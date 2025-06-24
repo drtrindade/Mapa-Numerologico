@@ -1178,20 +1178,20 @@
             }
             document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas cármicas identificadas)`;
             
-            // Ciclos de Vida
-            const cyclesStr = `Primeiro ciclo (0-${lifeCycles.firstEndAge} anos): ${lifeCycles.first} | ` +
-                             `Segundo ciclo (${lifeCycles.firstEndAge}-${lifeCycles.secondEndAge} anos): ${lifeCycles.second} | ` +
-                             `Terceiro ciclo (${lifeCycles.secondEndAge}+ anos): ${lifeCycles.third}`;
-            document.getElementById('lifeCycles').innerHTML = cyclesStr;
-            
-            // Descrição dos ciclos
-            let cyclesDescription = '';
-            cyclesDescription += `<strong>Primeiro Ciclo (0-${lifeCycles.firstEndAge} anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}<br><br>`;
-            cyclesDescription += `<strong>Segundo Ciclo (${lifeCycles.firstEndAge}-${lifeCycles.secondEndAge} anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}<br><br>`;
-            cyclesDescription += `<strong>Terceiro Ciclo (${lifeCycles.secondEndAge}+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}`;
-            
-            document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
-            document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
+           // Mostra os números dos ciclos (usando textContent para evitar conflitos)
+const cyclesStr = `1º ciclo (0-30 anos): ${lifeCycles.first} | ` +
+                 `2º ciclo (30-60 anos): ${lifeCycles.second} | ` +
+                 `3º ciclo (60+ anos): ${lifeCycles.third}`;
+
+document.getElementById('lifeCycles').textContent = cyclesStr; // ✅ Usa textContent
+
+// Descrição formatada (com HTML para negrito, se necessário)
+let cyclesDescription = `
+    <strong>1º Ciclo (0-30 anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}<br><br>
+    <strong>2º Ciclo (30-60 anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}<br><br>
+    <strong>3º Ciclo (60+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}
+`;
+document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
             
             // Ano Pessoal
             document.getElementById('personalYear').textContent = personalYear;
