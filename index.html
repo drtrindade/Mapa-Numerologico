@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ouro Oracular - Mapa Numerológico</title>
@@ -1235,17 +1237,35 @@
         }
         
         // Função para gerar o PDF
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Adicionar conteúdo ao PDF
-            addPageToPDF(doc);
-            
-            // Salvar o PDF
-            const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-            doc.save(`Mapa Numerológico - ${fullName}.pdf`);
-        }
+       function generatePDF() {
+    // Carrega a biblioteca jsPDF corretamente
+    const { jsPDF } = window.jspdf;
+    
+    // Cria um novo documento PDF
+    const doc = new jsPDF();
+    
+    // Captura o elemento com os resultados
+    const element = document.getElementById('resultContainer');
+    
+    // Usa html2canvas para capturar o conteúdo como imagem
+    html2canvas(element).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        
+        // Calcula as dimensões para ajustar ao PDF
+        const imgWidth = doc.internal.pageSize.getWidth() - 20;
+        const imgHeight = (canvas.height * imgWidth) / canvas.width;
+        
+        // Adiciona a imagem ao PDF
+        doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+        
+        // Salva o PDF
+        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
+        doc.save(`Mapa_Numerologico_${fullName}.pdf`);
+    }).catch(error => {
+        console.error('Erro ao gerar PDF:', error);
+        alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
+    });
+}
         
         // Função para adicionar uma página ao PDF
         function addPageToPDF(doc) {
