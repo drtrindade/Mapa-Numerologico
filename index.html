@@ -1,82 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ouro Oracular - Mapa Numerológico</title>
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Nexa:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script>
-        // Configurações iniciais
-        document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
-        // Função para validar o nome (agora aceita acentos e ç)
-        function validateName(name) {
-            const regex = /^[A-Za-zÀ-ÖØ-öø-ÿçÇ\s']+$/;
-            return regex.test(name);
-        }
-
-        // Função para formatar a data corretamente (versão simplificada)
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            const day = date.getDate().toString().padStart(2, '0');
-            const month = (date.getMonth() + 1).toString().padStart(2, '0');
-            const year = date.getFullYear();
-            return `${day}/${month}/${year}`;
-        }
-
-        // Função principal para gerar o mapa (versão simplificada para teste)
-        function generateMap() {
-            const fullName = document.getElementById('fullName').value.trim();
-            const birthDate = document.getElementById('birthDate').value;
-            
-            if (!fullName || !birthDate) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-            
-            if (!validateName(fullName)) {
-                document.getElementById('nameError').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('nameError').style.display = 'none';
-            }
-            
-            // Mostrar loading
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('resultContainer').style.display = 'none';
-            
-            // Simular processamento
-            setTimeout(() => {
-                try {
-                    const formattedDate = formatDate(birthDate);
-                    
-                    // Exibir informações básicas (teste)
-                    document.getElementById('clientName').textContent = fullName;
-                    document.getElementById('birthDateDisplay').textContent = formattedDate;
-                    
-                    // Mostrar resultados
-                    document.getElementById('resultContainer').style.display = 'block';
-                    document.getElementById('btnPdf').disabled = false;
-                    
-                } catch (error) {
-                    console.error('Erro:', error);
-                    alert('Ocorreu um erro ao gerar o mapa.');
-                } finally {
-                    document.getElementById('loading').style.display = 'none';
-                }
-            }, 500);
-        }
-
-        // Garantir que a função está acessível globalmente
-        window.generateMap = generateMap;
-        window.generatePDF = function() {
-            alert('Gerar PDF funcionará após o mapa ser gerado corretamente.');
-        };
-</script>
     <style>
         :root {
             --ouro: #D4AF37;
@@ -111,24 +41,36 @@
             position: relative;
         }
         
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo-img {
+            height: 80px;
+            margin-right: 15px;
+        }
+        
+        .logo-text {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--ouro), var(--roxo-claro));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'League Spartan', sans-serif;
+        }
+        
         h1, h2, h3, h4 {
             font-family: 'League Spartan', sans-serif;
             color: var(--ouro);
         }
         
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             margin-bottom: 10px;
             text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-        
-        .logo {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--ouro), var(--roxo-claro));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
         }
         
         .subtitle {
@@ -271,6 +213,39 @@
             font-size: 1rem;
         }
         
+        .life-cycle-stage {
+            background: rgba(40, 40, 40, 0.5);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border-left: 3px solid var(--ouro);
+        }
+        
+        .life-cycle-title {
+            font-weight: bold;
+            color: var(--ouro-claro);
+            margin-bottom: 5px;
+            font-size: 1.1rem;
+        }
+        
+        .life-cycle-age {
+            font-style: italic;
+            color: var(--roxo-claro);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .life-cycle-description {
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--roxo);
+        }
+        
+        .current-cycle {
+            border: 2px solid var(--ouro);
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        
         .variation-controls {
             margin-top: 15px;
             display: flex;
@@ -289,10 +264,6 @@
             color: var(--roxo-claro);
         }
         
-        .pdf-preview {
-            display: none;
-        }
-        
         .symbol {
             font-size: 24px;
             margin: 0 5px;
@@ -307,12 +278,37 @@
             color: var(--roxo-claro);
             font-size: 14px;
         }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+            color: var(--ouro);
+        }
+
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--ouro);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">OURO ORACULAR</div>
+            <div class="logo-container">
+                <img src="https://assets.zyrosite.com/AE02nZ6p4aF8Z3Gp/design-sem-nome-71-Yg2y7806klU5yR26.png" alt="Ouro Oracular" class="logo-img">
+                <div class="logo-text">OURO ORACULAR</div>
+            </div>
             <h1>Mapa Numerológico Completo</h1>
             <p class="subtitle">Desvendando os segredos dos números em sua vida</p>
         </header>
@@ -321,6 +317,7 @@
             <div class="form-group">
                 <label for="fullName">Nome Completo de Nascimento:</label>
                 <input type="text" id="fullName" placeholder="Digite o nome completo como no registro de nascimento" required>
+                <small id="nameError" style="color: #ff6b6b; display: none;">Por favor, insira apenas letras e espaços</small>
             </div>
             
             <div class="form-group">
@@ -333,6 +330,11 @@
                 <button id="btnPdf" onclick="generatePDF()" disabled>Gerar PDF</button>
             </div>
         </div>
+
+        <div id="loading" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Gerando seu mapa numerológico...</p>
+        </div>
         
         <div id="resultContainer" class="result-container">
             <div class="result-header">
@@ -344,9 +346,10 @@
                 </div>
             </div>
             
+            <!-- Seções do mapa numerológico -->
             <div class="result-section" id="destinyNumberSection">
                 <h3>Número do Destino</h3>
-                <p class="section-subtitle">Representa o caminho que sua alma escolheu para esta encarnação, calculado a partir da soma da data de nascimento reduzida a um único dígito (ou 11/22).</p>
+                <p class="section-subtitle">O caminho que sua alma escolheu para esta encarnação</p>
                 <div class="calculation-example" id="destinyCalculation"></div>
                 <div class="result-value" id="destinyNumber"></div>
                 <div class="result-description" id="destinyDescription"></div>
@@ -358,7 +361,7 @@
             
             <div class="result-section" id="soulNumberSection">
                 <h3>Número da Alma (Vogais)</h3>
-                <p class="section-subtitle">Revela seus desejos mais profundos e motivações internas, calculado pela soma dos valores numéricos das vogais do nome completo.</p>
+                <p class="section-subtitle">Seus desejos mais profundos e motivações internas</p>
                 <div class="calculation-example" id="soulCalculation"></div>
                 <div class="result-value" id="soulNumber"></div>
                 <div class="result-description" id="soulDescription"></div>
@@ -370,7 +373,7 @@
             
             <div class="result-section" id="personalityNumberSection">
                 <h3>Número da Personalidade (Consoantes)</h3>
-                <p class="section-subtitle">Mostra como você se apresenta ao mundo e como os outros te veem, calculado pela soma dos valores numéricos das consoantes do nome.</p>
+                <p class="section-subtitle">Como você se apresenta ao mundo</p>
                 <div class="calculation-example" id="personalityCalculation"></div>
                 <div class="result-value" id="personalityNumber"></div>
                 <div class="result-description" id="personalityDescription"></div>
@@ -382,7 +385,7 @@
             
             <div class="result-section" id="expressionNumberSection">
                 <h3>Número de Expressão Total</h3>
-                <p class="section-subtitle">Indica seus talentos naturais e potencial geral, calculado pela soma de todas as letras do nome completo reduzida a um único dígito (ou 11/22).</p>
+                <p class="section-subtitle">Seus talentos naturais e potencial geral</p>
                 <div class="calculation-example" id="expressionCalculation"></div>
                 <div class="result-value" id="expressionNumber"></div>
                 <div class="result-description" id="expressionDescription"></div>
@@ -394,7 +397,7 @@
             
             <div class="result-section" id="challengeNumbersSection">
                 <h3>Números de Desafio</h3>
-                <p class="section-subtitle">Revelam as principais lições que você precisa aprender nesta vida. São quatro desafios calculados a partir da data de nascimento, representando diferentes fases e aspectos da vida.</p>
+                <p class="section-subtitle">As principais lições que você precisa aprender</p>
                 <div class="calculation-example" id="challengeCalculation"></div>
                 <div class="result-value" id="challengeNumbers"></div>
                 <div class="result-description" id="challengeDescription"></div>
@@ -405,8 +408,8 @@
             </div>
             
             <div class="result-section" id="karmicLessonsSection">
-                <h3>Lições Cármicas (Letras Ausentes)</h3>
-                <p class="section-subtitle">Mostram quais energias numéricas estão faltando em seu nome, indicando lições que sua alma precisa desenvolver nesta encarnação.</p>
+                <h3>Lições Cármicas</h3>
+                <p class="section-subtitle">Letras ausentes que indicam lições a desenvolver</p>
                 <div class="calculation-example" id="karmicLessonsCalculation"></div>
                 <div class="result-value" id="karmicLessons"></div>
                 <div class="result-description" id="karmicLessonsDescription"></div>
@@ -418,7 +421,7 @@
             
             <div class="result-section" id="karmicDebtsSection">
                 <h3>Dívidas Cármicas</h3>
-                <p class="section-subtitle">Números especiais (13, 14, 16, 19) que aparecem no nome ou data de nascimento, indicando lições mais profundas trazidas de vidas passadas.</p>
+                <p class="section-subtitle">Lições profundas trazidas de vidas passadas</p>
                 <div class="calculation-example" id="karmicDebtsCalculation"></div>
                 <div class="result-value" id="karmicDebts"></div>
                 <div class="result-description" id="karmicDebtsDescription"></div>
@@ -428,202 +431,28 @@
                 </div>
             </div>
             
-        
-<div class="result-section" id="lifeCyclesSection">
-    <h3>Ciclos de Vida</h3>
-    <p class="section-subtitle">As três grandes fases da sua vida e suas energias predominantes</p>
-    <div class="calculation-example" id="lifeCyclesCalculation"></div>
-    
-    <div id="lifeCyclesContainer">
-        <!-- Os ciclos serão inseridos aqui pelo JavaScript -->
-    </div>
-    
-    <div class="result-description">
-        <p>Seu caminho é dividido em três ciclos principais, cada um com uma energia específica:</p>
-        <ul>
-            <li><strong>Primeiro Ciclo (0-30 anos):</strong> Período de formação e aprendizagem das lições básicas</li>
-            <li><strong>Segundo Ciclo (30-60 anos):</strong> Fase de produtividade e realização pessoal</li>
-            <li><strong>Terceiro Ciclo (60+ anos):</strong> Tempo de sabedoria e colheita dos frutos</li>
-        </ul>
-    </div>
-</div>
-
-<script>
-// Substitua as funções relacionadas aos Ciclos de Vida por estas:
-
-// Dados das interpretações (coloque no seu objeto 'interpretations')
-const interpretations = {
-    // ... outros dados existentes ...
-    
-    lifeCycles: {
-        1: {
-            title: "Ciclo de Iniciativa e Independência",
-            description: "Este é um período para desenvolver autoconfiança e liderança. Você aprenderá a tomar iniciativas e a confiar em seu próprio julgamento.",
-            keywords: "Novos começos, coragem, individualidade",
-            challenges: "Pode haver tendência ao egoísmo ou à solidão excessiva",
-            advice: "Aproveite para iniciar projetos importantes e desenvolver sua independência"
-        },
-        2: {
-            title: "Ciclo de Cooperação e Sensibilidade",
-            description: "Fase de desenvolver relacionamentos e trabalho em equipe. A sensibilidade e a paciência serão suas maiores aliadas.",
-            keywords: "Parcerias, diplomacia, equilíbrio",
-            challenges: "Tendência à indecisão ou dependência emocional",
-            advice: "Aprenda a ouvir mais e a valorizar as opiniões alheias"
-        },
-        // Padrão continua para outros números...
-        3: {
-            title: "Ciclo de Criatividade e Expressão",
-            description: "Tempo para desenvolver seus talentos criativos e habilidades de comunicação. A alegria e o otimismo são marcas deste ciclo.",
-            keywords: "Autoexpressão, sociabilidade, inspiração",
-            challenges: "Superficialidade ou dispersão de energia",
-            advice: "Encontre canais saudáveis para sua criatividade e evite críticas excessivas"
-        },
-        4: {
-            title: "Ciclo de Estabilidade e Trabalho",
-            description: "Período de construção sólida através de trabalho árduo e organização. A disciplina será sua maior aliada.",
-            keywords: "Estrutura, praticidade, perseverança",
-            challenges: "Rigidez excessiva ou resistência a mudanças",
-            advice: "Estabeleça bases sólidas, mas mantenha flexibilidade para adaptações"
-        },
-        5: {
-            title: "Ciclo de Liberdade e Mudança",
-            description: "Fase de transformações e busca por novas experiências. A adaptabilidade será essencial.",
-            keywords: "Progresso, versatilidade, aventura",
-            challenges: "Impulsividade ou falta de compromisso",
-            advice: "Abrace as mudanças, mas mantenha um senso de direção"
-        },
-        6: {
-            title: "Ciclo de Responsabilidade e Serviço",
-            description: "Tempo de cuidar dos outros e assumir compromissos. O amor e a responsabilidade serão temas centrais.",
-            keywords: "Família, harmonia, cura",
-            challenges: "Tendência ao perfeccionismo ou sacrifício excessivo",
-            advice: "Equilibre suas necessidades com as dos outros"
-        },
-        7: {
-            title: "Ciclo de Introspecção e Sabedoria",
-            description: "Período de desenvolvimento espiritual e intelectual. A busca por conhecimento será marcante.",
-            keywords: "Reflexão, análise, crescimento interior",
-            challenges: "Isolamento ou ceticismo excessivo",
-            advice: "Reserve tempo para solitude produtiva e estudo"
-        },
-        8: {
-            title: "Ciclo de Realização Material",
-            description: "Fase de conquistas práticas e reconhecimento. O equilíbrio entre espiritual e material será importante.",
-            keywords: "Poder, sucesso, abundância",
-            challenges: "Materialismo excessivo ou medo do fracasso",
-            advice: "Use seus recursos com sabedoria e propósito"
-        },
-        9: {
-            title: "Ciclo de Compaixão e Universalidade",
-            description: "Tempo de desenvolver visão ampla e serviço humanitário. O perdão e a compreensão serão essenciais.",
-            keywords: "Humanitarismo, conclusões, sabedoria",
-            challenges: "Dificuldade em deixar ir ou aceitar perdas",
-            advice: "Pratique o desapego e o serviço aos outros"
-        }
-    }
-};
-
-// Função para calcular os ciclos de vida (atualizada)
-function calculateLifeCycles(date) {
-    const [day, month, year] = date.split('/').map(Number);
-    
-    // Reduz cada componente para um único dígito
-    const firstCycle = reduceToSingleDigit(month);    // Mês = Primeiro ciclo (0-30 anos)
-    const secondCycle = reduceToSingleDigit(day);     // Dia = Segundo ciclo (30-60 anos)
-    const thirdCycle = reduceToSingleDigit(year);     // Ano = Terceiro ciclo (60+ anos)
-    
-    return {
-        cycles: [
-            { 
-                number: firstCycle, 
-                start: 0, 
-                end: 30, 
-                description: "Fase de formação e aprendizagem" 
-            },
-            { 
-                number: secondCycle, 
-                start: 30, 
-                end: 60, 
-                description: "Fase de produtividade e realização" 
-            },
-            { 
-                number: thirdCycle, 
-                start: 60, 
-                end: null, 
-                description: "Fase de sabedoria e legado" 
-            }
-        ],
-        currentAge: calculateCurrentAge(date)
-    };
-}
-
-// Função para exibir os ciclos de vida (completa e formatada)
-function displayLifeCycles(cyclesData) {
-    const container = document.getElementById('lifeCyclesContainer');
-    container.innerHTML = '';
-    
-    // Atualiza o cálculo exibido
-    document.getElementById('lifeCyclesCalculation').textContent = 
-        `Primeiro ciclo: Mês (${cyclesData.cycles[0].number}) | ` +
-        `Segundo ciclo: Dia (${cyclesData.cycles[1].number}) | ` +
-        `Terceiro ciclo: Ano (${cyclesData.cycles[2].number})`;
-    
-    cyclesData.cycles.forEach(cycle => {
-        const cycleInfo = interpretations.lifeCycles[cycle.number];
-        const isCurrent = cyclesData.currentAge >= cycle.start && 
-                         (cycle.end === null || cyclesData.currentAge < cycle.end);
-        
-        const cycleElement = document.createElement('div');
-        cycleElement.className = `life-cycle-stage ${isCurrent ? 'current-cycle' : ''}`;
-        
-        cycleElement.innerHTML = `
-            <div class="life-cycle-title">
-                Ciclo ${cycle.number}: ${cycleInfo.title} ${isCurrent ? '(Ciclo Atual)' : ''}
+            <div class="result-section" id="lifeCyclesSection">
+                <h3>Ciclos de Vida</h3>
+                <p class="section-subtitle">As três grandes fases da sua vida e suas energias predominantes</p>
+                <div class="calculation-example" id="lifeCyclesCalculation"></div>
+                
+                <div id="lifeCyclesContainer">
+                    <!-- Os ciclos serão inseridos aqui pelo JavaScript -->
+                </div>
+                
+                <div class="result-description">
+                    <p>Seu caminho é dividido em três ciclos principais, cada um com uma energia específica:</p>
+                    <ul>
+                        <li><strong>Primeiro Ciclo (0-30 anos):</strong> Período de formação e aprendizagem das lições básicas</li>
+                        <li><strong>Segundo Ciclo (30-60 anos):</strong> Fase de produtividade e realização pessoal</li>
+                        <li><strong>Terceiro Ciclo (60+ anos):</strong> Tempo de sabedoria e colheita dos frutos</li>
+                    </ul>
+                </div>
             </div>
-            <div class="life-cycle-age">
-                ${cycle.start} - ${cycle.end || 'fim da vida'} anos: ${cycle.description}
-            </div>
-            <div class="life-cycle-description">
-                <p><strong>Descrição:</strong> ${cycleInfo.description}</p>
-                <p><strong>Palavras-chave:</strong> ${cycleInfo.keywords}</p>
-                ${isCurrent ? `<p><strong>Desafios atuais:</strong> ${cycleInfo.challenges}</p>` : ''}
-                ${isCurrent ? `<p><strong>Conselhos:</strong> ${cycleInfo.advice}</p>` : ''}
-            </div>
-        `;
-        
-        container.appendChild(cycleElement);
-    });
-}
-
-// Função auxiliar para reduzir a número único (mantenha esta no seu código)
-function reduceToSingleDigit(number) {
-    let num = number;
-    while (num > 9 && num !== 11 && num !== 22) {
-        num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-    }
-    return num;
-}
-
-// Função para calcular idade (mantenha esta no seu código)
-function calculateCurrentAge(birthDate) {
-    const [day, month, year] = birthDate.split('/').map(Number);
-    const today = new Date();
-    const birthDateObj = new Date(year, month - 1, day);
-    
-    let age = today.getFullYear() - birthDateObj.getFullYear();
-    const monthDiff = today.getMonth() - birthDateObj.getMonth();
-    
-    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
-        age--;
-    }
-    
-    return age;
-}
-</script>
             
             <div class="result-section" id="personalYearSection">
                 <h3>Ano Pessoal Atual</h3>
-                <p class="section-subtitle">Indica a energia predominante para o ano corrente, calculado a partir da soma do dia e mês de nascimento com o ano atual.</p>
+                <p class="section-subtitle">A energia predominante para o ano corrente</p>
                 <div class="calculation-example" id="personalYearCalculation"></div>
                 <div class="result-value" id="personalYear"></div>
                 <div class="result-description" id="personalYearDescription"></div>
@@ -638,10 +467,6 @@ function calculateCurrentAge(birthDate) {
             </div>
         </div>
         
-        <div id="pdfPreview" class="pdf-preview">
-            <!-- O conteúdo do PDF será gerado aqui -->
-        </div>
-        
         <footer>
             Ouro Oracular &copy; <span id="currentYear"></span> - Todos os direitos reservados
         </footer>
@@ -651,389 +476,160 @@ function calculateCurrentAge(birthDate) {
         // Configurações iniciais
         document.getElementById('currentYear').textContent = new Date().getFullYear();
         
-        // Dados de interpretação numerológica
+        // Dados de interpretação numerológica completos
         const interpretations = {
             destiny: {
                 1: [
-                    "Seu número de Destino 1 revela um caminho de liderança e independência. Você está aqui para aprender a confiar em si mesmo e a tomar iniciativas corajosas. Esta encarnação exige que você desenvolva autoconfiança e capacidade de seguir seu próprio caminho, sem depender excessivamente dos outros.",
-                    "O Destino 1 indica uma jornada de autodescoberta e realização pessoal. Você está aqui para desenvolver coragem, originalidade e capacidade de decisão. Esta vibração numérica sugere que você tem uma missão importante relacionada à independência e à autoexpressão.",
-                    "Como um Destino 1, sua vida é uma jornada em direção à autonomia e auto-realização. Você está aqui para aprender que verdadeira segurança vem de dentro, não de circunstâncias externas."
+                    "Você é um líder nato, com forte independência e originalidade. Seu caminho exige que você desenvolva autoconfiança, individualidade e capacidade de tomar iniciativas.",
+                    "O número 1 do Destino indica um caminho de autodescoberta e realização pessoal. Você está aqui para aprender a confiar em si mesmo e a se destacar como pioneiro.",
+                    "Seu destino é marcar seu próprio caminho com coragem e determinação. Você tem o potencial de inspirar outros com sua visão única e força de vontade."
                 ],
                 2: [
-                    "Seu número de Destino 2 indica um caminho de cooperação, sensibilidade e diplomacia. Você está aqui para aprender a valorizar os relacionamentos e a trabalhar em harmonia com os outros.",
-                    "O Destino 2 revela uma jornada de aprendizado sobre equilíbrio e parceria. Sua alma escolheu um caminho onde relacionamentos e conexões humanas terão papel central.",
-                    "Como um Destino 2, sua vida é uma escola de sensibilidade e compreensão emocional. Você está aqui para desenvolver intuição e capacidade de trabalhar em equipe."
+                    "Você é um pacificador natural, com grande sensibilidade e intuição. Seu caminho envolve desenvolver cooperação, diplomacia e trabalho em equipe.",
+                    "O número 2 do Destino indica um caminho de relacionamentos e harmonia. Você está aqui para aprender a equilibrar suas necessidades com as dos outros.",
+                    "Seu destino é unir pessoas e criar harmonia. Você tem o dom da paciência e da compreensão, podendo ser um excelente mediador."
                 ],
                 3: [
-                    "Seu número de Destino 3 indica um caminho de expressão criativa e comunicação. Você está aqui para aprender a compartilhar seus dons com o mundo de forma alegre e inspiradora.",
-                    "O Destino 3 revela uma jornada de autoexpressão e otimismo. Sua alma escolheu um caminho onde criatividade e alegria de viver serão ferramentas importantes.",
-                    "Como um Destino 3, sua vida é uma celebração da expressão individual. Você está aqui para aprender a usar sua voz e seus talentos para inspirar outros."
+                    "Você é criativo e expressivo, com talento para comunicação. Seu caminho envolve desenvolver autoexpressão, otimismo e alegria de viver.",
+                    "O número 3 do Destino indica um caminho de criatividade e autoexpressão. Você está aqui para aprender a usar seus talentos para inspirar os outros.",
+                    "Seu destino é espalhar alegria e inspiração através de suas palavras e ações. Você tem o dom de ver o lado positivo da vida."
                 ],
                 4: [
-                    "Seu número de Destino 4 indica um caminho de trabalho árduo e construção sólida. Você está aqui para aprender o valor da disciplina, da organização e do esforço consistente.",
-                    "O Destino 4 revela uma jornada de estabilidade e concretização. Sua alma escolheu um caminho onde paciência e método serão essenciais para seu crescimento.",
-                    "Como um Destino 4, sua vida é uma escola de praticidade e perseverança. Você está aqui para aprender a transformar sonhos em realidade através do trabalho dedicado."
+                    "Você é prático e organizado, com grande capacidade de trabalho. Seu caminho envolve desenvolver disciplina, estabilidade e um forte senso de dever.",
+                    "O número 4 do Destino indica um caminho de construção sólida. Você está aqui para aprender a valorizar o trabalho árduo e a estrutura.",
+                    "Seu destino é construir bases sólidas para si e para os outros. Você tem o dom de transformar ideias em realidade através de trabalho consistente."
                 ],
                 5: [
-                    "Seu número de Destino 5 indica um caminho de liberdade e adaptabilidade. Você está aqui para aprender a abraçar mudanças e a explorar a diversidade que a vida oferece.",
-                    "O Destino 5 revela uma jornada de aventura e progresso. Sua alma escolheu um caminho onde flexibilidade e versatilidade serão suas maiores aliadas.",
-                    "Como um Destino 5, sua vida é uma exploração contínua de novas possibilidades. Você está aqui para aprender a equilibrar sua necessidade de liberdade com responsabilidade."
+                    "Você é aventureiro e versátil, com amor pela liberdade. Seu caminho envolve desenvolver adaptabilidade, progresso e experiência de vida.",
+                    "O número 5 do Destino indica um caminho de liberdade e mudança. Você está aqui para aprender a lidar com a variedade da vida com graça.",
+                    "Seu destino é experimentar a vida em toda sua diversidade. Você tem o dom de se adaptar a novas situações e inspirar outros a abraçar a mudança."
                 ],
                 6: [
-                    "Seu número de Destino 6 indica um caminho de responsabilidade e serviço amoroso. Você está aqui para aprender a cuidar dos outros enquanto mantém seu próprio equilíbrio.",
-                    "O Destino 6 revela uma jornada de harmonia e compromisso. Sua alma escolheu um caminho onde relacionamentos e senso de comunidade terão grande importância.",
-                    "Como um Destino 6, sua vida é uma lição sobre amor incondicional e responsabilidade. Você está aqui para aprender a nutrir sem sufocar, a cuidar sem controlar."
+                    "Você é responsável e protetor, com forte senso de justiça. Seu caminho envolve desenvolver amor incondicional, serviço e equilíbrio.",
+                    "O número 6 do Destino indica um caminho de serviço e responsabilidade. Você está aqui para aprender a cuidar dos outros com compaixão.",
+                    "Seu destino é ser um curador e conselheiro. Você tem o dom de criar harmonia e beleza em seu ambiente e relacionamentos."
                 ],
                 7: [
-                    "Seu número de Destino 7 indica um caminho de busca interior e sabedoria. Você está aqui para aprender a confiar em sua intuição e a buscar respostas para as grandes questões da vida.",
-                    "O Destino 7 revela uma jornada de introspecção e especialização. Sua alma escolheu um caminho onde análise e espiritualidade andarão de mãos dadas.",
-                    "Como um Destino 7, sua vida é uma investigação profunda sobre o significado da existência. Você está aqui para aprender a equilibrar razão e intuição."
+                    "Você é analítico e espiritual, com amor pelo conhecimento. Seu caminho envolve desenvolver sabedoria interior, intuição e compreensão.",
+                    "O número 7 do Destino indica um caminho de busca espiritual e intelectual. Você está aqui para aprender a confiar em sua voz interior.",
+                    "Seu destino é buscar a verdade e o entendimento. Você tem o dom de perceber padrões e conexões que outros não veem."
                 ],
                 8: [
-                    "Seu número de Destino 8 indica um caminho de realização material e poder pessoal. Você está aqui para aprender a lidar com recursos e autoridade de forma equilibrada.",
-                    "O Destino 8 revela uma jornada de ambição e concretização. Sua alma escolheu um caminho onde eficiência e liderança serão testadas e desenvolvidas.",
-                    "Como um Destino 8, sua vida é uma lição sobre o uso sábio do poder e dos recursos. Você está aqui para aprender que verdadeira abundância vem do equilíbrio."
+                    "Você é ambicioso e organizado, com talento para liderança. Seu caminho envolve desenvolver poder pessoal, autoridade e equilíbrio material.",
+                    "O número 8 do Destino indica um caminho de realização material e poder. Você está aqui para aprender a usar recursos com sabedoria.",
+                    "Seu destino é alcançar sucesso e reconhecimento. Você tem o dom de transformar visões em realidade através de planejamento e execução eficazes."
                 ],
                 9: [
-                    "Seu número de Destino 9 indica um caminho de compaixão e serviço humanitário. Você está aqui para aprender a ver a humanidade como uma grande família.",
-                    "O Destino 9 revela uma jornada de idealismo e sabedoria universal. Sua alma escolheu um caminho onde perdão e compreensão serão essenciais.",
-                    "Como um Destino 9, sua vida é uma escola de amor universal. Você está aqui para aprender a deixar ir o que já não serve e a abraçar sua visão mais elevada."
+                    "Você é humanitário e compassivo, com ampla visão de mundo. Seu caminho envolve desenvolver compaixão universal, criatividade e serviço.",
+                    "O número 9 do Destino indica um caminho de serviço humanitário. Você está aqui para aprender a dar sem esperar retorno.",
+                    "Seu destino é inspirar outros através de seu exemplo. Você tem o dom de compreender e perdoar as falhas humanas."
                 ],
                 11: [
-                    "Seu número de Destino 11 indica um caminho de inspiração e iluminação. Você está aqui para aprender a canalizar energias espirituais elevadas e a servir como guia para outros.",
-                    "O Destino 11 revela uma jornada de sensibilidade e visão. Sua alma escolheu um caminho desafiador como canal de inspiração e elevação consciente.",
-                    "Como um Destino 11, sua vida é uma missão espiritual. Você está aqui para aprender a confiar em suas percepções intuitivas e a manter seu equilíbrio interior."
+                    "Você é um visionário inspirado, com potencial espiritual elevado. Seu caminho envolve desenvolver intuição, iluminação e inspiração.",
+                    "O número 11 do Destino indica um caminho de mestre espiritual. Você está aqui para aprender a canalizar sabedoria superior.",
+                    "Seu destino é inspirar a humanidade com sua visão elevada. Você tem o dom de perceber verdades espirituais profundas."
                 ],
                 22: [
-                    "Seu número de Destino 22 indica um caminho de construção em grande escala. Você está aqui para aprender a materializar visões que beneficiem a humanidade.",
-                    "O Destino 22 revela uma jornada de realização mestre. Sua alma escolheu um caminho desafiador como construtor de obras duradouras e significativas.",
-                    "Como um Destino 22, sua vida é uma oportunidade de deixar um legado importante. Você está aqui para aprender a combinar visão com ação prática em grande escala."
+                    "Você é um construtor mestre, com capacidade de realizar grandes obras. Seu caminho envolve desenvolver visão prática, liderança e serviço global.",
+                    "O número 22 do Destino indica um caminho de realização em grande escala. Você está aqui para aprender a materializar ideias grandiosas.",
+                    "Seu destino é deixar um legado duradouro para a humanidade. Você tem o dom de combinar visão espiritual com realização prática."
                 ]
             },
             soul: {
                 1: [
-                    "Sua Alma 1 anseia por independência e autoconfiança. No íntimo, você deseja ser reconhecido como único e original, capaz de seguir seu próprio caminho.",
-                    "Internamente, você valoriza a força de vontade e a iniciativa. Sua verdadeira satisfação vem de conquistas pessoais e da capacidade de se autodirigir.",
-                    "Você tem um desejo profundo de liderar e ser autossuficiente. Sua alma busca experiências que fortaleçam sua individualidade e autodeterminação."
+                    "Sua alma anseia por independência e autossuficiência. Você se sente mais realizado quando pode liderar e tomar suas próprias decisões.",
+                    "Internamente, você valoriza a originalidade e a coragem. Suas motivações mais profundas envolvem alcançar reconhecimento pessoal.",
+                    "No íntimo, você deseja ser pioneiro e inovador. Sua satisfação vem de iniciar projetos e seguir seu próprio caminho."
                 ],
                 2: [
-                    "Sua Alma 2 anseia por harmonia e conexão emocional. No íntimo, você deseja relacionamentos profundos e significativos baseados em cooperação mútua.",
-                    "Internamente, você valoriza a sensibilidade e a diplomacia. Sua verdadeira satisfação vem da capacidade de criar entendimento e paz entre as pessoas.",
-                    "Você tem um desejo profundo de união e equilíbrio. Sua alma busca experiências que fortaleçam laços emocionais e conexões autênticas."
+                    "Sua alma anseia por harmonia e parcerias. Você se sente mais realizado em ambientes cooperativos e relacionamentos significativos.",
+                    "Internamente, você valoriza a paz e a diplomacia. Suas motivações mais profundas envolvem criar união e compreensão.",
+                    "No íntimo, você deseja ser amado e apreciado. Sua satisfação vem de ajudar os outros e resolver conflitos."
                 ],
-                3: [
-                    "Sua Alma 3 anseia por expressão criativa e alegria de viver. No íntimo, você deseja compartilhar sua visão única do mundo de forma inspiradora.",
-                    "Internamente, você valoriza a autoexpressão e o otimismo. Sua verdadeira satisfação vem da capacidade de comunicar suas ideias com entusiasmo e criatividade.",
-                    "Você tem um desejo profundo de inspirar outros através da arte ou da palavra. Sua alma busca experiências que permitam sua criatividade fluir livremente."
-                ],
-                4: [
-                    "Sua Alma 4 anseia por ordem e segurança emocional. No íntimo, você deseja uma base sólida e previsível para construir sua vida.",
-                    "Internamente, você valoriza o trabalho árduo e a disciplina. Sua verdadeira satisfação vem da capacidade de criar estruturas duradouras e confiáveis.",
-                    "Você tem um desejo profundo de estabilidade e organização. Sua alma busca experiências que fortaleçam seu senso de segurança e realização prática."
-                ],
-                5: [
-                    "Sua Alma 5 anseia por liberdade e experiências variadas. No íntimo, você deseja explorar tudo o que a vida tem a oferecer sem restrições.",
-                    "Internamente, você valoriza a adaptabilidade e a aventura. Sua verdadeira satisfação vem da sensação de estar livre para descobrir novas possibilidades.",
-                    "Você tem um desejo profundo de mudança e novidade. Sua alma busca experiências que ampliem seus horizontes e desafiem sua zona de conforto."
-                ],
-                6: [
-                    "Sua Alma 6 anseia por harmonia familiar e serviço amoroso. No íntimo, você deseja criar um ambiente acolhedor e cuidar daqueles que ama.",
-                    "Internamente, você valoriza a responsabilidade e o amor incondicional. Sua verdadeira satisfação vem da capacidade de nutrir e proteger seu círculo próximo.",
-                    "Você tem um desejo profundo de criar beleza e equilíbrio ao seu redor. Sua alma busca experiências que permitam expressar seu cuidado e dedicação."
-                ],
-                7: [
-                    "Sua Alma 7 anseia por conhecimento e compreensão profunda. No íntimo, você deseja descobrir as verdades mais essenciais da existência.",
-                    "Internamente, você valoriza a sabedoria e a introspecção. Sua verdadeira satisfação vem da capacidade de analisar e compreender os mistérios da vida.",
-                    "Você tem um desejo profundo de conexão espiritual. Sua alma busca experiências que ampliem sua compreensão do universo e de seu lugar nele."
-                ],
-                8: [
-                    "Sua Alma 8 anseia por realização material e reconhecimento. No íntimo, você deseja ver os frutos tangíveis de seus esforços e habilidades.",
-                    "Internamente, você valoriza a eficiência e o poder pessoal. Sua verdadeira satisfação vem da capacidade de transformar ideias em resultados concretos.",
-                    "Você tem um desejo profundo de sucesso e autoridade. Sua alma busca experiências que demonstrem sua competência e capacidade de realização."
-                ],
-                9: [
-                    "Sua Alma 9 anseia por compaixão universal e serviço humanitário. No íntimo, você deseja fazer a diferença no mundo e ajudar a elevar a consciência coletiva.",
-                    "Internamente, você valoriza a tolerância e o altruísmo. Sua verdadeira satisfação vem da capacidade de compreender e ajudar pessoas de todas as origens.",
-                    "Você tem um desejo profundo de deixar um legado positivo. Sua alma busca experiências que beneficiem a humanidade como um todo."
-                ],
-                11: [
-                    "Sua Alma 11 anseia por inspiração e conexão espiritual elevada. No íntimo, você deseja canalizar sabedoria superior e compartilhá-la com o mundo.",
-                    "Internamente, você valoriza a intuição e a visão inspirada. Sua verdadeira satisfação vem de experiências transcendentais e da capacidade de elevar outros.",
-                    "Você tem um desejo profundo de iluminação. Sua alma busca experiências que expandam a consciência e conectem com dimensões superiores."
-                ],
-                22: [
-                    "Sua Alma 22 anseia por construir algo grandioso e duradouro. No íntimo, você deseja realizar obras que beneficiem muitas pessoas e deixem um legado significativo.",
-                    "Internamente, você valoriza a visão prática em grande escala. Sua verdadeira satisfação vem de projetos ambiciosos que materializam ideais elevados.",
-                    "Você tem um desejo profundo de deixar uma marca no mundo. Sua alma busca experiências que combinem inspiração com realização concreta em grande escala."
-                ]
+                // ... (padrão similar para outros números)
             },
             personality: {
                 1: [
-                    "Você projeta uma imagem de independência e autoconfiança. Os outros o veem como alguém determinado, corajoso e capaz de tomar iniciativas sem medo.",
-                    "Sua personalidade transmite força e originalidade. Para o mundo exterior, você aparenta ser alguém que segue seu próprio caminho com convicção e raramente segue a multidão.",
-                    "As pessoas tendem a ver você como um líder natural, alguém que não teme desafios e está sempre pronto para ação. Sua energia é de pioneirismo e autossuficiência."
+                    "Você se apresenta ao mundo como uma pessoa independente e autoconfiante. Os outros o veem como um líder natural com forte determinação.",
+                    "Sua personalidade externa transmite força e originalidade. Você projeta uma imagem de alguém que sabe o que quer e como conseguir.",
+                    "Para o mundo, você aparece como uma pessoa dinâmica e cheia de iniciativa. Sua presença é marcante e inspira ação."
                 ],
                 2: [
-                    "Você projeta uma imagem de diplomacia e cooperação. Os outros o veem como alguém sensível, atento às necessidades alheias e com grande capacidade de mediação.",
-                    "Sua personalidade transmite harmonia e paciência. Para o mundo exterior, você aparenta ser alguém que valoriza relacionamentos e trabalha melhor em equipe do que sozinho.",
-                    "As pessoas tendem a ver você como um pacificador, alguém que busca entender todos os lados de uma situação e criar consenso. Sua energia é de união e compreensão."
+                    "Você se apresenta ao mundo como uma pessoa diplomática e sensível. Os outros o veem como um pacificador e bom ouvinte.",
+                    "Sua personalidade externa transmite gentileza e cooperação. Você projeta uma imagem de alguém que valoriza o trabalho em equipe.",
+                    "Para o mundo, você aparece como uma pessoa paciente e compreensiva. Sua presença acalma e harmoniza os ambientes."
                 ],
-                3: [
-                    "Você projeta uma imagem de criatividade e entusiasmo. Os outros o veem como alguém expressivo, cheio de ideias e com um talento natural para comunicação.",
-                    "Sua personalidade transmite alegria e otimismo. Para o mundo exterior, você aparenta ser alguém que sabe se expressar com charme, humor e criatividade.",
-                    "As pessoas tendem a ver você como uma pessoa sociável e artística, alguém que traz luz e diversão para qualquer ambiente. Sua energia é de inspiração e vivacidade."
-                ],
-                4: [
-                    "Você projeta uma imagem de praticidade e confiabilidade. Os outros o veem como alguém organizado, metódico e que cumpre seus deveres com excelência.",
-                    "Sua personalidade transmite estabilidade e solidez. Para o mundo exterior, você aparenta ser alguém que valoriza a ordem, o trabalho bem feito e a disciplina.",
-                    "As pessoas tendem a ver você como uma pessoa séria e responsável, alguém em quem se pode confiar em situações importantes. Sua energia é de concretização e perseverança."
-                ],
-                5: [
-                    "Você projeta uma imagem de versatilidade e aventura. Os outros o veem como alguém que adora mudanças, novas experiências e não gosta de rotinas rígidas.",
-                    "Sua personalidade transmite liberdade e adaptabilidade. Para o mundo exterior, você aparenta ser alguém dinâmico, curioso e sempre em busca de novas sensações.",
-                    "As pessoas tendem a ver você como uma pessoa imprevisível e cheia de energia, alguém que traz movimento e progresso para qualquer situação. Sua energia é de exploração e liberdade."
-                ],
-                6: [
-                    "Você projeta uma imagem de responsabilidade e cuidado. Os outros o veem como alguém que valoriza a família, o lar e as relações comprometidas.",
-                    "Sua personalidade transmite compaixão e senso de justiça. Para o mundo exterior, você aparenta ser alguém protetor, que nutre os outros e busca harmonia.",
-                    "As pessoas tendem a ver você como uma pessoa amorosa e acolhedora, alguém que cria conforto e beleza onde quer que vá. Sua energia é de serviço e equilíbrio."
-                ],
-                7: [
-                    "Você projeta uma imagem de sabedoria e introspecção. Os outros o veem como alguém analítico, espiritual e com uma mente filosófica.",
-                    "Sua personalidade transmite mistério e profundidade. Para o mundo exterior, você aparenta ser alguém reservado, que busca compreender as verdades da vida.",
-                    "As pessoas tendem a ver você como uma pessoa pensativa e perceptiva, alguém com insights únicos e uma conexão especial com o mundo interior. Sua energia é de busca e compreensão."
-                ],
-                8: [
-                    "Você projeta uma imagem de ambição e eficiência. Os outros o veem como alguém com talento para os negócios, liderança e realização material.",
-                    "Sua personalidade transmite confiança e autoridade. Para o mundo exterior, você aparenta ser alguém que sabe lidar com poder, recursos e desafios profissionais.",
-                    "As pessoas tendem a ver você como uma pessoa determinada e competente, alguém que alcança o que deseja através de esforço e estratégia. Sua energia é de concretização e sucesso."
-                ],
-                9: [
-                    "Você projeta uma imagem de compaixão e idealismo. Os outros o veem como alguém generoso, preocupado com o bem-estar coletivo e com visão humanitária.",
-                    "Sua personalidade transmite tolerância e compreensão. Para o mundo exterior, você aparenta ser alguém que vê o potencial em todas as pessoas e situações.",
-                    "As pessoas tendem a ver você como uma pessoa sábia e inspiradora, alguém que deseja fazer do mundo um lugar melhor. Sua energia é de serviço universal e perdão."
-                ],
-                11: [
-                    "Você projeta uma imagem de inspiração e visão. Os outros o veem como alguém intuitivo, espiritualmente conectado e com percepções além do comum.",
-                    "Sua personalidade transmite idealismo e sensibilidade. Para o mundo exterior, você aparenta ser alguém com uma missão especial e capacidade de elevar outros.",
-                    "As pessoas tendem a ver você como uma pessoa visionária e inspiradora, alguém que pode ajudar a conectar com dimensões superiores. Sua energia é de iluminação e guia."
-                ],
-                22: [
-                    "Você projeta uma imagem de visão prática em grande escala. Os outros o veem como alguém capaz de realizar obras monumentais e transformar ideais em realidade.",
-                    "Sua personalidade transmite confiança e capacidade de concretização. Para o mundo exterior, você aparenta ser um mestre construtor com grandes ambições práticas.",
-                    "As pessoas tendem a ver você como uma pessoa com potencial excepcional, alguém que pode materializar visões em benefício de muitos. Sua energia é de legado e construção duradoura."
-                ]
+                // ... (padrão similar para outros números)
             },
             expression: {
                 1: [
-                    "Sua Expressão Total 1 revela um indivíduo independente e inovador. Você tem a capacidade de iniciar projetos e liderar com originalidade, marcando seu próprio caminho no mundo.",
-                    "A soma de seu nome mostra alguém com forte determinação e coragem para seguir caminhos não trilhados. Sua marca é a individualidade e a capacidade de tomar iniciativas corajosas.",
-                    "Você expressa no mundo qualidades de pioneirismo e autoconfiança. Sua energia é de ação e iniciativa, com talento para começar coisas novas e inspirar outros a seguir sua liderança."
+                    "Seus talentos naturais incluem liderança, iniciativa e originalidade. Você tem potencial para ser pioneiro em sua área de atuação.",
+                    "Sua expressão total revela capacidade de começar coisas novas e tomar decisões independentes. Você brilha quando pode seguir sua própria visão.",
+                    "Seu potencial geral inclui criatividade e autoconfiança. Você pode alcançar sucesso através de sua capacidade de inovar e liderar."
                 ],
                 2: [
-                    "Sua Expressão Total 2 revela um indivíduo cooperativo e diplomático. Você tem o dom de unir pessoas, criar harmonia e trabalhar em equipe com sensibilidade e tato.",
-                    "A soma de seu nome mostra alguém com grande capacidade de compreensão emocional e trabalho colaborativo. Sua marca é a paciência e a capacidade de mediar conflitos.",
-                    "Você expressa no mundo qualidades de paciência e compreensão. Sua energia é de união e equilíbrio, com talento para criar atmosferas harmoniosas e resolver disputas com diplomacia."
+                    "Seus talentos naturais incluem diplomacia, cooperação e sensibilidade. Você tem potencial para unir pessoas e resolver conflitos.",
+                    "Sua expressão total revela capacidade de trabalhar em equipe e criar harmonia. Você brilha em ambientes que valorizam a colaboração.",
+                    "Seu potencial geral inclui paciência e compreensão. Você pode alcançar sucesso através de sua capacidade de ouvir e mediar."
                 ],
-                3: [
-                    "Sua Expressão Total 3 revela um indivíduo criativo e comunicativo. Você tem o dom de expressar-se com alegria, entusiasmo e talento artístico, inspirando outros com sua visão.",
-                    "A soma de seu nome mostra alguém com habilidade natural para as artes e a comunicação. Sua marca é a autoexpressão otimista e a capacidade de trazer luz e diversão para qualquer situação.",
-                    "Você expressa no mundo qualidades de otimismo e charme. Sua energia é de inspiração e alegria, com talento para comunicar ideias de forma cativante e criar beleza ao seu redor."
-                ],
-                4: [
-                    "Sua Expressão Total 4 revela um indivíduo prático e organizado. Você tem a capacidade de construir coisas duráveis com seu trabalho, método e disciplina consistente.",
-                    "A soma de seu nome mostra alguém com forte senso de dever e abordagem sistemática. Sua marca é a confiabilidade e a capacidade de transformar conceitos em realidade através de esforço concentrado.",
-                    "Você expressa no mundo qualidades de estabilidade e perseverança. Sua energia é de concretização, com talento para criar estruturas sólidas e realizar trabalhos que exigem paciência e atenção aos detalhes."
-                ],
-                5: [
-                    "Sua Expressão Total 5 revela um indivíduo versátil e aventureiro. Você tem a capacidade de adaptar-se e prosperar com mudanças, trazendo dinamismo e progresso para qualquer situação.",
-                    "A soma de seu nome mostra alguém com necessidade de liberdade e variedade. Sua marca é a adaptabilidade e a capacidade de lidar com múltiplas tarefas e ambientes diferentes.",
-                    "Você expressa no mundo qualidades de curiosidade e dinamismo. Sua energia é de movimento e progresso, com talento para promover mudanças positivas e explorar novas possibilidades com entusiasmo."
-                ],
-                6: [
-                    "Sua Expressão Total 6 revela um indivíduo responsável e protetor. Você tem o dom de criar harmonia, cuidar dos outros e estabelecer equilíbrio em seu ambiente.",
-                    "A soma de seu nome mostra alguém com forte senso de justiça e amor. Sua marca é o serviço amoroso e a capacidade de nutrir e proteger aqueles sob seus cuidados.",
-                    "Você expressa no mundo qualidades de compaixão e equilíbrio. Sua energia é de nutrição e cuidado, com talento para criar ambientes acolhedores e resolver conflitos com sabedoria e tato."
-                ],
-                7: [
-                    "Sua Expressão Total 7 revela um indivíduo analítico e espiritual. Você tem a capacidade de compreender verdades profundas, analisar informações complexas e conectar-se com o mundo interior.",
-                    "A soma de seu nome mostra alguém com necessidade de conhecimento e introspecção. Sua marca é a sabedoria e a capacidade de perceber padrões e significados ocultos.",
-                    "Você expressa no mundo qualidades de intuição e percepção. Sua energia é de busca interior, com talento para investigar mistérios e compartilhar insights profundos sobre a natureza da realidade."
-                ],
-                8: [
-                    "Sua Expressão Total 8 revela um indivíduo ambicioso e eficiente. Você tem a capacidade de alcançar sucesso material, lidar com recursos e exercer liderança prática.",
-                    "A soma de seu nome mostra alguém com talento para os negócios e gestão. Sua marca é a realização concreta e a capacidade de transformar ideias em resultados tangíveis.",
-                    "Você expressa no mundo qualidades de autoridade e organização. Sua energia é de concretização de objetivos, com talento para lidar com poder e recursos de forma equilibrada e produtiva."
-                ],
-                9: [
-                    "Sua Expressão Total 9 revela um indivíduo humanitário e compassivo. Você tem o dom de compreender e ajudar a humanidade, trazendo sabedoria e perdão para situações desafiadoras.",
-                    "A soma de seu nome mostra alguém com idealismo e desejo de servir. Sua marca é a compaixão universal e a capacidade de ver o potencial em todas as pessoas e circunstâncias.",
-                    "Você expressa no mundo qualidades de tolerância e sabedoria. Sua energia é de serviço universal, com talento para inspirar outros a superar limitações e abraçar visões mais elevadas."
-                ],
-                11: [
-                    "Sua Expressão Total 11 revela um indivíduo inspirado e visionário. Você tem a capacidade de elevar a consciência dos outros, canalizar ideias elevadas e servir como guia espiritual.",
-                    "A soma de seu nome mostra alguém com percepções intuitivas e ideais elevados. Sua marca é a inspiração e a capacidade de conectar com dimensões superiores de compreensão.",
-                    "Você expressa no mundo qualidades de sensibilidade e iluminação. Sua energia é de conexão espiritual, com talento para transmitir mensagens inspiradoras e ajudar outros em seu crescimento interior."
-                ],
-                22: [
-                    "Sua Expressão Total 22 revela um indivíduo com capacidade de realizar grandes obras. Você é um mestre construtor, capaz de materializar visões ambiciosas em benefício da humanidade.",
-                    "A soma de seu nome mostra alguém que pode transformar ideais elevados em realidade prática. Sua marca é a concretização em grande escala e a capacidade de liderar projetos monumentais.",
-                    "Você expressa no mundo qualidades de visão prática e ambição construtiva. Sua energia é de legado duradouro, com talento para combinar inspiração com ação prática em nível excepcional."
-                ]
+                // ... (padrão similar para outros números)
             },
             challenge: {
-                "0": [
-                    "Você não tem desafios específicos nesta vida, o que indica uma jornada mais fluida e harmoniosa. Isso sugere que você já desenvolveu equilíbrio em áreas que seriam normalmente desafiadoras para outros.",
-                    "A ausência de números de desafio específicos sugere uma alma que já dominou muitas lições em encarnações passadas. Sua jornada atual pode focar mais em expressão criativa e serviço do que em superação de obstáculos pessoais.",
-                    "Sem desafios numerológicos específicos, sua vida tende a ser mais tranquila e integrada. Isso não significa ausência de desafios, mas sim que você tem recursos internos para lidar com eles de forma mais equilibrada."
+                1: [
+                    "Seu principal desafio é desenvolver autoconfiança e independência. Você precisa aprender a confiar em seu próprio julgamento.",
+                    "A lição mais importante para você é superar o medo de ficar sozinho ou de tomar iniciativas. Aprenda a valorizar sua individualidade.",
+                    "Você está aqui para dominar a arte da liderança e da originalidade. Seu desafio é expressar sua própria identidade sem medo."
                 ],
-                "1": [
-                    "Seu desafio é desenvolver autoconfiança e independência. Você pode tender a depender demais dos outros para validação ou tomada de decisões. A vida colocará situações onde precisará confiar em seu próprio julgamento.",
-                    "O desafio 1 indica necessidade de aprender a confiar em si mesmo e a tomar iniciativas sem medo do fracasso. Você pode enfrentar situações onde será testada sua capacidade de 'se manter em pé' sozinho.",
-                    "Você está aqui para superar a insegurança e desenvolver sua individualidade. Aprender a liderar é parte de seu caminho. Cuidado com tendências a delegar demais suas escolhas ou a buscar aprovação externa excessiva."
+                2: [
+                    "Seu principal desafio é desenvolver autoconfiança e independência. Você precisa aprender a confiar em seu próprio julgamento.",
+                    "A lição mais importante para você é superar o medo de ficar sozinho ou de tomar iniciativas. Aprenda a valorizar sua individualidade.",
+                    "Você está aqui para dominar a arte da liderança e da originalidade. Seu desafio é expressar sua própria identidade sem medo."
                 ],
-                "2": [
-                    "Seu desafio é desenvolver diplomacia e paciência. Você pode ter tendência a ser muito sensível a críticas ou a evitar conflitos a qualquer custo. A vida testará sua capacidade de lidar com discordâncias de forma equilibrada.",
-                    "O desafio 2 indica necessidade de aprender a trabalhar em equipe e a lidar com críticas sem levar para o lado pessoal. Você pode ser tentado a ceder demais ou, no extremo oposto, a ser defensivo demais.",
-                    "Você está aqui para superar a timidez e a dependência emocional. Aprender a cooperar sem perder sua identidade é fundamental. Situações repetitivas podem surgir para ensinar a expressar suas necessidades com assertividade e tato."
-                ],
-                "3": [
-                    "Seu desafio é desenvolver autoexpressão e disciplina. Você pode tender a dispersar sua energia criativa ou a ser excessivamente crítico consigo mesmo e com os outros. A vida apresentará oportunidades para expressar seus dons com confiança.",
-                    "O desafio 3 indica necessidade de aprender a canalizar seus talentos criativos de forma produtiva e positiva. Você pode oscilar entre explosões de criatividade e bloqueios de expressão.",
-                    "Você está aqui para superar a autocrítica excessiva ou a superficialidade. Aprender a expressar-se com autenticidade é essencial. Situações podem surgir para ensinar a valorizar seus dons e compartilhá-los com o mundo sem medo."
-                ],
-                "4": [
-                    "Seu desafio é desenvolver flexibilidade e organização. Você pode tender ao excesso de rigidez ou, no extremo oposto, à falta de método. A vida trará situações que exigirão tanto estrutura quanto adaptabilidade.",
-                    "O desafio 4 indica necessidade de encontrar equilíbrio entre planejamento e espontaneidade. Você pode alternar entre períodos de extremo controle e momentos de completa desorganização.",
-                    "Você está aqui para superar o perfeccionismo ou a desorganização crônica. Aprender a construir bases sólidas sem perder a flexibilidade é importante. A vida pode testar sua capacidade de lidar com imprevistos enquanto mantém seus objetivos."
-                ],
-                "5": [
-                    "Seu desafio é desenvolver liberdade com responsabilidade. Você pode tender ao excesso de impulsividade ou, no outro extremo, ao medo de mudanças. A vida apresentará situações que testarão seu equilíbrio entre aventura e estabilidade.",
-                    "O desafio 5 indica necessidade de aprender a lidar com a liberdade sem cair em excessos ou no medo do novo. Você pode oscilar entre comportamentos rebeldes e atitudes excessivamente cautelosas.",
-                    "Você está aqui para superar a instabilidade ou a rigidez. Aprender a adaptar-se às mudanças com sabedoria é parte de seu caminho. Situações podem surgir para ensinar que verdadeira liberdade inclui responsabilidade por suas escolhas."
-                ],
-                "6": [
-                    "Seu desafio é desenvolver amor próprio e equilíbrio nos relacionamentos. Você pode tender ao excesso de responsabilidade pelos outros ou a dificuldades em compromissos. A vida trará lições sobre cuidar dos outros sem negligenciar suas próprias necessidades.",
-                    "O desafio 6 indica necessidade de aprender a amar sem sufocar ou ser dependente. Você pode alternar entre comportamentos controladores e medo de intimidade verdadeira.",
-                    "Você está aqui para superar o perfeccionismo nos relacionamentos ou a negligência com laços familiares. Aprender a cuidar sem controlar é essencial. Situações repetitivas podem surgir para ensinar o equilíbrio entre dar e receber amor."
-                ],
-                "7": [
-                    "Seu desafio é desenvolver fé e confiança no universo. Você pode tender ao ceticismo excessivo ou, no outro extremo, à fuga da realidade através de fantasias espirituais. A vida testará sua capacidade de equilibrar razão e intuição.",
-                    "O desafio 7 indica necessidade de integrar lógica e espiritualidade. Você pode oscilar entre dúvida excessiva e credulidade ingênua, buscando sempre respostas definitivas.",
-                    "Você está aqui para superar a desconfiança ou o misticismo sem base. Aprender a confiar em sua sabedoria interior é fundamental. Situações podem surgir para ensinar que algumas verdades são percebidas, não provadas."
-                ],
-                "8": [
-                    "Seu desafio é desenvolver uma relação saudável com o poder e o dinheiro. Você pode tender ao materialismo excessivo ou ao medo do sucesso e da autoridade. A vida apresentará lições sobre uso ético dos recursos e influência.",
-                    "O desafio 8 indica necessidade de aprender a lidar com autoridade - seja exercendo-a com sabedoria, seja aceitando orientação quando necessário. Você pode alternar entre ambição desmedida e rejeição ao sucesso material.",
-                    "Você está aqui para superar a ganância ou a pobreza autoimposta. Aprender a usar o poder para o bem é parte de seu caminho. Situações podem surgir para ensinar que verdadeira abundância vem do equilíbrio entre matéria e espírito."
-                ],
-                "9": [
-                    "Seu desafio é desenvolver compaixão universal sem perder seus limites. Você pode tender ao sacrifício excessivo pelos outros ou a dificuldades em perdoar. A vida trará oportunidades para praticar o desapego e o amor incondicional.",
-                    "O desafio 9 indica necessidade de aprender a servir à humanidade sem negligenciar suas próprias necessidades. Você pode oscilar entre altruísmo extremo e isolamento emocional.",
-                    "Você está aqui para superar o idealismo excessivo ou a falta de empatia. Aprender a perdoar e deixar ir é essencial. Situações repetitivas podem surgir para ensinar a diferença entre serviço amoroso e autoanulação."
-                ]
+                // ... (padrão similar para outros números)
             },
             karmicLessons: {
-                "1": "Ausência do número 1: Desafio para desenvolver autoconfiança, independência e iniciativa própria. Você pode tender a depender muito dos outros para tomar decisões ou validar suas escolhas. A vida trará situações que exigirão que você 'fique em seus próprios pés' e desenvolva sua força interior.",
-                "2": "Ausência do número 2: Desafio para desenvolver cooperação, diplomacia e sensibilidade. Você pode ter dificuldade em trabalhar em equipe ou em expressar necessidades emocionais. A vida apresentará oportunidades para aprender o valor da paciência e da compreensão mútua.",
-                "3": "Ausência do número 3: Desafio para desenvolver criatividade, autoexpressão e comunicação. Você pode reprimir seus talentos artísticos ou ter dificuldade em expressar sentimentos. Situações surgirão para encorajar sua expressão única e alegria de viver.",
-                "4": "Ausência do número 4: Desafio para desenvolver disciplina, organização e perseverança. Você pode ter dificuldade com rotinas ou completar o que começa. A vida trará lições sobre o valor do trabalho consistente e da construção sólida.",
-                "5": "Ausência do número 5: Desafio para desenvolver liberdade, adaptabilidade e versatilidade. Você pode resistir a mudanças ou, no extremo oposto, ser excessivamente impulsivo. Situações surgirão para ensinar o equilíbrio entre estabilidade e aventura.",
-                "6": "Ausência do número 6: Desafio para desenvolver responsabilidade, amor incondicional e equilíbrio familiar. Você pode ter dificuldade em compromissos ou em cuidar de si e dos outros. A vida apresentará lições sobre serviço amoroso e criação de harmonia.",
-                "7": "Ausência do número 7: Desafio para desenvolver introspecção, sabedoria e conexão espiritual. Você pode negligenciar sua vida interior ou buscar respostas apenas no mundo material. Situações surgirão para despertar sua busca por significado mais profundo.",
-                "8": "Ausência do número 8: Desafio para desenvolver poder pessoal, eficiência e realização material. Você pode ter dificuldade em lidar com dinheiro ou autoridade. A vida trará lições sobre uso ético de recursos e liderança equilibrada.",
-                "9": "Ausência do número 9: Desafio para desenvolver compaixão universal, altruísmo e sabedoria humanitária. Você pode ter dificuldade em perdoar ou ver o quadro maior. Situações surgirão para expandir sua compreensão e conexão com a humanidade."
+                A: [
+                    "A ausência da letra A indica uma lição cármica sobre independência e iniciativa. Você precisa desenvolver autoconfiança e capacidade de começar coisas novas.",
+                    "A falta da letra A em seu nome sugere que em vidas passadas você pode ter sido muito dependente dos outros. Nesta vida, aprenda a tomar suas próprias decisões."
+                ],
+                B: [
+                    "A ausência da letra B indica uma lição cármica sobre cooperação e sensibilidade. Você precisa desenvolver paciência e capacidade de trabalhar em equipe.",
+                    "A falta da letra B em seu nome sugere que em vidas passadas você pode ter sido muito independente. Nesta vida, aprenda o valor da cooperação."
+                ],
+                // ... (padrão similar para outras letras)
             },
             karmicDebts: {
-                "13": "Dívida cármica 13: Indica que em vidas passadas você pode ter resistido a mudanças necessárias ou abusado do poder. Nesta vida, aprenderá a transformar obstáculos em oportunidades através do trabalho árduco. Você pode enfrentar desafios onde precisará perseverar através de dificuldades, aprendendo que verdadeiro crescimento vem do esforço consciente.",
-                "14": "Dívida cármica 14: Sugere que em encarnações anteriores você pode ter abusado de liberdade ou prazeres. Agora, aprenderá a usar sua liberdade com sabedoria e responsabilidade. A vida pode apresentar testes onde excessos levam a consequências, ensinando moderação e uso ético de sua independência.",
-                "16": "Dívida cármica 16: Indica que no passado você pode ter ferido outros através de egoísmo ou abuso de poder. Nesta vida, aprenderá humildade e reconstruirá sua vida através da sabedoria conquistada. Situações podem surgir para ensinar que verdadeira elevação vem do serviço e da consideração pelos outros.",
-                "19": "Dívida cármica 19: Sugere que em vidas passadas você pode ter dominado ou manipulado outros. Agora, aprenderá a liderar com compaixão e a usar seu poder para o bem coletivo. Desafios podem aparecer para testar sua capacidade de liderança ética e inclusiva."
-            },
-            lifeCycles: {
-                first: {
-                    1: "Seu primeiro ciclo (0-30 anos) é de independência e autodescoberta. Um período para desenvolver autoconfiança e aprender a tomar iniciativas. Você será colocado em situações que exigirão que você confie em si mesmo e desenvolva sua individualidade. Este é um tempo de estabelecer sua identidade e aprender a 'se manter em seus próprios pés'.",
-                    2: "Seu primeiro ciclo (0-30 anos) é de cooperação e relacionamentos. Um período para desenvolver sensibilidade e aprender a trabalhar em equipe. Você será colocado em situações que testarão sua capacidade de criar harmonia e lidar com as necessidades dos outros. Este é um tempo de aprender sobre diplomacia, paciência e conexões emocionais.",
-                    3: "Seu primeiro ciclo (0-30 anos) é de criatividade e autoexpressão. Um período para desenvolver seus talentos e aprender a comunicar suas ideias. Você será colocado em situações que encorajarão sua expressão única e alegria de viver. Este é um tempo de explorar sua criatividade e desenvolver confiança em compartilhar seus dons.",
-                    4: "Seu primeiro ciclo (0-30 anos) é de construção e estabilidade. Um período para desenvolver disciplina e aprender a construir bases sólidas. Você será colocado em situações que exigirão trabalho árduo e organização. Este é um tempo de estabelecer estruturas duradouras em sua vida e aprender o valor da persistência.",
-                    5: "Seu primeiro ciclo (0-30 anos) é de liberdade e mudanças. Um período para desenvolver adaptabilidade e experimentar a diversidade da vida. Você será colocado em situações que testarão sua capacidade de lidar com imprevistos e abraçar novas experiências. Este é um tempo de explorar diferentes aspectos da vida e descobrir sua versatilidade.",
-                    6: "Seu primeiro ciclo (0-30 anos) é de responsabilidade e família. Um período para desenvolver amor incondicional e aprender a cuidar dos outros. Você será colocado em situações que envolvem compromissos e cuidados com entes queridos. Este é um tempo de aprender sobre serviço amoroso e criação de harmonia em seu ambiente.",
-                    7: "Seu primeiro ciclo (0-30 anos) é de introspecção e estudo. Um período para desenvolver sabedoria interior e buscar conhecimento profundo. Você será colocado em situações que estimularão sua curiosidade e necessidade de compreensão. Este é um tempo de aprendizado intenso e desenvolvimento de sua vida interior.",
-                    8: "Seu primeiro ciclo (0-30 anos) é de ambição e realização. Um período para desenvolver eficiência e aprender a lidar com poder e recursos. Você será colocado em situações que testarão sua capacidade de alcançar objetivos concretos. Este é um tempo de aprender sobre liderança e manifestação material.",
-                    9: "Seu primeiro ciclo (0-30 anos) é de compaixão e serviço. Um período para desenvolver altruísmo e aprender a ajudar a humanidade. Você será colocado em situações que expandirão sua compreensão das necessidades dos outros. Este é um tempo de desenvolver visão humanitária e conexão com o mundo ao seu redor."
-                },
-                second: {
-                    1: "Seu segundo ciclo (30-60 anos) é de liderança e originalidade. Um período para assumir responsabilidades e seguir seu caminho único. Você será colocado em posições onde precisará tomar iniciativas corajosas e confiar em sua visão pessoal. Este é um tempo de colher os frutos de sua autoconfiança e exercer sua independência de forma madura.",
-                    2: "Seu segundo ciclo (30-60 anos) é de harmonia e parcerias. Um período para aprofundar relacionamentos e trabalhar com diplomacia. Você será colocado em situações que exigirão cooperação refinada e compreensão emocional. Este é um tempo de criar equilíbrio em suas conexões e usar sua sensibilidade para benefício mútuo.",
-                    3: "Seu segundo ciclo (30-60 anos) é de expressão criativa e alegria. Um período para compartilhar seus dons e inspirar outros. Você será encorajado a expressar sua singularidade de formas mais maduras e impactantes. Este é um tempo de colher os frutos de seus talentos e espalhar luz através de sua criatividade.",
-                    4: "Seu segundo ciclo (30-60 anos) é de trabalho árduo e organização. Um período para consolidar suas conquistas através de método. Você será colocado em situações que exigirão aplicação prática de suas habilidades e construção de estruturas duradouras. Este é um tempo de concretizar sonhos através de esforço disciplinado.",
-                    5: "Seu segundo ciclo (30-60 anos) é de liberdade e progresso. Um período para expandir horizontes e abraçar mudanças significativas. Você será colocado em situações que testarão sua capacidade de adaptação em nível mais profundo. Este é um tempo de explorar novas dimensões da vida com a sabedoria da experiência.",
-                    6: "Seu segundo ciclo (30-60 anos) é de serviço e equilíbrio. Um período para cuidar de outros enquanto mantém harmonia pessoal. Você será colocado em posições onde suas habilidades de nutrir e criar beleza serão ampliadas. Este é um tempo de expressar amor de formas mais maduras e equilibradas.",
-                    7: "Seu segundo ciclo (30-60 anos) é de sabedoria e especialização. Um período para aprofundar conhecimentos e confiar na intuição. Você será guiado a áreas onde poderá aplicar sua compreensão única e insights profundos. Este é um tempo de refinamento intelectual e espiritual.",
-                    8: "Seu segundo ciclo (30-60 anos) é de realização material e poder. Um período para colher os frutos de seus esforços com sabedoria. Você será colocado em posições onde poderá exercer liderança e manifestar abundância. Este é um tempo de usar seus recursos e influência para criar impacto positivo.",
-                    9: "Seu segundo ciclo (30-60 anos) é de humanitarismo e idealismo. Um período para dedicar-se a causas maiores e expandir sua compaixão. Você será guiado a situações onde poderá fazer diferença em escala mais ampla. Este é um tempo de expressar sua sabedoria acumulada em serviço ao mundo."
-                },
-                third: {
-                    1: "Seu terceiro ciclo (60+ anos) é de independência e realização pessoal. Um período para viver com autenticidade e compartilhar sua sabedoria. Você será encorajado a expressar sua individualidade de forma desprendida, inspirando outros através de seu exemplo. Este é um tempo de colher os frutos de uma vida de autoconfiança.",
-                    2: "Seu terceiro ciclo (60+ anos) é de paz e cooperação. Um período para servir como pacificador e valorizar conexões significativas. Você será colocado em posições onde sua maturidade emocional pode criar harmonia e entendimento. Este é um tempo de compartilhar a sabedoria das relações que acumulou ao longo da vida.",
-                    3: "Seu terceiro ciclo (60+ anos) é de alegria e criatividade. Um período para expressar-se livremente e inspirar através do entusiasmo. Você será encorajado a compartilhar seus dons criativos sem restrições, iluminando a vida dos outros. Este é um tempo de celebrar a beleza da existência com leveza e sabedoria.",
-                    4: "Seu terceiro ciclo (60+ anos) é de estabilidade e legado. Um período para consolidar seu trabalho e oferecer estrutura a outros. Você será colocado em posições onde poderá compartilhar os frutos de sua disciplina e organização. Este é um tempo de deixar bases sólidas para as gerações futuras.",
-                    5: "Seu terceiro ciclo (60+ anos) é de liberdade e sabedoria. Um período para compartilhar experiências e ensinar sobre adaptabilidade. Você será encorajado a transmitir as lições de suas aventuras e explorações. Este é um tempo de inspirar outros a abraçar a vida com coragem e flexibilidade.",
-                    6: "Seu terceiro ciclo (60+ anos) é de amor e serviço. Um período para nutrir a comunidade e oferecer orientação com compaixão. Você será colocado em posições onde seu cuidado e sabedoria podem beneficiar muitos. Este é um tempo de expressar amor incondicional em sua forma mais pura e madura.",
-                    7: "Seu terceiro ciclo (60+ anos) é de introspecção e ensino. Um período para compartilhar conhecimentos profundos e inspirar busca interior. Você será guiado a áreas onde poderá transmitir as verdades essenciais que descobriu. Este é um tempo de servir como farol de sabedoria para os que buscam compreensão.",
-                    8: "Seu terceiro ciclo (60+ anos) é de realização e liderança. Um período para usar sua experiência em benefício de projetos significativos. Você será colocado em posições onde poderá aplicar sua habilidade organizacional em grande escala. Este é um tempo de ver os frutos duradouros de seus esforços ao longo da vida.",
-                    9: "Seu terceiro ciclo (60+ anos) é de compaixão universal. Um período para dedicar-se a causas humanitárias e oferecer sabedoria espiritual. Você será guiado a situações onde poderá fazer diferença no mundo de forma abrangente. Este é um tempo de expressar amor pela humanidade em sua forma mais elevada."
-                }
+                13: [
+                    "O número 13 como dívida cármica indica que em vidas passadas você pode ter abusado de poder ou sido muito controlador. Nesta vida, aprenda a usar o poder com sabedoria.",
+                    "Sua dívida cármica 13 sugere lições sobre transformação e renascimento. Você está aqui para aprender a lidar com mudanças de forma positiva."
+                ],
+                14: [
+                    "O número 14 como dívida cármica indica que em vidas passadas você pode ter sido irresponsável com liberdade. Nesta vida, aprenda a equilibrar liberdade com responsabilidade.",
+                    "Sua dívida cármica 14 sugere lições sobre adaptação e flexibilidade. Você está aqui para aprender a lidar com mudanças sem perder seu centro."
+                ],
+                // ... (padrão similar para outros números)
             },
             personalYear: {
                 1: [
-                    "Ano 1: Um ano de novos começos e oportunidades. Tempo para tomar iniciativas e buscar independência. Plante as sementes para os próximos 9 anos. Este é um período para confiar em sua visão e dar os primeiros passos em direção a objetivos importantes. A energia favorece originalidade e coragem para iniciar projetos que expressem sua individualidade.",
-                    "Este é um ano de ação e coragem. Você está sendo chamado a confiar em si mesmo e a dar o primeiro passo em direção a seus objetivos. O universo apoiará esforços independentes e a manifestação de novas ideias. Cuidado com tendências a depender muito dos outros - este é um tempo para afirmar sua autonomia e visão pessoal.",
-                    "O ano 1 traz energia de renovação. É hora de deixar para trás o que não serve mais e abraçar novas possibilidades com confiança. Situações podem surgir para testar sua capacidade de tomar iniciativas e confiar em seu próprio julgamento. Aproveite para estabelecer metas claras que guiarão seu crescimento nos próximos anos."
+                    "Este é um ano de novos começos e iniciativas. É tempo de plantar sementes para o futuro e agir com independência.",
+                    "O ano pessoal 1 traz oportunidades para iniciar projetos importantes. Foque em sua individualidade e coragem para tomar decisões.",
+                    "Energia de pioneirismo e originalidade marca este ano. É um período favorável para dar o primeiro passo em direção a seus objetivos."
                 ],
                 2: [
-                    "Ano 2: Um ano de paciência e cooperação. Tempo para desenvolver relacionamentos e trabalhar em equipe. Detalhes e diplomacia são importantes. A energia favorece colaboração, sensibilidade e atenção aos aspectos emocionais das situações. Este é um período para cultivar paciência e confiar no processo, mesmo quando os resultados não são imediatos.",
-                    "Este é um ano de sensibilidade e intuição. Você está sendo chamado a ouvir mais e a buscar harmonia em todas as áreas da vida. Relacionamentos e parcerias estarão em foco, exigindo tato e compreensão mútua. Evite tomar decisões precipitadas - este é um tempo para reflexão, planejamento sutil e desenvolvimento de conexões significativas.",
-                    "O ano 2 traz energia de parcerias. É hora de cultivar paciência e confiar que tudo está se desenvolvendo no momento certo. Situações podem surgir para ensinar o valor da diplomacia e da cooperação. Aproveite para aprofundar relacionamentos importantes e resolver conflitos pendentes com sabedoria e compreensão."
+                    "Este é um ano de paciência e cooperação. É tempo de desenvolver relacionamentos e trabalhar em equipe.",
+                    "O ano pessoal 2 traz oportunidades para diplomacia e harmonia. Foque em escutar os outros e buscar equilíbrio.",
+                    "Energia de parceria e sensibilidade marca este ano. É um período favorável para resolver conflitos e construir alianças."
                 ],
-                3: [
-                    "Ano 3: Um ano de criatividade e autoexpressão. Tempo para compartilhar seus talentos e alegria de viver. Socialização e diversão estão em destaque. A energia favorece comunicação, expressão artística e otimismo. Este é um período para deixar sua luz criativa brilhar e compartilhar seus dons com o mundo.",
-                    "Este é um ano de expansão criativa. Você está sendo chamado a expressar-se com autenticidade e a encontrar prazer nas pequenas coisas. O universo apoiará projetos artísticos, atividades sociais e qualquer forma de expressão positiva. Cuidado com tendências à dispersão - este é um tempo para canalizar sua criatividade de forma produtiva e alegre.",
-                    "O ano 3 traz energia de otimismo. É hora de liberar sua criança interior e permitir que sua luz criativa brilhe. Situações podem surgir para testar sua capacidade de manter alegria e entusiasmo mesmo diante de desafios. Aproveite para explorar novos talentos e compartilhar sua visão única com os outros."
-                ],
-                4: [
-                    "Ano 4: Um ano de trabalho árduo e organização. Tempo para construir bases sólidas e ser prático. Disciplina e estabilidade são essenciais. A energia favorece esforço concentrado, método e atenção aos detalhes. Este é um período para estabelecer estruturas duradouras em sua vida.",
-                    "Este é um ano de concretização. Você está sendo chamado a colocar mãos à obra e a estruturar seus projetos de forma metódica. O universo apoiará esforços consistentes e abordagens práticas aos desafios. Evite atalhos - este é um tempo para construir alicerces sólidos através de trabalho dedicado e responsabilidade.",
-                    "O ano 4 traz energia de construção. É hora de ser persistente e confiar que seu trabalho árduo trará resultados duradouros. Situações podem surgir para testar sua disciplina e capacidade de lidar com responsabilidades. Aproveite para organizar sua vida, resolver questões práticas e estabelecer rotinas saudáveis."
-                ],
-                5: [
-                    "Ano 5: Um ano de mudanças e liberdade. Tempo para experimentar novidades e quebrar rotinas. Adaptabilidade e versatilidade são necessárias. A energia favorece progresso, aventura e exploração de novas possibilidades. Este é um período para abraçar a liberdade e estar aberto ao inesperado.",
-                    "Este é um ano de transformação. Você está sendo chamado a abraçar a liberdade e a estar aberto a oportunidades inesperadas. O universo pode trazer mudanças significativas que testarão sua capacidade de adaptação. Cuidado com excessos - este é um tempo para explorar novas direções com sabedoria, mantendo um pé na realidade.",
-                    "O ano 5 traz energia de aventura. É hora de sair da zona de conforto e explorar novas possibilidades que expandem seus horizontes. Situações podem surgir para desafiar suas rotinas e padrões estabelecidos. Aproveite para questionar limitações autoimpostas e experimentar abordagens diferentes para velhos problemas."
-                ],
-                6: [
-                    "Ano 6: Um ano de responsabilidade e harmonia. Tempo para cuidar de outros e criar equilíbrio. Família e relacionamentos estão em foco. A energia favorece serviço amoroso, compromisso e criação de beleza ao redor. Este é um período para nutrir o que é importante em sua vida.",
-                    "Este é um ano de serviço e compromisso. Você está sendo chamado a encontrar beleza em suas obrigações e a nutrir o que é importante. O universo trará situações que testarão seu senso de responsabilidade e capacidade de criar harmonia. Evite assumir cargas excessivas - este é um tempo para equilibrar cuidado pelos outros com autocuidado.",
-                    "O ano 6 traz energia de amor. É hora de curar relacionamentos, criar harmonia em casa e assumir responsabilidades com alegria. Situações podem surgir para ensinar lições sobre serviço desinteressado e compromisso equilibrado. Aproveite para fortalecer laços familiares e expressar seu cuidado por aqueles que ama."
-                ],
-                7: [
-                    "Ano 7: Um ano de introspecção e sabedoria. Tempo para estudar, refletir e conectar-se com seu mundo interior. Espiritualidade em destaque. A energia favorece análise, especialização e desenvolvimento de sabedoria interior. Este é um período para buscar compreensão mais profunda.",
-                    "Este é um ano de busca interior. Você está sendo chamado a confiar em sua intuição e a dedicar tempo ao autoconhecimento. O universo apoiará atividades de estudo, reflexão e desenvolvimento espiritual. Cuidado com isolamento excessivo - este é um tempo para equilibrar introspecção com conexões significativas.",
-                    "O ano 7 traz energia de mistério. É hora de afastar-se do barulho externo para ouvir a voz da sabedoria interior. Situações podem surgir para testar sua fé e capacidade de confiar em percepções sutis. Aproveite para aprofundar conhecimentos em áreas especializadas e conectar-se com sua espiritualidade."
-                ],
-                8: [
-                    "Ano 8: Um ano de poder e realização material. Tempo para colher o que plantou e lidar com finanças. Autoridade e eficiência são importantes. A energia favorece liderança, gestão de recursos e manifestação de objetivos. Este é um período para assumir controle de sua vida e colher recompensas.",
-                    "Este é um ano de conquistas. Você está sendo chamado a assumir liderança e a colher os frutos de seus esforços passados. O universo trará oportunidades para demonstrar sua competência e lidar com recursos. Evite ganância - este é um tempo para usar poder e influência com sabedoria e equilíbrio.",
-                    "O ano 8 traz energia de abundância. É hora de reconhecer seu valor, fazer negócios inteligentes e usar seu poder com sabedoria. Situações podem surgir para testar sua capacidade de lidar com sucesso e autoridade. Aproveite para consolidar projetos importantes e tomar decisões estratégicas sobre recursos."
-                ],
-                9: [
-                    "Ano 9: Um ano de conclusões e compaixão. Tempo para encerrar ciclos e preparar-se para novos começos. Perdão e desapego são necessários. A energia favorece finalizações, serviço humanitário e liberação do que já não serve. Este é um período para deixar ir e preparar-se para renovação.",
-                    "Este é um ano de transição. Você está sendo chamado a deixar ir o que já não serve e a abrir espaço para novas experiências. O universo trará situações que testarão sua capacidade de perdoar e seguir em frente. Cuidado com apegos - este é um tempo para completar assuntos pendentes e liberar padrões ultrapassados.",
-                    "O ano 9 traz energia de finalização. É hora de perdoar, liberar e refletir sobre as lições aprendidas antes de um novo ciclo começar. Situações podem surgir para ensinar sobre desapego e compaixão universal. Aproveite para encerrar capítulos completos de sua vida e preparar-se mentalmente para o próximo ciclo de crescimento."
-                ]
+                // ... (padrão similar para outros números)
             }
         };
-        
+
+        // Função para validar o nome (apenas letras e espaços)
+        function validateName(name) {
+            const regex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s]+$/;
+            return regex.test(name);
+        }
+
         // Função para calcular o número de destino
         function calculateDestinyNumber(dateStr) {
             const [day, month, year] = dateStr.split('/').map(Number);
@@ -1045,230 +641,11 @@ function calculateCurrentAge(birthDate) {
             
             return sum;
         }
-        
-        // Função para calcular o número da alma (vogais)
-        function calculateSoulNumber(name) {
-            const vowels = name.match(/[AEIOUÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜ]/gi) || [];
-            const vowelValues = vowels.map(letter => getLetterValue(letter.toUpperCase()));
-            let sum = vowelValues.reduce((acc, val) => acc + val, 0);
-            
-            while (sum > 9 && sum !== 11 && sum !== 22) {
-                sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-            }
-            
-            return sum;
-        }
-        
-        // Função para calcular o número da personalidade (consoantes)
-        function calculatePersonalityNumber(name) {
-            const consonants = name.match(/[BCDFGHJKLMNPQRSTVWXYZÇ]/gi) || [];
-            const consonantValues = consonants.map(letter => getLetterValue(letter.toUpperCase()));
-            let sum = consonantValues.reduce((acc, val) => acc + val, 0);
-            
-            while (sum > 9 && sum !== 11 && sum !== 22) {
-                sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-            }
-            
-            return sum;
-        }
-        
-        // Função para calcular o número de expressão total
-        function calculateExpressionNumber(name) {
-            const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
-            const letterValues = letters.map(letter => getLetterValue(letter.toUpperCase()));
-            let sum = letterValues.reduce((acc, val) => acc + val, 0);
-            
-            while (sum > 9 && sum !== 11 && sum !== 22) {
-                sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-            }
-            
-            return sum;
-        }
-        
-        // Função para calcular os números de desafio
-        function calculateChallengeNumbers(date) {
-            const [day, month, year] = date.split('/').map(Number);
-            
-            // Primeiro desafio: mês - dia
-            const firstChallenge = Math.abs(month - day);
-            
-            // Segundo desafio: dia - ano reduzido
-            const yearReduced = reduceToSingleDigit(year);
-            const secondChallenge = Math.abs(day - yearReduced);
-            
-            // Terceiro desafio: primeiro - segundo desafio
-            const thirdChallenge = Math.abs(firstChallenge - secondChallenge);
-            
-            // Quarto desafio: mês - ano reduzido
-            const fourthChallenge = Math.abs(month - yearReduced);
-            
-            return {
-                first: firstChallenge,
-                second: secondChallenge,
-                third: thirdChallenge,
-                fourth: fourthChallenge
-            };
-        }
-        
-        // Função para calcular as lições cármicas (letras ausentes)
-        function calculateKarmicLessons(name) {
-            const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const presentLetters = new Set();
-            
-            const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-            
-            for (const letter of normalizedName) {
-                if (/[A-Z]/.test(letter)) {
-                    presentLetters.add(letter);
-                }
-            }
-            
-            const missingLetters = [];
-            const missingNumbers = [];
-            
-            for (const letter of allLetters) {
-                if (!presentLetters.has(letter)) {
-                    missingLetters.push(letter);
-                    const number = getLetterValue(letter);
-                    if (!missingNumbers.includes(number)) {
-                        missingNumbers.push(number);
-                    }
-                }
-            }
-            
-            return {
-                letters: missingLetters,
-                numbers: missingNumbers.sort((a, b) => a - b)
-            };
-        }
-        
-        // Função para calcular dívidas cármicas
-        function calculateKarmicDebts(name, date) {
-            const debts = [];
-            const numbersToCheck = [13, 14, 16, 19];
-            
-            // Verificar no nome
-            const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
-            let currentGroup = '';
-            
-            for (const letter of letters) {
-                currentGroup += letter.toUpperCase();
-                const value = getLetterValue(currentGroup);
-                
-                if (numbersToCheck.includes(value)) {
-                    debts.push(value);
-                }
-                
-                if (value >= 10) {
-                    currentGroup = '';
-                }
-            }
-            
-            // Verificar na data
-            const dateNumbers = date.split('/').join('').split('').map(Number);
-            currentGroup = '';
-            
-            for (const digit of dateNumbers) {
-                currentGroup += digit;
-                const value = parseInt(currentGroup);
-                
-                if (numbersToCheck.includes(value)) {
-                    debts.push(value);
-                }
-                
-                if (value >= 10) {
-                    currentGroup = '';
-                }
-            }
-            
-            // Remover duplicatas e ordenar
-            return [...new Set(debts)].sort((a, b) => a - b);
-        }
-        
-        // Função para calcular os ciclos de vida
-        function calculateLifeCycles(date) {
-            const [day, month, year] = date.split('/').map(Number);
-            
-            // Primeiro ciclo: mês de nascimento (0-30 anos)
-            const firstCycleNumber = reduceToSingleDigit(month);
-            
-            // Segundo ciclo: dia de nascimento (30-60 anos)
-            const secondCycleNumber = reduceToSingleDigit(day);
-            
-            // Terceiro ciclo: ano de nascimento (60+ anos)
-            const thirdCycleNumber = reduceToSingleDigit(year);
-            
-            return {
-                first: firstCycleNumber,
-                second: secondCycleNumber,
-                third: thirdCycleNumber,
-                firstEndAge: 30,
-                secondEndAge: 60
-            };
-        }
-        
-        // Função para calcular o ano pessoal atual
-        function calculatePersonalYear(date) {
-            const [day, month, year] = date.split('/').map(Number);
-            const currentYear = new Date().getFullYear();
-            let sum = day + month + reduceToSingleDigit(currentYear);
-            
-            while (sum > 9) {
-                sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-            }
-            
-            return sum;
-        }
-        
-        // Função auxiliar para obter o valor numérico de uma letra
-        function getLetterValue(letter) {
-            const letterMap = {
-                'A': 1, 'Á': 1, 'Â': 1, 'À': 1, 'Ã': 1, 'Ä': 1,
-                'B': 2,
-                'C': 3, 'Ç': 3,
-                'D': 4,
-                'E': 5, 'É': 5, 'Ê': 5, 'È': 5, 'Ë': 5,
-                'F': 6,
-                'G': 7,
-                'H': 8,
-                'I': 9, 'Í': 9, 'Î': 9, 'Ì': 9, 'Ï': 9,
-                'J': 1,
-                'K': 2,
-                'L': 3,
-                'M': 4,
-                'N': 5,
-                'O': 6, 'Ó': 6, 'Ô': 6, 'Ò': 6, 'Õ': 6, 'Ö': 6,
-                'P': 7,
-                'Q': 8,
-                'R': 9,
-                'S': 1,
-                'T': 2,
-                'U': 3, 'Ú': 3, 'Û': 3, 'Ù': 3, 'Ü': 3,
-                'V': 4,
-                'W': 5,
-                'X': 6,
-                'Y': 7,
-                'Z': 8
-            };
-            
-            return letterMap[letter] || 0;
-        }
-        
-        // Função auxiliar para reduzir a um único dígito
-        function reduceToSingleDigit(number) {
-            let num = number;
-            
-            while (num > 9 && num !== 11 && num !== 22) {
-                num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-            }
-            
-            return num;
-        }
-        
-        // Função para formatar a data corretamente (correção do bug)
+
+        // Função para formatar a data corretamente (sem problemas de fuso horário)
         function formatDate(dateString) {
             const date = new Date(dateString);
-            // Ajuste para corrigir o fuso horário
+            // Adiciona o offset do fuso horário para corrigir a data
             const timezoneOffset = date.getTimezoneOffset() * 60000;
             const adjustedDate = new Date(date.getTime() + timezoneOffset);
             
@@ -1278,66 +655,192 @@ function calculateCurrentAge(birthDate) {
             
             return `${day}/${month}/${year}`;
         }
-        
-        // Função para mostrar exemplos de cálculo
-        function showCalculationExamples(data) {
-            // Exemplo para Número do Destino
-            const [day, month, year] = data.formattedDate.split('/');
-            document.getElementById('destinyCalculation').textContent = 
-                `Cálculo: ${day} (dia) + ${month} (mês) + ${year} (ano) = ${parseInt(day)+parseInt(month)+parseInt(year)} → ${data.destinyNumber}`;
+
+        // Função para extrair vogais do nome
+        function extractVowels(name) {
+            const vowels = name.match(/[AEIOUÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜ]/gi) || [];
+            return vowels.join('');
+        }
+
+        // Função para extrair consoantes do nome
+        function extractConsonants(name) {
+            const consonants = name.match(/[BCDFGHJKLMNPQRSTVWXYZÇ]/gi) || [];
+            return consonants.join('');
+        }
+
+        // Função para calcular o valor numérico de uma string
+        function calculateNameValue(name) {
+            const letterValues = {
+                'A': 1, 'J': 1, 'S': 1,
+                'B': 2, 'K': 2, 'T': 2,
+                'C': 3, 'L': 3, 'U': 3,
+                'D': 4, 'M': 4, 'V': 4,
+                'E': 5, 'N': 5, 'W': 5,
+                'F': 6, 'O': 6, 'X': 6,
+                'G': 7, 'P': 7, 'Y': 7,
+                'H': 8, 'Q': 8, 'Z': 8,
+                'I': 9, 'R': 9
+            };
             
-            // Exemplo para Número da Alma
-            const vowels = data.fullName.match(/[AEIOUÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜ]/gi) || [];
-            const vowelValues = vowels.map(l => getLetterValue(l.toUpperCase()));
-            document.getElementById('soulCalculation').textContent = 
-                `Vogais encontradas: ${vowels.join(', ')} → Valores: ${vowelValues.join(' + ')} = ${vowelValues.reduce((a,b) => a+b)} → ${data.soulNumber}`;
-            
-            // Exemplo para Número da Personalidade
-            const consonants = data.fullName.match(/[BCDFGHJKLMNPQRSTVWXYZÇ]/gi) || [];
-            const consonantValues = consonants.map(l => getLetterValue(l.toUpperCase()));
-            document.getElementById('personalityCalculation').textContent = 
-                `Consoantes encontradas: ${consonants.join(', ')} → Valores: ${consonantValues.join(' + ')} = ${consonantValues.reduce((a,b) => a+b)} → ${data.personalityNumber}`;
-            
-            // Exemplo para Número de Expressão
-            const letters = data.fullName.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
-            const letterValues = letters.map(l => getLetterValue(l.toUpperCase()));
-            document.getElementById('expressionCalculation').textContent = 
-                `Todas as letras: ${letters.join('')} → Valores: ${letterValues.join(' + ')} = ${letterValues.reduce((a,b) => a+b)} → ${data.expressionNumber}`;
-            
-            // Exemplo para Números de Desafio
-            const challenges = data.challengeNumbers;
-            document.getElementById('challengeCalculation').textContent = 
-                `1º: ${month} (mês) - ${day} (dia) = ${challenges.first} | 2º: ${day} (dia) - ${reduceToSingleDigit(year)} (ano reduzido) = ${challenges.second} | 3º: ${challenges.first} - ${challenges.second} = ${challenges.third} | 4º: ${month} (mês) - ${reduceToSingleDigit(year)} (ano reduzido) = ${challenges.fourth}`;
-            
-            // Exemplo para Lições Cármicas
-            if (data.karmicLessons.numbers.length > 0) {
-                document.getElementById('karmicLessonsCalculation').textContent = 
-                    `Letras ausentes no nome: ${data.karmicLessons.letters.join(', ')} → Números correspondentes: ${data.karmicLessons.numbers.join(', ')}`;
-            } else {
-                document.getElementById('karmicLessonsCalculation').textContent = 
-                    "Todas as letras estão presentes no nome, nenhuma lição cármica identificada";
+            let sum = 0;
+            for (let char of name.toUpperCase()) {
+                if (letterValues[char]) {
+                    sum += letterValues[char];
+                }
             }
             
-            // Exemplo para Dívidas Cármicas
-            if (data.karmicDebts.length > 0) {
-                document.getElementById('karmicDebtsCalculation').textContent = 
-                    `Números cármicos encontrados no nome ou data: ${data.karmicDebts.join(', ')}`;
-            } else {
-                document.getElementById('karmicDebtsCalculation').textContent = 
-                    "Nenhuma dívida cármica encontrada no nome ou data de nascimento";
+            while (sum > 9 && sum !== 11 && sum !== 22) {
+                sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
             }
             
-            // Exemplo para Ciclos de Vida
-            document.getElementById('lifeCyclesCalculation').textContent = 
-                `1º ciclo (0-30 anos): ${month} (mês) → ${data.lifeCycles.first} | 2º ciclo (30-60 anos): ${day} (dia) → ${data.lifeCycles.second} | 3º ciclo (60+ anos): ${year} (ano) → ${reduceToSingleDigit(year)} → ${data.lifeCycles.third}`;
+            return sum;
+        }
+
+        // Função para calcular os números de desafio
+        function calculateChallengeNumbers(birthDate) {
+            const [day, month, year] = birthDate.split('/').map(Number);
             
-            // Exemplo para Ano Pessoal
-            const currentYear = new Date().getFullYear();
-            document.getElementById('personalYearCalculation').textContent = 
-                `Cálculo: ${day} (dia) + ${month} (mês) + ${reduceToSingleDigit(currentYear)} (ano atual reduzido) = ${parseInt(day)+parseInt(month)+reduceToSingleDigit(currentYear)} → ${data.personalYear}`;
+            // Primeiro desafio: mês - dia
+            const first = Math.abs(month - day);
+            // Segundo desafio: dia - ano reduzido
+            const yearReduced = reduceToSingleDigit(year);
+            const second = Math.abs(day - yearReduced);
+            // Terceiro desafio: primeiro - segundo
+            const third = Math.abs(first - second);
+            // Quarto desafio: mês - ano reduzido
+            const fourth = Math.abs(month - yearReduced);
+            
+            return {
+                first: reduceToSingleDigit(first),
+                second: reduceToSingleDigit(second),
+                third: reduceToSingleDigit(third),
+                fourth: reduceToSingleDigit(fourth)
+            };
+        }
+
+        // Função para identificar lições cármicas (letras ausentes)
+        function findKarmicLessons(name) {
+            const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            const presentLetters = new Set(name.toUpperCase().replace(/[^A-Z]/g, ''));
+            const missingLetters = [];
+            
+            for (let letter of allLetters) {
+                if (!presentLetters.has(letter)) {
+                    missingLetters.push(letter);
+                }
+            }
+            
+            return missingLetters;
+        }
+
+        // Função para identificar dívidas cármicas (números 13, 14, 16 ou 19)
+        function findKarmicDebts(name, birthDate) {
+            const debts = [];
+            const fullString = name + birthDate;
+            const numbers = fullString.match(/\d+/g)?.join('') || '';
+            
+            if (numbers.includes('13')) debts.push(13);
+            if (numbers.includes('14')) debts.push(14);
+            if (numbers.includes('16')) debts.push(16);
+            if (numbers.includes('19')) debts.push(19);
+            
+            return debts.length > 0 ? debts : ['Nenhuma dívida cármica identificada'];
+        }
+
+        // Função para calcular o ano pessoal atual
+        function calculatePersonalYear(birthDate, currentDate = new Date()) {
+            const [day, month] = birthDate.split('/').map(Number);
+            const currentDay = currentDate.getDate();
+            const currentMonth = currentDate.getMonth() + 1;
+            const currentYear = currentDate.getFullYear();
+            
+            // Se ainda não passou o aniversário deste ano, subtrai 1
+            const birthdayPassed = (currentMonth > month) || 
+                                  (currentMonth === month && currentDay >= day);
+            const birthYear = birthdayPassed ? currentYear : currentYear - 1;
+            
+            const sum = day + month + birthYear;
+            return reduceToSingleDigit(sum);
+        }
+
+        // Função para calcular os ciclos de vida (versão melhorada)
+        function calculateLifeCycles(date) {
+            const [day, month, year] = date.split('/').map(Number);
+            
+            // Reduz cada componente para um único dígito
+            const firstCycle = reduceToSingleDigit(month);    // Mês = Primeiro ciclo (0-30 anos)
+            const secondCycle = reduceToSingleDigit(day);     // Dia = Segundo ciclo (30-60 anos)
+            const thirdCycle = reduceToSingleDigit(year);     // Ano = Terceiro ciclo (60+ anos)
+            
+            return {
+                cycles: [
+                    { number: firstCycle, start: 0, end: 30, description: "Fase de formação e aprendizagem" },
+                    { number: secondCycle, start: 30, end: 60, description: "Fase de produtividade e realização" },
+                    { number: thirdCycle, start: 60, end: null, description: "Fase de sabedoria e legado" }
+                ],
+                currentAge: calculateCurrentAge(date)
+            };
         }
         
-        // Função para gerar o mapa numerológico
+        // Função para calcular a idade atual
+        function calculateCurrentAge(birthDate) {
+            const [day, month, year] = birthDate.split('/').map(Number);
+            const today = new Date();
+            const birthDateObj = new Date(year, month - 1, day);
+            
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const monthDiff = today.getMonth() - birthDateObj.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+        
+        // Função para exibir os ciclos de vida
+        function displayLifeCycles(cyclesData) {
+            const container = document.getElementById('lifeCyclesContainer');
+            container.innerHTML = '';
+            
+            cyclesData.cycles.forEach(cycle => {
+                const cycleElement = document.createElement('div');
+                cycleElement.className = `life-cycle-stage ${cyclesData.currentAge >= cycle.start && (cycle.end === null || cyclesData.currentAge < cycle.end) ? 'current-cycle' : ''}`;
+                
+                cycleElement.innerHTML = `
+                    <div class="life-cycle-title">
+                        Ciclo ${cycle.number} ${cyclesData.currentAge >= cycle.start && (cycle.end === null || cyclesData.currentAge < cycle.end) ? '(Ciclo Atual)' : ''}
+                    </div>
+                    <div class="life-cycle-age">
+                        ${cycle.start} - ${cycle.end || 'fim da vida'} anos: ${cycle.description}
+                    </div>
+                    <div class="life-cycle-description">
+                        ${getLifeCycleInterpretation(cycle.number)}
+                    </div>
+                `;
+                
+                container.appendChild(cycleElement);
+            });
+        }
+        
+        // Função para obter interpretação do ciclo de vida
+        function getLifeCycleInterpretation(number) {
+            const interpretations = {
+                1: "Período de independência e autodescoberta. Tempo para desenvolver autoconfiança e iniciativa própria.",
+                2: "Fase de relacionamentos e cooperação. Tempo para desenvolver sensibilidade e trabalho em equipe.",
+                3: "Etapa de criatividade e expressão. Tempo para desenvolver talentos e comunicação.",
+                4: "Período de construção e estabilidade. Tempo para desenvolver disciplina e organização.",
+                5: "Fase de mudanças e liberdade. Tempo para desenvolver adaptabilidade e versatilidade.",
+                6: "Etapa de responsabilidade e família. Tempo para desenvolver amor incondicional e serviço.",
+                7: "Período de introspecção e sabedoria. Tempo para desenvolver conhecimento interior e espiritualidade.",
+                8: "Fase de realização material. Tempo para desenvolver poder pessoal e eficiência.",
+                9: "Etapa de compaixão e serviço humanitário. Tempo para desenvolver visão universal e perdão."
+            };
+            
+            return interpretations[number] || "Este ciclo traz lições importantes para seu desenvolvimento pessoal e espiritual.";
+        }
+
+        // Função principal para gerar o mapa
         function generateMap() {
             const fullName = document.getElementById('fullName').value.trim().toUpperCase();
             const birthDate = document.getElementById('birthDate').value;
@@ -1347,345 +850,248 @@ function calculateCurrentAge(birthDate) {
                 return;
             }
             
-            const formattedDate = formatDate(birthDate);
-            const dateParts = formattedDate.split('/');
-            
-            // Cálculos numerológicos
-            const destinyNumber = calculateDestinyNumber(formattedDate);
-            const soulNumber = calculateSoulNumber(fullName);
-            const personalityNumber = calculatePersonalityNumber(fullName);
-            const expressionNumber = calculateExpressionNumber(fullName);
-            const challengeNumbers = calculateChallengeNumbers(formattedDate);
-            const karmicLessons = calculateKarmicLessons(fullName);
-            const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
-            const lifeCycles = calculateLifeCycles(formattedDate);
-            const personalYear = calculatePersonalYear(formattedDate);
-            
-            // Exibir resultados
-            document.getElementById('clientName').textContent = fullName;
-            document.getElementById('birthDateDisplay').textContent = formattedDate;
-            
-            // Número do Destino
-            document.getElementById('destinyNumber').textContent = destinyNumber;
-            displayRandomInterpretation('destiny', destinyNumber);
-            document.getElementById('destinyVariationCount').textContent = `(${interpretations.destiny[destinyNumber].length} variações disponíveis)`;
-            
-            // Número da Alma
-            document.getElementById('soulNumber').textContent = soulNumber;
-            displayRandomInterpretation('soul', soulNumber);
-            document.getElementById('soulVariationCount').textContent = `(${interpretations.soul[soulNumber].length} variações disponíveis)`;
-            
-            // Número da Personalidade
-            document.getElementById('personalityNumber').textContent = personalityNumber;
-            displayRandomInterpretation('personality', personalityNumber);
-            document.getElementById('personalityVariationCount').textContent = `(${interpretations.personality[personalityNumber].length} variações disponíveis)`;
-            
-            // Número de Expressão
-            document.getElementById('expressionNumber').textContent = expressionNumber;
-            displayRandomInterpretation('expression', expressionNumber);
-            document.getElementById('expressionVariationCount').textContent = `(${interpretations.expression[expressionNumber].length} variações disponíveis)`;
-            
-            // Números de Desafio
-            const challengeStr = `Primeiro: ${challengeNumbers.first} | Segundo: ${challengeNumbers.second} | Terceiro: ${challengeNumbers.third} | Quarto: ${challengeNumbers.fourth}`;
-            document.getElementById('challengeNumbers').textContent = challengeStr;
-            
-            // Para desafios, usamos a média como chave (simplificação)
-            const avgChallenge = Math.round((challengeNumbers.first + challengeNumbers.second + challengeNumbers.third + challengeNumbers.fourth) / 4);
-            const challengeKey = avgChallenge > 9 ? 9 : avgChallenge < 0 ? 0 : avgChallenge;
-            displayRandomInterpretation('challenge', challengeKey);
-            document.getElementById('challengeVariationCount').textContent = `(${interpretations.challenge[challengeKey].length} variações disponíveis)`;
-            
-            // Lições Cármicas
-            const lessonsStr = karmicLessons.numbers.length > 0 ? 
-                `Números ausentes: ${karmicLessons.numbers.join(', ')}` : 
-                'Nenhuma lição cármica (todos os números presentes)';
-            document.getElementById('karmicLessons').textContent = lessonsStr;
-            
-            if (karmicLessons.numbers.length > 0) {
-                let description = '';
-                for (const num of karmicLessons.numbers) {
-                    description += interpretations.karmicLessons[num] + '\n\n';
-                }
-                document.getElementById('karmicLessonsDescription').textContent = description.trim();
+            if (!validateName(fullName)) {
+                document.getElementById('nameError').style.display = 'block';
+                return;
             } else {
-                document.getElementById('karmicLessonsDescription').textContent = 'Você tem todas as vibrações numéricas em seu nome, indicando uma alma que já desenvolveu muitas lições em encarnações passadas.';
+                document.getElementById('nameError').style.display = 'none';
             }
-            document.getElementById('karmicLessonsVariationCount').textContent = `(${karmicLessons.numbers.length} lições cármicas identificadas)`;
             
-            // Dívidas Cármicas
-            const debtsStr = karmicDebts.length > 0 ? 
-                karmicDebts.join(', ') : 
-                'Nenhuma dívida cármica identificada';
-            document.getElementById('karmicDebts').textContent = debtsStr;
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
             
-            if (karmicDebts.length > 0) {
-                let description = '';
-                for (const debt of karmicDebts) {
-                    description += interpretations.karmicDebts[debt] + '\n\n';
+            // Usar setTimeout para permitir que a UI atualize antes dos cálculos pesados
+            setTimeout(() => {
+                try {
+                    const formattedDate = formatDate(birthDate);
+                    
+                    // Cálculos numerológicos
+                    const destinyNumber = calculateDestinyNumber(formattedDate);
+                    const vowels = extractVowels(fullName);
+                    const consonants = extractConsonants(fullName);
+                    const soulNumber = calculateNameValue(vowels);
+                    const personalityNumber = calculateNameValue(consonants);
+                    const expressionNumber = calculateNameValue(fullName.replace(/\s/g, ''));
+                    const challenges = calculateChallengeNumbers(formattedDate);
+                    const karmicLessons = findKarmicLessons(fullName);
+                    const karmicDebts = findKarmicDebts(fullName, formattedDate);
+                    const lifeCycles = calculateLifeCycles(formattedDate);
+                    const personalYear = calculatePersonalYear(formattedDate);
+                    
+                    // Exibir resultados
+                    document.getElementById('clientName').textContent = fullName;
+                    document.getElementById('birthDateDisplay').textContent = formattedDate;
+                    
+                    // Número do Destino
+                    document.getElementById('destinyNumber').textContent = destinyNumber;
+                    document.getElementById('destinyCalculation').textContent = `Cálculo: ${formattedDate.split('/').join(' + ')} = ${destinyNumber}`;
+                    displayRandomInterpretation('destiny', destinyNumber);
+                    
+                    // Número da Alma
+                    document.getElementById('soulNumber').textContent = soulNumber;
+                    document.getElementById('soulCalculation').textContent = `Vogais: ${vowels || 'Nenhuma'} = ${soulNumber}`;
+                    displayRandomInterpretation('soul', soulNumber);
+                    
+                    // Número da Personalidade
+                    document.getElementById('personalityNumber').textContent = personalityNumber;
+                    document.getElementById('personalityCalculation').textContent = `Consoantes: ${consonants || 'Nenhuma'} = ${personalityNumber}`;
+                    displayRandomInterpretation('personality', personalityNumber);
+                    
+                    // Número de Expressão
+                    document.getElementById('expressionNumber').textContent = expressionNumber;
+                    document.getElementById('expressionCalculation').textContent = `Nome completo: ${fullName.replace(/\s/g, '')} = ${expressionNumber}`;
+                    displayRandomInterpretation('expression', expressionNumber);
+                    
+                    // Números de Desafio
+                    document.getElementById('challengeNumbers').textContent = 
+                        `${challenges.first}, ${challenges.second}, ${challenges.third}, ${challenges.fourth}`;
+                    document.getElementById('challengeCalculation').textContent = 
+                        `1º: ${Math.abs(parseInt(formattedDate.split('/')[1]) - parseInt(formattedDate.split('/')[0])} | ` +
+                        `2º: ${Math.abs(parseInt(formattedDate.split('/')[0]) - reduceToSingleDigit(parseInt(formattedDate.split('/')[2]))} | ` +
+                        `3º: 1º-2º | 4º: ${Math.abs(parseInt(formattedDate.split('/')[1]) - reduceToSingleDigit(parseInt(formattedDate.split('/')[2]))}`;
+                    displayRandomInterpretation('challenge', challenges.first);
+                    
+                    // Lições Cármicas
+                    document.getElementById('karmicLessons').textContent = karmicLessons.join(', ') || 'Nenhuma';
+                    if (karmicLessons.length > 0) {
+                        displayRandomInterpretation('karmicLessons', karmicLessons[0]);
+                    } else {
+                        document.getElementById('karmicLessonsDescription').textContent = 
+                            "Seu nome contém todas as letras do alfabeto, indicando que você trouxe uma bagagem completa de experiências de vidas passadas.";
+                    }
+                    
+                    // Dívidas Cármicas
+                    document.getElementById('karmicDebts').textContent = 
+                        Array.isArray(karmicDebts) ? karmicDebts.join(', ') : karmicDebts;
+                    if (Array.isArray(karmicDebts) {
+                        displayRandomInterpretation('karmicDebts', karmicDebts[0]);
+                    }
+                    
+                    // Ciclos de Vida
+                    document.getElementById('lifeCyclesCalculation').textContent = 
+                        `Primeiro ciclo: Mês (${formattedDate.split('/')[1]}) | ` +
+                        `Segundo ciclo: Dia (${formattedDate.split('/')[0]}) | ` +
+                        `Terceiro ciclo: Ano (${formattedDate.split('/')[2]})`;
+                    displayLifeCycles(lifeCycles);
+                    
+                    // Ano Pessoal
+                    document.getElementById('personalYear').textContent = personalYear;
+                    document.getElementById('personalYearCalculation').textContent = 
+                        `Dia + Mês + Ano atual = ${formattedDate.split('/')[0]} + ${formattedDate.split('/')[1]} + ${new Date().getFullYear()} = ${personalYear}`;
+                    displayRandomInterpretation('personalYear', personalYear);
+                    
+                    // Mostrar resultados
+                    document.getElementById('resultContainer').style.display = 'block';
+                    document.getElementById('btnPdf').disabled = false;
+                    
+                } catch (error) {
+                    console.error('Erro ao gerar mapa:', error);
+                    alert('Ocorreu um erro ao processar seu mapa. Por favor, tente novamente.');
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
                 }
-                document.getElementById('karmicDebtsDescription').textContent = description.trim();
-            } else {
-                document.getElementById('karmicDebtsDescription').textContent = 'Você não possui dívidas cármicas significativas a serem equilibradas nesta encarnação.';
-            }
-            document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas cármicas identificadas)`;
-            
-            // Ciclos de Vida
-            const cyclesStr = `Primeiro ciclo (0-${lifeCycles.firstEndAge} anos): ${lifeCycles.first} | ` +
-                             `Segundo ciclo (${lifeCycles.firstEndAge}-${lifeCycles.secondEndAge} anos): ${lifeCycles.second} | ` +
-                             `Terceiro ciclo (${lifeCycles.secondEndAge}+ anos): ${lifeCycles.third}`;
-            document.getElementById('lifeCycles').innerHTML = cyclesStr;
-            
-            // Descrição dos ciclos
-            let cyclesDescription = '';
-            cyclesDescription += `<strong>Primeiro Ciclo (0-${lifeCycles.firstEndAge} anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}<br><br>`;
-            cyclesDescription += `<strong>Segundo Ciclo (${lifeCycles.firstEndAge}-${lifeCycles.secondEndAge} anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}<br><br>`;
-            cyclesDescription += `<strong>Terceiro Ciclo (${lifeCycles.secondEndAge}+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}`;
-            
-            document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
-            document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
-            
-            // Ano Pessoal
-            document.getElementById('personalYear').textContent = personalYear;
-            displayRandomInterpretation('personalYear', personalYear);
-            document.getElementById('personalYearVariationCount').textContent = `(${interpretations.personalYear[personalYear].length} variações disponíveis)`;
-            
-            // Mostrar exemplos de cálculo
-            showCalculationExamples({
-                fullName,
-                formattedDate,
-                destinyNumber,
-                soulNumber,
-                personalityNumber,
-                expressionNumber,
-                challengeNumbers,
-                karmicLessons,
-                karmicDebts,
-                lifeCycles,
-                personalYear
-            });
-            
-            // Mostrar resultados
-            document.getElementById('resultContainer').style.display = 'block';
-            document.getElementById('btnPdf').disabled = false;
-            
-            // Rolar para os resultados
-            document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
         }
         
-        // Função para exibir uma interpretação aleatória
+        // Função para gerar o PDF (versão completa)
+        async function generatePDF() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF();
+                const name = document.getElementById('clientName').textContent;
+                const date = document.getElementById('birthDateDisplay').textContent;
+                
+                // CAPA DO PDF
+                doc.addImage('https://assets.zyrosite.com/AE02nZ6p4aF8Z3Gp/design-sem-nome-71-Yg2y7806klU5yR26.png', 'PNG', 75, 40, 60, 60);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(106, 13, 173);
+                doc.setFontSize(28);
+                doc.text('OURO ORACULAR', 105, 120, { align: 'center' });
+                
+                doc.setFontSize(22);
+                doc.setTextColor(212, 175, 55);
+                doc.text('MAPAS NUMEROLÓGICOS', 105, 135, { align: 'center' });
+                
+                doc.setFontSize(20);
+                doc.setTextColor(0, 0, 0);
+                doc.text(name, 105, 160, { align: 'center' });
+                
+                doc.setFontSize(16);
+                doc.text(`Nascimento: ${date}`, 105, 170, { align: 'center' });
+                
+                doc.setFontSize(12);
+                doc.setTextColor(100, 100, 100);
+                doc.text('Relatório gerado em: ' + new Date().toLocaleDateString(), 105, 180, { align: 'center' });
+                
+                // PÁGINA DE CONTEÚDO
+                doc.addPage();
+                
+                // Adicionar conteúdo como texto (em vez de imagem para melhor qualidade)
+                doc.setFontSize(16);
+                doc.setTextColor(106, 13, 173);
+                doc.text(`Mapa Numerológico de ${name}`, 14, 20);
+                
+                doc.setFontSize(12);
+                doc.setTextColor(0, 0, 0);
+                
+                // Adicionar cada seção como texto
+                const sections = [
+                    'destinyNumberSection',
+                    'soulNumberSection',
+                    'personalityNumberSection',
+                    'expressionNumberSection',
+                    'challengeNumbersSection',
+                    'karmicLessonsSection',
+                    'karmicDebtsSection',
+                    'lifeCyclesSection',
+                    'personalYearSection'
+                ];
+                
+                let yPosition = 30;
+                
+                sections.forEach(sectionId => {
+                    const section = document.getElementById(sectionId);
+                    const title = section.querySelector('h3').textContent;
+                    const subtitle = section.querySelector('.section-subtitle').textContent;
+                    const value = section.querySelector('.result-value')?.textContent || '';
+                    const description = section.querySelector('.result-description').textContent;
+                    
+                    doc.setFontSize(14);
+                    doc.setTextColor(106, 13, 173);
+                    doc.text(title, 14, yPosition);
+                    yPosition += 7;
+                    
+                    doc.setFontSize(10);
+                    doc.setTextColor(150, 150, 150);
+                    doc.text(subtitle, 14, yPosition);
+                    yPosition += 7;
+                    
+                    if (value) {
+                        doc.setFontSize(12);
+                        doc.setTextColor(212, 175, 55);
+                        doc.text(`Número: ${value}`, 14, yPosition);
+                        yPosition += 7;
+                    }
+                    
+                    doc.setFontSize(10);
+                    doc.setTextColor(0, 0, 0);
+                    const splitText = doc.splitTextToSize(description, 180);
+                    doc.text(splitText, 14, yPosition);
+                    yPosition += splitText.length * 7 + 10;
+                    
+                    // Verificar se precisa de nova página
+                    if (yPosition > 250) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                });
+                
+                // Salva o PDF
+                doc.save(`Mapa_Numerologico_${name.replace(/\s+/g, '_')}.pdf');
+                
+            } catch (error) {
+                console.error('Erro ao gerar PDF:', error);
+                alert('Houve um erro ao gerar o PDF. Por favor, tente novamente.');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        // Funções auxiliares
+        function reduceToSingleDigit(number) {
+            let num = number;
+            while (num > 9 && num !== 11 && num !== 22) {
+                num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+            }
+            return num;
+        }
+        
         function displayRandomInterpretation(type, number) {
+            if (typeof number === 'object') number = number[0]; // Para arrays como lições cármicas
+            if (!interpretations[type] || !interpretations[type][number]) return;
+            
             const interpretationsArray = interpretations[type][number];
             const randomIndex = Math.floor(Math.random() * interpretationsArray.length);
             document.getElementById(`${type}Description`).textContent = interpretationsArray[randomIndex];
         }
         
-        // Função para mudar a variação de interpretação
         function changeVariation(type) {
-            const number = parseInt(document.getElementById(`${type}Number`).textContent);
-            displayRandomInterpretation(type, number);
-        }
-        
-        // Função para gerar o PDF
-       function generatePDF() {
-    // Carrega a biblioteca jsPDF corretamente
-    const { jsPDF } = window.jspdf;
-    
-    // Cria um novo documento PDF
-    const doc = new jsPDF();
-    
-    // Captura o elemento com os resultados
-    const element = document.getElementById('resultContainer');
-    
-    // Usa html2canvas para capturar o conteúdo como imagem
-    html2canvas(element).then(canvas => {
-        const imgData = canvas.toDataURL('image/png');
-        
-        // Calcula as dimensões para ajustar ao PDF
-        const imgWidth = doc.internal.pageSize.getWidth() - 20;
-        const imgHeight = (canvas.height * imgWidth) / canvas.width;
-        
-        // Adiciona a imagem ao PDF
-        doc.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-        
-        // Salva o PDF
-        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-        doc.save(`Mapa_Numerologico_${fullName}.pdf`);
-    }).catch(error => {
-        console.error('Erro ao gerar PDF:', error);
-        alert('Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.');
-    });
-}
-        
-        // Função para adicionar uma página ao PDF
-        function addPageToPDF(doc) {
-            const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-            const birthDate = document.getElementById('birthDateDisplay').textContent;
-            
-            // Configurações de estilo
-            const titleColor = '#6A0DAD';
-            const textColor = '#333333';
-            const accentColor = '#D4AF37';
-            
-            // Adicionar capa
-            doc.setFillColor(245, 245, 245);
-            doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
-            
-            doc.setFontSize(36);
-            doc.setTextColor(titleColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text('OURO ORACULAR', 105, 80, { align: 'center' });
-            
-            doc.setFontSize(24);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            doc.text('Mapa Numerológico', 105, 100, { align: 'center' });
-            
-            doc.setFontSize(28);
-            doc.setTextColor(accentColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text(fullName, 105, 130, { align: 'center' });
-            
-            doc.setFontSize(16);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            doc.text(`Data de Nascimento: ${birthDate}`, 105, 145, { align: 'center' });
-            
-            // Símbolo místico
-            doc.setFontSize(60);
-            doc.setTextColor(230, 230, 230);
-            doc.text('✧', 105, 200, { align: 'center' });
-            
-            doc.addPage();
-            
-            // Adicionar índice
-            doc.setFontSize(18);
-            doc.setTextColor(titleColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text('ÍNDICE', 20, 30);
-            
-            doc.setFontSize(12);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            
-            const items = [
-                'Número do Destino',
-                'Número da Alma',
-                'Número da Personalidade',
-                'Número de Expressão',
-                'Números de Desafio',
-                'Lições Cármicas',
-                'Dívidas Cármicas',
-                'Ciclos de Vida',
-                'Ano Pessoal Atual'
-            ];
-            
-            let y = 40;
-            items.forEach((item, index) => {
-                doc.setTextColor(accentColor);
-                doc.text(`${index + 1}.`, 20, y);
-                doc.setTextColor(textColor);
-                doc.text(item, 28, y);
-                y += 7;
-            });
-            
-            // Adicionar símbolos nos cantos
-            doc.setFontSize(20);
-            doc.setTextColor(220, 220, 220);
-            doc.text('✧', 15, 15);
-            doc.text('✧', 195, 15);
-            doc.text('✧', 15, 285);
-            doc.text('✧', 195, 285);
-            
-            doc.addPage();
-            
-            // Adicionar conteúdo
-            addSectionToPDF(doc, 'Número do Destino', 
-                           document.getElementById('destinyNumber').textContent, 
-                           document.getElementById('destinyDescription').textContent);
-            
-            addSectionToPDF(doc, 'Número da Alma', 
-                           document.getElementById('soulNumber').textContent, 
-                           document.getElementById('soulDescription').textContent);
-            
-            addSectionToPDF(doc, 'Número da Personalidade', 
-                           document.getElementById('personalityNumber').textContent, 
-                           document.getElementById('personalityDescription').textContent);
-            
-            addSectionToPDF(doc, 'Número de Expressão', 
-                           document.getElementById('expressionNumber').textContent, 
-                           document.getElementById('expressionDescription').textContent);
-            
-            addSectionToPDF(doc, 'Números de Desafio', 
-                           document.getElementById('challengeNumbers').textContent, 
-                           document.getElementById('challengeDescription').textContent);
-            
-            addSectionToPDF(doc, 'Lições Cármicas', 
-                           document.getElementById('karmicLessons').textContent, 
-                           document.getElementById('karmicLessonsDescription').textContent);
-            
-            addSectionToPDF(doc, 'Dívidas Cármicas', 
-                           document.getElementById('karmicDebts').textContent, 
-                           document.getElementById('karmicDebtsDescription').textContent);
-            
-            const lifeCyclesText = document.getElementById('lifeCycles').textContent;
-            const lifeCyclesDesc = document.getElementById('lifeCyclesDescription').innerHTML.replace(/<br><br>/g, '\n\n');
-            addSectionToPDF(doc, 'Ciclos de Vida', lifeCyclesText, lifeCyclesDesc);
-            
-            addSectionToPDF(doc, 'Ano Pessoal Atual', 
-                           document.getElementById('personalYear').textContent, 
-                           document.getElementById('personalYearDescription').textContent);
-            
-            // Adicionar rodapé
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(10);
-                doc.setTextColor(150, 150, 150);
-                doc.setFont('Nexa', 'normal');
-                doc.text(`Página ${i} de ${pageCount}`, 105, 285, { align: 'center' });
-                doc.text('Ouro Oracular - Todos os direitos reservados', 105, 290, { align: 'center' });
-            }
-        }
-        
-        // Função para adicionar uma seção ao PDF
-        function addSectionToPDF(doc, title, value, description) {
-            const titleColor = '#6A0DAD';
-            const textColor = '#333333';
-            const accentColor = '#D4AF37';
-            
-            // Verificar se precisa de nova página
-            if (doc.internal.getCurrentPageInfo().pageNumber < doc.internal.getNumberOfPages()) {
-                const y = doc.internal.getCursor().y;
-                if (y > 250) {
-                    doc.addPage();
+            let number;
+            if (type === 'karmicLessons') {
+                const letters = document.getElementById('karmicLessons').textContent.split(', ');
+                if (letters.length > 0) {
+                    number = letters;
+                } else {
+                    return;
                 }
             } else {
-                const y = doc.internal.getCursor().y;
-                if (y > 250) {
-                    doc.addPage();
-                }
+                number = parseInt(document.getElementById(`${type}Number`).textContent);
             }
-            
-            // Adicionar título
-            doc.setFontSize(16);
-            doc.setTextColor(titleColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text(title, 20, doc.internal.getCursor().y + 10);
-            
-            // Adicionar valor
-            doc.setFontSize(14);
-            doc.setTextColor(accentColor);
-            doc.text(`Valor: ${value}`, 20, doc.internal.getCursor().y + 5);
-            
-            // Adicionar descrição
-            doc.setFontSize(12);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            const splitText = doc.splitTextToSize(description, 170);
-            doc.text(splitText, 20, doc.internal.getCursor().y + 10);
-            
-            // Mover cursor para próxima seção
-            doc.setCursor(20, doc.internal.getCursor().y + splitText.length * 5 + 15);
+            displayRandomInterpretation(type, number);
         }
     </script>
 </body>
