@@ -428,17 +428,198 @@
                 </div>
             </div>
             
-            <div class="result-section" id="lifeCyclesSection">
-                <h3>Ciclos de Vida</h3>
-                <p class="section-subtitle">Mostra as três principais fases da vida e suas energias predominantes, calculadas a partir da data de nascimento.</p>
-                <div class="calculation-example" id="lifeCyclesCalculation"></div>
-                <div id="lifeCycles"></div>
-                <div class="result-description" id="lifeCyclesDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('lifeCycles')">Outra Interpretação</button>
-                    <span class="variation-count" id="lifeCyclesVariationCount"></span>
-                </div>
+            <!-- HTML - Mantenha esta estrutura no seu arquivo -->
+<div class="result-section" id="lifeCyclesSection">
+    <h3>Ciclos de Vida</h3>
+    <p class="section-subtitle">As três grandes fases da sua vida e suas energias predominantes</p>
+    <div class="calculation-example" id="lifeCyclesCalculation"></div>
+    
+    <div id="lifeCyclesContainer">
+        <!-- Os ciclos serão inseridos aqui pelo JavaScript -->
+    </div>
+    
+    <div class="result-description">
+        <p>Seu caminho é dividido em três ciclos principais, cada um com uma energia específica:</p>
+        <ul>
+            <li><strong>Primeiro Ciclo (0-30 anos):</strong> Período de formação e aprendizagem das lições básicas</li>
+            <li><strong>Segundo Ciclo (30-60 anos):</strong> Fase de produtividade e realização pessoal</li>
+            <li><strong>Terceiro Ciclo (60+ anos):</strong> Tempo de sabedoria e colheita dos frutos</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+// Substitua as funções relacionadas aos Ciclos de Vida por estas:
+
+// Dados das interpretações (coloque no seu objeto 'interpretations')
+const interpretations = {
+    // ... outros dados existentes ...
+    
+    lifeCycles: {
+        1: {
+            title: "Ciclo de Iniciativa e Independência",
+            description: "Este é um período para desenvolver autoconfiança e liderança. Você aprenderá a tomar iniciativas e a confiar em seu próprio julgamento.",
+            keywords: "Novos começos, coragem, individualidade",
+            challenges: "Pode haver tendência ao egoísmo ou à solidão excessiva",
+            advice: "Aproveite para iniciar projetos importantes e desenvolver sua independência"
+        },
+        2: {
+            title: "Ciclo de Cooperação e Sensibilidade",
+            description: "Fase de desenvolver relacionamentos e trabalho em equipe. A sensibilidade e a paciência serão suas maiores aliadas.",
+            keywords: "Parcerias, diplomacia, equilíbrio",
+            challenges: "Tendência à indecisão ou dependência emocional",
+            advice: "Aprenda a ouvir mais e a valorizar as opiniões alheias"
+        },
+        // Padrão continua para outros números...
+        3: {
+            title: "Ciclo de Criatividade e Expressão",
+            description: "Tempo para desenvolver seus talentos criativos e habilidades de comunicação. A alegria e o otimismo são marcas deste ciclo.",
+            keywords: "Autoexpressão, sociabilidade, inspiração",
+            challenges: "Superficialidade ou dispersão de energia",
+            advice: "Encontre canais saudáveis para sua criatividade e evite críticas excessivas"
+        },
+        4: {
+            title: "Ciclo de Estabilidade e Trabalho",
+            description: "Período de construção sólida através de trabalho árduo e organização. A disciplina será sua maior aliada.",
+            keywords: "Estrutura, praticidade, perseverança",
+            challenges: "Rigidez excessiva ou resistência a mudanças",
+            advice: "Estabeleça bases sólidas, mas mantenha flexibilidade para adaptações"
+        },
+        5: {
+            title: "Ciclo de Liberdade e Mudança",
+            description: "Fase de transformações e busca por novas experiências. A adaptabilidade será essencial.",
+            keywords: "Progresso, versatilidade, aventura",
+            challenges: "Impulsividade ou falta de compromisso",
+            advice: "Abrace as mudanças, mas mantenha um senso de direção"
+        },
+        6: {
+            title: "Ciclo de Responsabilidade e Serviço",
+            description: "Tempo de cuidar dos outros e assumir compromissos. O amor e a responsabilidade serão temas centrais.",
+            keywords: "Família, harmonia, cura",
+            challenges: "Tendência ao perfeccionismo ou sacrifício excessivo",
+            advice: "Equilibre suas necessidades com as dos outros"
+        },
+        7: {
+            title: "Ciclo de Introspecção e Sabedoria",
+            description: "Período de desenvolvimento espiritual e intelectual. A busca por conhecimento será marcante.",
+            keywords: "Reflexão, análise, crescimento interior",
+            challenges: "Isolamento ou ceticismo excessivo",
+            advice: "Reserve tempo para solitude produtiva e estudo"
+        },
+        8: {
+            title: "Ciclo de Realização Material",
+            description: "Fase de conquistas práticas e reconhecimento. O equilíbrio entre espiritual e material será importante.",
+            keywords: "Poder, sucesso, abundância",
+            challenges: "Materialismo excessivo ou medo do fracasso",
+            advice: "Use seus recursos com sabedoria e propósito"
+        },
+        9: {
+            title: "Ciclo de Compaixão e Universalidade",
+            description: "Tempo de desenvolver visão ampla e serviço humanitário. O perdão e a compreensão serão essenciais.",
+            keywords: "Humanitarismo, conclusões, sabedoria",
+            challenges: "Dificuldade em deixar ir ou aceitar perdas",
+            advice: "Pratique o desapego e o serviço aos outros"
+        }
+    }
+};
+
+// Função para calcular os ciclos de vida (atualizada)
+function calculateLifeCycles(date) {
+    const [day, month, year] = date.split('/').map(Number);
+    
+    // Reduz cada componente para um único dígito
+    const firstCycle = reduceToSingleDigit(month);    // Mês = Primeiro ciclo (0-30 anos)
+    const secondCycle = reduceToSingleDigit(day);     // Dia = Segundo ciclo (30-60 anos)
+    const thirdCycle = reduceToSingleDigit(year);     // Ano = Terceiro ciclo (60+ anos)
+    
+    return {
+        cycles: [
+            { 
+                number: firstCycle, 
+                start: 0, 
+                end: 30, 
+                description: "Fase de formação e aprendizagem" 
+            },
+            { 
+                number: secondCycle, 
+                start: 30, 
+                end: 60, 
+                description: "Fase de produtividade e realização" 
+            },
+            { 
+                number: thirdCycle, 
+                start: 60, 
+                end: null, 
+                description: "Fase de sabedoria e legado" 
+            }
+        ],
+        currentAge: calculateCurrentAge(date)
+    };
+}
+
+// Função para exibir os ciclos de vida (completa e formatada)
+function displayLifeCycles(cyclesData) {
+    const container = document.getElementById('lifeCyclesContainer');
+    container.innerHTML = '';
+    
+    // Atualiza o cálculo exibido
+    document.getElementById('lifeCyclesCalculation').textContent = 
+        `Primeiro ciclo: Mês (${cyclesData.cycles[0].number}) | ` +
+        `Segundo ciclo: Dia (${cyclesData.cycles[1].number}) | ` +
+        `Terceiro ciclo: Ano (${cyclesData.cycles[2].number})`;
+    
+    cyclesData.cycles.forEach(cycle => {
+        const cycleInfo = interpretations.lifeCycles[cycle.number];
+        const isCurrent = cyclesData.currentAge >= cycle.start && 
+                         (cycle.end === null || cyclesData.currentAge < cycle.end);
+        
+        const cycleElement = document.createElement('div');
+        cycleElement.className = `life-cycle-stage ${isCurrent ? 'current-cycle' : ''}`;
+        
+        cycleElement.innerHTML = `
+            <div class="life-cycle-title">
+                Ciclo ${cycle.number}: ${cycleInfo.title} ${isCurrent ? '(Ciclo Atual)' : ''}
             </div>
+            <div class="life-cycle-age">
+                ${cycle.start} - ${cycle.end || 'fim da vida'} anos: ${cycle.description}
+            </div>
+            <div class="life-cycle-description">
+                <p><strong>Descrição:</strong> ${cycleInfo.description}</p>
+                <p><strong>Palavras-chave:</strong> ${cycleInfo.keywords}</p>
+                ${isCurrent ? `<p><strong>Desafios atuais:</strong> ${cycleInfo.challenges}</p>` : ''}
+                ${isCurrent ? `<p><strong>Conselhos:</strong> ${cycleInfo.advice}</p>` : ''}
+            </div>
+        `;
+        
+        container.appendChild(cycleElement);
+    });
+}
+
+// Função auxiliar para reduzir a número único (mantenha esta no seu código)
+function reduceToSingleDigit(number) {
+    let num = number;
+    while (num > 9 && num !== 11 && num !== 22) {
+        num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+    }
+    return num;
+}
+
+// Função para calcular idade (mantenha esta no seu código)
+function calculateCurrentAge(birthDate) {
+    const [day, month, year] = birthDate.split('/').map(Number);
+    const today = new Date();
+    const birthDateObj = new Date(year, month - 1, day);
+    
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const monthDiff = today.getMonth() - birthDateObj.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+        age--;
+    }
+    
+    return age;
+}
+</script>
             
             <div class="result-section" id="personalYearSection">
                 <h3>Ano Pessoal Atual</h3>
