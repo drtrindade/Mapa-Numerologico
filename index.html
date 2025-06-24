@@ -935,26 +935,26 @@
         }
         
         // Função para calcular os ciclos de vida
-        function calculateLifeCycles(date) {
-            const [day, month, year] = date.split('/').map(Number);
-            
-            // Primeiro ciclo: mês de nascimento (0-30 anos)
-            const firstCycleNumber = reduceToSingleDigit(month);
-            
-            // Segundo ciclo: dia de nascimento (30-60 anos)
-            const secondCycleNumber = reduceToSingleDigit(day);
-            
-            // Terceiro ciclo: ano de nascimento (60+ anos)
-            const thirdCycleNumber = reduceToSingleDigit(year);
-            
-            return {
-                first: firstCycleNumber,
-                second: secondCycleNumber,
-                third: thirdCycleNumber,
-                firstEndAge: 30,
-                secondEndAge: 60
-            };
-        }
+      function calculateLifeCycles(date) {
+    const [day, month, year] = date.split('/').map(Number);
+    
+    // Primeiro ciclo: mês de nascimento (0-30 anos)
+    const firstCycleNumber = reduceToSingleDigit(month);
+    
+    // Segundo ciclo: dia de nascimento (30-60 anos)
+    const secondCycleNumber = reduceToSingleDigit(day);
+    
+    // Terceiro ciclo: soma do dia + mês + ano (60+ anos) → Igual ao Número do Destino!
+    const thirdCycleNumber = reduceToSingleDigit(day + month + year);
+    
+    return {
+        first: firstCycleNumber,
+        second: secondCycleNumber,
+        third: thirdCycleNumber,
+        firstEndAge: 30,
+        secondEndAge: 60
+    };
+}
         
         // Função para calcular o ano pessoal atual
         function calculatePersonalYear(date) {
