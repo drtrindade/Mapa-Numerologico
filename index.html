@@ -9,6 +9,74 @@
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Nexa:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        // Configurações iniciais
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+        
+        // Função para validar o nome (agora aceita acentos e ç)
+        function validateName(name) {
+            const regex = /^[A-Za-zÀ-ÖØ-öø-ÿçÇ\s']+$/;
+            return regex.test(name);
+        }
+
+        // Função para formatar a data corretamente (versão simplificada)
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const day = date.getDate().toString().padStart(2, '0');
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Função principal para gerar o mapa (versão simplificada para teste)
+        function generateMap() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const birthDate = document.getElementById('birthDate').value;
+            
+            if (!fullName || !birthDate) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            if (!validateName(fullName)) {
+                document.getElementById('nameError').style.display = 'block';
+                return;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            // Mostrar loading
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('resultContainer').style.display = 'none';
+            
+            // Simular processamento
+            setTimeout(() => {
+                try {
+                    const formattedDate = formatDate(birthDate);
+                    
+                    // Exibir informações básicas (teste)
+                    document.getElementById('clientName').textContent = fullName;
+                    document.getElementById('birthDateDisplay').textContent = formattedDate;
+                    
+                    // Mostrar resultados
+                    document.getElementById('resultContainer').style.display = 'block';
+                    document.getElementById('btnPdf').disabled = false;
+                    
+                } catch (error) {
+                    console.error('Erro:', error);
+                    alert('Ocorreu um erro ao gerar o mapa.');
+                } finally {
+                    document.getElementById('loading').style.display = 'none';
+                }
+            }, 500);
+        }
+
+        // Garantir que a função está acessível globalmente
+        window.generateMap = generateMap;
+        window.generatePDF = function() {
+            alert('Gerar PDF funcionará após o mapa ser gerado corretamente.');
+        };
+</script>
     <style>
         :root {
             --ouro: #D4AF37;
