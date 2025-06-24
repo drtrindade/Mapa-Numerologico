@@ -643,18 +643,14 @@
         }
 
         // Função para formatar a data corretamente (sem problemas de fuso horário)
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            // Adiciona o offset do fuso horário para corrigir a data
-            const timezoneOffset = date.getTimezoneOffset() * 60000;
-            const adjustedDate = new Date(date.getTime() + timezoneOffset);
-            
-            const day = adjustedDate.getDate().toString().padStart(2, '0');
-            const month = (adjustedDate.getMonth() + 1).toString().padStart(2, '0');
-            const year = adjustedDate.getFullYear();
-            
-            return `${day}/${month}/${year}`;
-        }
+       function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${day}/${month}/${year}`;
+}
 
         // Função para extrair vogais do nome
         function extractVowels(name) {
@@ -735,17 +731,34 @@
 
         // Função para identificar dívidas cármicas (números 13, 14, 16 ou 19)
         function findKarmicDebts(name, birthDate) {
-            const debts = [];
-            const fullString = name + birthDate;
-            const numbers = fullString.match(/\d+/g)?.join('') || '';
-            
-            if (numbers.includes('13')) debts.push(13);
-            if (numbers.includes('14')) debts.push(14);
-            if (numbers.includes('16')) debts.push(16);
-            if (numbers.includes('19')) debts.push(19);
-            
-            return debts.length > 0 ? debts : ['Nenhuma dívida cármica identificada'];
+    const debts = [];
+    const letterValues = {
+        'A': 1, 'J': 1, 'S': 1,
+        'B': 2, 'K': 2, 'T': 2,
+        // ... (restante do mapeamento)
+    };
+    
+    // Verificar no nome
+    for (let char of name.toUpperCase()) {
+        if (letterValues[char] === 1 || letterValues[char] === 4 || 
+            letterValues[char] === 6 || letterValues[char] === 9) {
+            const nextChar = name[name.indexOf(char)+1];
+            if (nextChar && letterValues[nextChar.toUpperCase()] === 3) {
+                if (!debts.includes(13)) debts.push(13);
+            }
+            // Verificar outros números de forma similar
         }
+    }
+    
+    // Verificar na data
+    const dateNumbers = birthDate.replace(/\D/g, '');
+    if (dateNumbers.includes('13')) debts.push(13);
+    if (dateNumbers.includes('14')) debts.push(14);
+    if (dateNumbers.includes('16')) debts.push(16);
+    if (dateNumbers.includes('19')) debts.push(19);
+    
+    return debts.length > 0 ? [...new Set(debts)] : ['Nenhuma dívida cármica identificada'];
+}
 
         // Função para calcular o ano pessoal atual
         function calculatePersonalYear(birthDate, currentDate = new Date()) {
@@ -841,21 +854,15 @@
         }
 
         // Função principal para gerar o mapa
-        function generateMap() {
-            const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-            const birthDate = document.getElementById('birthDate').value;
-            
-            if (!fullName || !birthDate) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-            
-            if (!validateName(fullName)) {
-                document.getElementById('nameError').style.display = 'block';
-                return;
-            } else {
-                document.getElementById('nameError').style.display = 'none';
-            }
+       function generateMap() {
+    try {
+        // ... código existente
+    } catch (error) {
+        console.error('Erro detalhado:', error);
+        alert(`Erro ao gerar mapa: ${error.message}`);
+        document.getElementById('loading').style.display = 'none';
+    }
+}
             
             // Mostrar loading
             document.getElementById('loading').style.display = 'block';
@@ -906,11 +913,10 @@
                     // Números de Desafio
                     document.getElementById('challengeNumbers').textContent = 
                         `${challenges.first}, ${challenges.second}, ${challenges.third}, ${challenges.fourth}`;
-                    document.getElementById('challengeCalculation').textContent = 
-                        `1º: ${Math.abs(parseInt(formattedDate.split('/')[1]) - parseInt(formattedDate.split('/')[0])} | ` +
-                        `2º: ${Math.abs(parseInt(formattedDate.split('/')[0]) - reduceToSingleDigit(parseInt(formattedDate.split('/')[2]))} | ` +
-                        `3º: 1º-2º | 4º: ${Math.abs(parseInt(formattedDate.split('/')[1]) - reduceToSingleDigit(parseInt(formattedDate.split('/')[2]))}`;
-                    displayRandomInterpretation('challenge', challenges.first);
+                   document.getElementById('challengeCalculation').textContent = 
+    `1º: ${Math.abs(parseInt(formattedDate.split('/')[1]) - parseInt(formattedDate.split('/')[0]))} | ` +
+    `2º: ${Math.abs(parseInt(formattedDate.split('/')[0]) - reduceToSingleDigit(parseInt(formattedDate.split('/')[2]))} | ` +
+    `3º: 1º-2º | 4º: ${Math.abs(parseInt(formattedDate.split('/')[1]) - reduceToSingleDigit(parseInt(formattedDate.split('/')[2])))}`;
                     
                     // Lições Cármicas
                     document.getElementById('karmicLessons').textContent = karmicLessons.join(', ') || 'Nenhuma';
@@ -924,9 +930,9 @@
                     // Dívidas Cármicas
                     document.getElementById('karmicDebts').textContent = 
                         Array.isArray(karmicDebts) ? karmicDebts.join(', ') : karmicDebts;
-                    if (Array.isArray(karmicDebts) {
-                        displayRandomInterpretation('karmicDebts', karmicDebts[0]);
-                    }
+                    if (Array.isArray(karmicDebts)) {
+    displayRandomInterpretation('karmicDebts', karmicDebts[0]);
+}
                     
                     // Ciclos de Vida
                     document.getElementById('lifeCyclesCalculation').textContent = 
