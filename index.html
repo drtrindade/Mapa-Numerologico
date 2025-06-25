@@ -1262,7 +1262,30 @@ if (interpretations.lifeCycles &&
     descElement.appendChild(errorMsg);
     console.error("Dados de interpretação incompletos");
 }
-
+// Fallback extremo - criar novo elemento
+if (descElement.childElementCount === 0) {
+    console.log("Aplicando fallback extremo para exibição");
+    
+    const newElement = document.createElement('div');
+    newElement.id = 'lifeCyclesDescription_fallback';
+    newElement.innerHTML = `
+        <p><strong>1º Ciclo (0-30 anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}</p>
+        <p><strong>2º Ciclo (30-60 anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}</p>
+        <p><strong>3º Ciclo (60+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}</p>
+    `;
+    
+    // Estilos críticos
+    newElement.style.display = 'block';
+    newElement.style.color = '#f0f0f0';
+    newElement.style.padding = '15px';
+    newElement.style.marginTop = '10px';
+    
+    // Inserir após o elemento original
+    descElement.parentNode.insertBefore(newElement, descElement.nextSibling);
+    
+    // Ocultar elemento problemático
+    descElement.style.display = 'none';
+}
 document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
             
             // Descrição dos ciclos
