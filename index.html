@@ -1088,257 +1088,234 @@
         
         // Função para gerar o mapa numerológico
         function generateMap() {
-            const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-            const birthDate = document.getElementById('birthDate').value;
-            
-            if (!fullName || !birthDate) {
-                alert('Por favor, preencha todos os campos.');
-                return;
-            }
-            
-            const formattedDate = formatDate(birthDate);
-            const dateParts = formattedDate.split('/');
-            
-            // Cálculos numerológicos
-            const destinyNumber = calculateDestinyNumber(formattedDate);
-            const soulNumber = calculateSoulNumber(fullName);
-            const personalityNumber = calculatePersonalityNumber(fullName);
-            const expressionNumber = calculateExpressionNumber(fullName);
-            const challengeNumbers = calculateChallengeNumbers(formattedDate);
-            const karmicLessons = calculateKarmicLessons(fullName);
-            const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
-            const lifeCycles = calculateLifeCycles(formattedDate);
-            const personalYear = calculatePersonalYear(formattedDate);
-            
-            // Exibir resultados
-            document.getElementById('clientName').textContent = fullName;
-            document.getElementById('birthDateDisplay').textContent = formattedDate;
-            
-            // Número do Destino
-            document.getElementById('destinyNumber').textContent = destinyNumber;
-            displayRandomInterpretation('destiny', destinyNumber);
-            document.getElementById('destinyVariationCount').textContent = `(${interpretations.destiny[destinyNumber].length} variações disponíveis)`;
-            
-            // Número da Alma
-            document.getElementById('soulNumber').textContent = soulNumber;
-            displayRandomInterpretation('soul', soulNumber);
-            document.getElementById('soulVariationCount').textContent = `(${interpretations.soul[soulNumber].length} variações disponíveis)`;
-            
-            // Número da Personalidade
-            document.getElementById('personalityNumber').textContent = personalityNumber;
-            displayRandomInterpretation('personality', personalityNumber);
-            document.getElementById('personalityVariationCount').textContent = `(${interpretations.personality[personalityNumber].length} variações disponíveis)`;
-            
-            // Número de Expressão
-            document.getElementById('expressionNumber').textContent = expressionNumber;
-            displayRandomInterpretation('expression', expressionNumber);
-            document.getElementById('expressionVariationCount').textContent = `(${interpretations.expression[expressionNumber].length} variações disponíveis)`;
-            
-            // Números de Desafio
-            const challengeStr = `Primeiro: ${challengeNumbers.first} | Segundo: ${challengeNumbers.second} | Terceiro: ${challengeNumbers.third} | Quarto: ${challengeNumbers.fourth}`;
-            document.getElementById('challengeNumbers').textContent = challengeStr;
-            
-            // Para desafios, usamos a média como chave (simplificação)
-            const avgChallenge = Math.round((challengeNumbers.first + challengeNumbers.second + challengeNumbers.third + challengeNumbers.fourth) / 4);
-            const challengeKey = avgChallenge > 9 ? 9 : avgChallenge < 0 ? 0 : avgChallenge;
-            displayRandomInterpretation('challenge', challengeKey);
-            document.getElementById('challengeVariationCount').textContent = `(${interpretations.challenge[challengeKey].length} variações disponíveis)`;
-            
-            // Lições Cármicas
-            const lessonsStr = karmicLessons.numbers.length > 0 ? 
-                `Números ausentes: ${karmicLessons.numbers.join(', ')}` : 
-                'Nenhuma lição cármica (todos os números presentes)';
-            document.getElementById('karmicLessons').textContent = lessonsStr;
-            
-            if (karmicLessons.numbers.length > 0) {
-                let description = '';
-                for (const num of karmicLessons.numbers) {
-                    description += interpretations.karmicLessons[num] + '\n\n';
-                }
-                document.getElementById('karmicLessonsDescription').textContent = description.trim();
-            } else {
-                document.getElementById('karmicLessonsDescription').textContent = 'Você tem todas as vibrações numéricas em seu nome, indicando uma alma que já desenvolveu muitas lições em encarnações passadas.';
-            }
-            document.getElementById('karmicLessonsVariationCount').textContent = `(${karmicLessons.numbers.length} lições cármicas identificadas)`;
-            
-            // Dívidas Cármicas
-            const debtsStr = karmicDebts.length > 0 ? 
-                karmicDebts.join(', ') : 
-                'Nenhuma dívida cármica identificada';
-            document.getElementById('karmicDebts').textContent = debtsStr;
-            
-            if (karmicDebts.length > 0) {
-                let description = '';
-                for (const debt of karmicDebts) {
-                    description += interpretations.karmicDebts[debt] + '\n\n';
-                }
-                document.getElementById('karmicDebtsDescription').textContent = description.trim();
-            } else {
-                document.getElementById('karmicDebtsDescription').textContent = 'Você não possui dívidas cármicas significativas a serem equilibradas nesta encarnação.';
-            }
-            document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas cármicas identificadas)`;
-            
-            // Ciclos de Vida
-/* CORREÇÃO PARA EXIBIÇÃO DOS CICLOS DE VIDA */
-#lifeCyclesDescription {
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    color: #f0f0f0 !important;
-    font-size: 1rem !important;
-    line-height: 1.6 !important;
-    padding: 15px !important;
-    background: rgba(24, 24, 24, 0.6) !important;
-    border-left: 4px solid var(--roxo) !important;
-    border-radius: 0 5px 5px 0 !important;
-    margin-bottom: 20px !important;
-}
-
-#lifeCyclesDescription p {
-    margin: 10px 0 !important;
-    padding: 0 !important;
-}
-
-#lifeCyclesDescription strong {
-    color: var(--ouro-claro) !important;
-}
-           // Substitua APENAS a seção de Ciclos de Vida por este código:
-
-// CICLOS DE VIDA (Versão Corrigida com Debug Visual)
-const cyclesStr = `1º ciclo (0-30 anos): ${lifeCycles.first} | ` +
-                `2º ciclo (30-60 anos): ${lifeCycles.second} | ` +
-                `3º ciclo (60+ anos): ${lifeCycles.third}`;
-document.getElementById('lifeCycles').textContent = cyclesStr;
-
-// Debug visual para garantir que o elemento está sendo modificado
-const descElement = document.getElementById('lifeCyclesDescription');
-descElement.style.border = "2px dashed red"; // Remova depois de testar
-
-// Limpar qualquer conteúdo anterior
-descElement.innerHTML = '';
-
-// Verificar se os objetos de interpretação existem
-if (interpretations.lifeCycles && 
-    interpretations.lifeCycles.first && 
-    interpretations.lifeCycles.first[lifeCycles.first] &&
-    interpretations.lifeCycles.second && 
-    interpretations.lifeCycles.second[lifeCycles.second] &&
-    interpretations.lifeCycles.third && 
-    interpretations.lifeCycles.third[lifeCycles.third]) {
-    
-    // Criar elementos de forma explícita
-    const wrapper = document.createElement('div');
-    
-    const firstCyclePara = document.createElement('p');
-    firstCyclePara.innerHTML = `<strong>1º Ciclo (0-30 anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}`;
-    
-    const secondCyclePara = document.createElement('p');
-    secondCyclePara.innerHTML = `<strong>2º Ciclo (30-60 anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}`;
-    
-    const thirdCyclePara = document.createElement('p');
-    thirdCyclePara.innerHTML = `<strong>3º Ciclo (60+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}`;
-    
-    // Adicionar elementos ao wrapper
-    wrapper.appendChild(firstCyclePara);
-    wrapper.appendChild(secondCyclePara);
-    wrapper.appendChild(thirdCyclePara);
-    
-    // Adicionar ao DOM
-    descElement.appendChild(wrapper);
-    
-    // Forçar reflow (atualização visual)
-    void descElement.offsetHeight;
-    
-    // Aplicar estilos críticos diretamente
-    descElement.style.display = 'block';
-    descElement.style.visibility = 'visible';
-    descElement.style.opacity = '1';
-    
-    console.log("Conteúdo dos ciclos inserido com sucesso");
-} else {
-    const errorMsg = document.createElement('p');
-    errorMsg.textContent = "Interpretação não disponível para os ciclos calculados";
-    errorMsg.style.color = "var(--ouro)";
-    descElement.appendChild(errorMsg);
-    console.error("Dados de interpretação incompletos");
-}
-// Fallback extremo - criar novo elemento
-if (descElement.childElementCount === 0) {
-    console.log("Aplicando fallback extremo para exibição");
-    
-    const newElement = document.createElement('div');
-    newElement.id = 'lifeCyclesDescription_fallback';
-    newElement.innerHTML = `
-        <p><strong>1º Ciclo (0-30 anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}</p>
-        <p><strong>2º Ciclo (30-60 anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}</p>
-        <p><strong>3º Ciclo (60+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}</p>
-    `;
-    
-    // Estilos críticos
-    newElement.style.display = 'block';
-    newElement.style.color = '#f0f0f0';
-    newElement.style.padding = '15px';
-    newElement.style.marginTop = '10px';
-    
-    // Inserir após o elemento original
-    descElement.parentNode.insertBefore(newElement, descElement.nextSibling);
-    
-    // Ocultar elemento problemático
-    descElement.style.display = 'none';
-}
-document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
-            
-            // Descrição dos ciclos
-            let cyclesDescription = '';
-            cyclesDescription += `<strong>Primeiro Ciclo (0-${lifeCycles.firstEndAge} anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}<br><br>`;
-            cyclesDescription += `<strong>Segundo Ciclo (${lifeCycles.firstEndAge}-${lifeCycles.secondEndAge} anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}<br><br>`;
-            cyclesDescription += `<strong>Terceiro Ciclo (${lifeCycles.secondEndAge}+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}`;
-            
-            document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
-            document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
-            
-            // Ano Pessoal
-            document.getElementById('personalYear').textContent = personalYear;
-            displayRandomInterpretation('personalYear', personalYear);
-            document.getElementById('personalYearVariationCount').textContent = `(${interpretations.personalYear[personalYear].length} variações disponíveis)`;
-            
-            // Mostrar exemplos de cálculo
-            showCalculationExamples({
-                fullName,
-                formattedDate,
-                destinyNumber,
-                soulNumber,
-                personalityNumber,
-                expressionNumber,
-                challengeNumbers,
-                karmicLessons,
-                karmicDebts,
-                lifeCycles,
-                personalYear
-            });
-            
-            // Mostrar resultados
-            document.getElementById('resultContainer').style.display = 'block';
-            document.getElementById('btnPdf').disabled = false;
-            
-            // Rolar para os resultados
-            document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+    try {
+        console.log("Iniciando geração do mapa...");
+        
+        // 1. Obter valores dos inputs
+        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
+        const birthDate = document.getElementById('birthDate').value;
+        
+        if (!fullName || !birthDate) {
+            alert('Por favor, preencha todos os campos.');
+            return;
         }
-        // No final da função generateMap(), adicione:
-console.log("Verificação visual dos elementos:");
 
-// Verificar estilos computados
-const computedStyles = window.getComputedStyle(descElement);
-console.log("display:", computedStyles.display);
-console.log("visibility:", computedStyles.visibility);
-console.log("opacity:", computedStyles.opacity);
-console.log("height:", computedStyles.height);
-console.log("color:", computedStyles.color);
+        // 2. Formatar data corretamente (DD/MM/AAAA)
+        const formattedDate = formatDate(birthDate);
+        console.log("Data formatada:", formattedDate);
+        const [day, month, year] = formattedDate.split('/').map(Number);
 
-// Verificar posição e dimensões
-console.log("offsetHeight:", descElement.offsetHeight);
-console.log("clientHeight:", descElement.clientHeight);
-console.log("scrollHeight:", descElement.scrollHeight);
+        // 3. Realizar todos os cálculos
+        console.log("Calculando números...");
+        const destinyNumber = calculateDestinyNumber(formattedDate);
+        const soulNumber = calculateSoulNumber(fullName);
+        const personalityNumber = calculatePersonalityNumber(fullName);
+        const expressionNumber = calculateExpressionNumber(fullName);
+        const challengeNumbers = calculateChallengeNumbers(formattedDate);
+        const karmicLessons = calculateKarmicLessons(fullName);
+        const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
+        const lifeCycles = calculateLifeCycles(formattedDate);
+        const personalYear = calculatePersonalYear(formattedDate);
+
+        // 4. Exibir resultados básicos
+        console.log("Exibindo resultados básicos...");
+        document.getElementById('clientName').textContent = fullName;
+        document.getElementById('birthDateDisplay').textContent = formattedDate;
+
+        // 5. Exibir cada seção individualmente
+        displayDestinySection(destinyNumber);
+        displaySoulSection(soulNumber);
+        displayPersonalitySection(personalityNumber);
+        displayExpressionSection(expressionNumber);
+        displayChallengeSection(challengeNumbers);
+        displayKarmicLessonsSection(karmicLessons);
+        displayKarmicDebtsSection(karmicDebts);
+        displayLifeCyclesSection(lifeCycles); // Foco principal
+        displayPersonalYearSection(personalYear);
+
+        // 6. Mostrar exemplos de cálculo
+        console.log("Mostrando exemplos de cálculo...");
+        showCalculationExamples({
+            fullName,
+            formattedDate,
+            destinyNumber,
+            soulNumber,
+            personalityNumber,
+            expressionNumber,
+            challengeNumbers,
+            karmicLessons,
+            karmicDebts,
+            lifeCycles,
+            personalYear
+        });
+
+        // 7. Exibir container de resultados
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('btnPdf').disabled = false;
+        document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+
+        console.log("Mapa gerado com sucesso!");
+
+    } catch (error) {
+        console.error("Erro crítico ao gerar mapa:", error);
+        alert("Ocorreu um erro grave. Verifique o console para detalhes.");
+    }
+}
+
+// Função dedicada para exibir a seção de Ciclos de Vida
+function displayLifeCyclesSection(lifeCycles) {
+    try {
+        console.log("Exibindo seção de Ciclos de Vida...");
+        const cyclesStr = `1º ciclo (0-30 anos): ${lifeCycles.first} | ` +
+                         `2º ciclo (30-60 anos): ${lifeCycles.second} | ` +
+                         `3º ciclo (60+ anos): ${lifeCycles.third}`;
+        
+        // Elemento para o texto simples dos ciclos
+        const cyclesElement = document.getElementById('lifeCycles');
+        cyclesElement.textContent = cyclesStr;
+        
+        // Elemento para a descrição detalhada
+        const descElement = document.getElementById('lifeCyclesDescription');
+        
+        // Resetar estilos críticos (garantir visibilidade)
+        descElement.style.display = 'block';
+        descElement.style.visibility = 'visible';
+        descElement.style.opacity = '1';
+        descElement.style.color = '#f0f0f0';
+        descElement.style.fontSize = '1rem';
+        descElement.style.padding = '15px';
+        descElement.style.marginTop = '10px';
+        descElement.style.background = 'rgba(24, 24, 24, 0.6)';
+        descElement.style.borderLeft = '4px solid #6A0DAD';
+        descElement.style.borderRadius = '0 5px 5px 0';
+        
+        // Limpar conteúdo anterior
+        descElement.innerHTML = '';
+        
+        // Verificar disponibilidade das interpretações
+        if (interpretations.lifeCycles && 
+            interpretations.lifeCycles.first && 
+            interpretations.lifeCycles.first[lifeCycles.first] &&
+            interpretations.lifeCycles.second && 
+            interpretations.lifeCycles.second[lifeCycles.second] &&
+            interpretations.lifeCycles.third && 
+            interpretations.lifeCycles.third[lifeCycles.third]) {
+            
+            // Criar conteúdo formatado
+            const firstCycleText = interpretations.lifeCycles.first[lifeCycles.first][0];
+            const secondCycleText = interpretations.lifeCycles.second[lifeCycles.second][0];
+            const thirdCycleText = interpretations.lifeCycles.third[lifeCycles.third][0];
+            
+            const contentHTML = `
+                <p><strong>1º Ciclo (0-30 anos):</strong> ${firstCycleText}</p>
+                <p><strong>2º Ciclo (30-60 anos):</strong> ${secondCycleText}</p>
+                <p><strong>3º Ciclo (60+ anos):</strong> ${thirdCycleText}</p>
+            `;
+            
+            descElement.innerHTML = contentHTML;
+            console.log("Conteúdo dos ciclos inserido com sucesso");
+        } else {
+            descElement.innerHTML = '<p>Interpretações não disponíveis para os ciclos calculados</p>';
+            console.warn("Dados de interpretação incompletos para ciclos");
+        }
+        
+        // Atualizar contador de variações
+        document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
+        
+    } catch (error) {
+        console.error("Erro ao exibir ciclos de vida:", error);
+        const descElement = document.getElementById('lifeCyclesDescription');
+        descElement.innerHTML = '<p style="color:red">Erro ao carregar interpretações</p>';
+    }
+}
+
+// Funções de exibição para outras seções
+function displayDestinySection(destinyNumber) {
+    document.getElementById('destinyNumber').textContent = destinyNumber;
+    displayRandomInterpretation('destiny', destinyNumber);
+    document.getElementById('destinyVariationCount').textContent = `(${interpretations.destiny[destinyNumber].length} variações disponíveis)`;
+}
+
+function displaySoulSection(soulNumber) {
+    document.getElementById('soulNumber').textContent = soulNumber;
+    displayRandomInterpretation('soul', soulNumber);
+    document.getElementById('soulVariationCount').textContent = `(${interpretations.soul[soulNumber].length} variações disponíveis)`;
+}
+
+function displayPersonalitySection(personalityNumber) {
+    document.getElementById('personalityNumber').textContent = personalityNumber;
+    displayRandomInterpretation('personality', personalityNumber);
+    document.getElementById('personalityVariationCount').textContent = `(${interpretations.personality[personalityNumber].length} variações disponíveis)`;
+}
+
+function displayExpressionSection(expressionNumber) {
+    document.getElementById('expressionNumber').textContent = expressionNumber;
+    displayRandomInterpretation('expression', expressionNumber);
+    document.getElementById('expressionVariationCount').textContent = `(${interpretations.expression[expressionNumber].length} variações disponíveis)`;
+}
+
+function displayChallengeSection(challengeNumbers) {
+    const challengeStr = `1º: ${challengeNumbers.first} | 2º: ${challengeNumbers.second} | 3º: ${challengeNumbers.third} | 4º: ${challengeNumbers.fourth}`;
+    document.getElementById('challengeNumbers').textContent = challengeStr;
+    const avgChallenge = Math.round((challengeNumbers.first + challengeNumbers.second + challengeNumbers.third + challengeNumbers.fourth) / 4);
+    const challengeKey = Math.min(Math.max(avgChallenge, 0), 9);
+    displayRandomInterpretation('challenge', challengeKey);
+    document.getElementById('challengeVariationCount').textContent = `(${interpretations.challenge[challengeKey].length} variações disponíveis)`;
+}
+
+function displayKarmicLessonsSection(karmicLessons) {
+    const lessonsStr = karmicLessons.numbers.length > 0 ? 
+        `Números ausentes: ${karmicLessons.numbers.join(', ')}` : 
+        'Nenhuma lição cármica (todos os números presentes)';
+    document.getElementById('karmicLessons').textContent = lessonsStr;
+    
+    if (karmicLessons.numbers.length > 0) {
+        let description = '';
+        for (const num of karmicLessons.numbers) {
+            description += interpretations.karmicLessons[num] + '\n\n';
+        }
+        document.getElementById('karmicLessonsDescription').textContent = description.trim();
+    } else {
+        document.getElementById('karmicLessonsDescription').textContent = 'Você tem todas as vibrações numéricas em seu nome.';
+    }
+    document.getElementById('karmicLessonsVariationCount').textContent = `(${karmicLessons.numbers.length} lições identificadas)`;
+}
+
+function displayKarmicDebtsSection(karmicDebts) {
+    const debtsStr = karmicDebts.length > 0 ? 
+        karmicDebts.join(', ') : 
+        'Nenhuma dívida cármica identificada';
+    document.getElementById('karmicDebts').textContent = debtsStr;
+    
+    if (karmicDebts.length > 0) {
+        let description = '';
+        for (const debt of karmicDebts) {
+            description += interpretations.karmicDebts[debt] + '\n\n';
+        }
+        document.getElementById('karmicDebtsDescription').textContent = description.trim();
+    } else {
+        document.getElementById('karmicDebtsDescription').textContent = 'Nenhuma dívida cármica significativa.';
+    }
+    document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas identificadas)`;
+}
+
+function displayPersonalYearSection(personalYear) {
+    document.getElementById('personalYear').textContent = personalYear;
+    displayRandomInterpretation('personalYear', personalYear);
+    document.getElementById('personalYearVariationCount').textContent = `(${interpretations.personalYear[personalYear].length} variações disponíveis)`;
+}
+
+// Função auxiliar para exibir interpretações aleatórias
+function displayRandomInterpretation(type, number) {
+    const interpretationsArray = interpretations[type][number];
+    if (interpretationsArray && interpretationsArray.length > 0) {
+        const randomIndex = Math.floor(Math.random() * interpretationsArray.length);
+        document.getElementById(`${type}Description`).textContent = interpretationsArray[randomIndex];
+    } else {
+        document.getElementById(`${type}Description`).textContent = 'Interpretação não disponível.';
+    }
+}
+        
         // Função para exibir uma interpretação aleatória
         function displayRandomInterpretation(type, number) {
             const interpretationsArray = interpretations[type][number];
