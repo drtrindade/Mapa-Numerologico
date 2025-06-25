@@ -1087,7 +1087,7 @@
         }
         
         // Função para gerar o mapa numerológico
-       function generateMap() {
+      function generateMap() {
     try {
         // 1. Obter valores dos inputs
         const fullName = document.getElementById('fullName').value.trim().toUpperCase();
@@ -1179,28 +1179,40 @@
         }
         document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas identificadas)`;
 
-        // CICLOS DE VIDA (Versão Corrigida)
+        // CORREÇÃO FINAL: CICLOS DE VIDA
         const cyclesStr = `1º ciclo (0-30 anos): ${lifeCycles.first} | ` +
                          `2º ciclo (30-60 anos): ${lifeCycles.second} | ` +
                          `3º ciclo (60+ anos): ${lifeCycles.third}`;
         document.getElementById('lifeCycles').textContent = cyclesStr;
 
         // Descrição formatada com verificações de segurança
+        const descElement = document.getElementById('lifeCyclesDescription');
+        
+        // Verificar se os objetos de interpretação existem
         if (interpretations.lifeCycles && 
-            interpretations.lifeCycles.first[lifeCycles.first] &&
-            interpretations.lifeCycles.second[lifeCycles.second] &&
-            interpretations.lifeCycles.third[lifeCycles.third]) {
+            interpretations.lifeCycles.first && 
+            interpretations.lifeCycles.second && 
+            interpretations.lifeCycles.third) {
             
+            // Obter as interpretações corretas
+            const firstCycleText = interpretations.lifeCycles.first[lifeCycles.first][0];
+            const secondCycleText = interpretations.lifeCycles.second[lifeCycles.second][0];
+            const thirdCycleText = interpretations.lifeCycles.third[lifeCycles.third][0];
+            
+            // Construir o HTML formatado
             const cyclesDescription = `
-                <p><strong>1º Ciclo (0-30 anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}</p>
-                <p><strong>2º Ciclo (30-60 anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}</p>
-                <p><strong>3º Ciclo (60+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}</p>
+                <p><strong>1º Ciclo (0-30 anos):</strong> ${firstCycleText}</p>
+                <p><strong>2º Ciclo (30-60 anos):</strong> ${secondCycleText}</p>
+                <p><strong>3º Ciclo (60+ anos):</strong> ${thirdCycleText}</p>
             `;
-            document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
+            
+            // Inserir no elemento
+            descElement.innerHTML = cyclesDescription;
         } else {
             console.error("Dados de interpretação dos ciclos não encontrados");
-            document.getElementById('lifeCyclesDescription').textContent = "Interpretação não disponível";
+            descElement.textContent = "Interpretação não disponível para os ciclos calculados";
         }
+        
         document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
 
         // Ano Pessoal
