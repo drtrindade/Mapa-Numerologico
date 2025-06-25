@@ -8,7 +8,21 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+.logo-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
 
+.site-logo {
+    max-width: 150px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+/* Mantenha o logo existente (texto gradiente) escondido */
+.logo {
+    display: none;
+}
 .cycles-numbers-container {
     display: flex;
     justify-content: space-between;
@@ -291,11 +305,13 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="logo">OURO ORACULAR</div>
-            <h1>Mapa Numerológico Completo</h1>
-            <p class="subtitle">Desvendando os segredos dos números em sua vida</p>
-        </header>
+       <header>
+    <div class="logo-container">
+        <img src="https://assets.zyrosite.com/AE02nZ6p4aF8Z3Gp/design-sem-nome-71-Yg2y7806klU5yR26.png" alt="Ouro Oracular" class="site-logo">
+    </div>
+    <h1>Mapa Numerológico Completo</h1>
+    <p class="subtitle">Desvendando os segredos dos números em sua vida</p>
+</header>
         
         <div class="form-container">
             <div class="form-group">
