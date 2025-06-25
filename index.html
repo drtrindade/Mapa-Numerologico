@@ -1049,28 +1049,20 @@
         
         // Função auxiliar para reduzir a um único dígito
         function reduceToSingleDigit(number) {
-            let num = number;
-            
-            while (num > 9 && num !== 11 && num !== 22) {
-                num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-            }
-            
-            return num;
-        }
-        
-        // Função para formatar a data corretamente (correção do bug)
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            // Ajuste para corrigir o fuso horário
-            const timezoneOffset = date.getTimezoneOffset() * 60000;
-            const adjustedDate = new Date(date.getTime() + timezoneOffset);
-            
-            const day = adjustedDate.getDate().toString().padStart(2, '0');
-            const month = (adjustedDate.getMonth() + 1).toString().padStart(2, '0');
-            const year = adjustedDate.getFullYear();
-            
-            return `${day}/${month}/${year}`;
-        }
+    let num = number;
+    while (num > 9 && num !== 11 && num !== 22) {
+        num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+    }
+    return num;
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+}
         
         // Função para mostrar exemplos de cálculo
         function showCalculationExamples(data) {
@@ -1133,8 +1125,6 @@
         // Função para gerar o mapa numerológico
         function generateMap() {
     try {
-        console.log("Iniciando geração do mapa...");
-        
         // 1. Obter valores dos inputs
         const fullName = document.getElementById('fullName').value.trim().toUpperCase();
         const birthDate = document.getElementById('birthDate').value;
@@ -1144,13 +1134,11 @@
             return;
         }
 
-        // 2. Formatar data corretamente (DD/MM/AAAA)
+        // 2. Formatar data
         const formattedDate = formatDate(birthDate);
-        console.log("Data formatada:", formattedDate);
         const [day, month, year] = formattedDate.split('/').map(Number);
 
-        // 3. Realizar todos os cálculos
-        console.log("Calculando números...");
+        // 3. Cálculos principais
         const destinyNumber = calculateDestinyNumber(formattedDate);
         const soulNumber = calculateSoulNumber(fullName);
         const personalityNumber = calculatePersonalityNumber(fullName);
@@ -1158,16 +1146,14 @@
         const challengeNumbers = calculateChallengeNumbers(formattedDate);
         const karmicLessons = calculateKarmicLessons(fullName);
         const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
- const lifeCycles = calculateLifeCycles(formattedDate);
-    
+        const lifeCycles = calculateLifeCycles(formattedDate);
         const personalYear = calculatePersonalYear(formattedDate);
 
         // 4. Exibir resultados básicos
-        console.log("Exibindo resultados básicos...");
         document.getElementById('clientName').textContent = fullName;
         document.getElementById('birthDateDisplay').textContent = formattedDate;
 
-        // 5. Exibir cada seção individualmente
+        // 5. Exibir cada seção (mantenha suas funções existentes para outras seções)
         displayDestinySection(destinyNumber);
         displaySoulSection(soulNumber);
         displayPersonalitySection(personalityNumber);
@@ -1175,11 +1161,13 @@
         displayChallengeSection(challengeNumbers);
         displayKarmicLessonsSection(karmicLessons);
         displayKarmicDebtsSection(karmicDebts);
-        displayLifeCycles(lifeCycles); // Foco principal
+        
+        // 6. Exibir CICLOS DE VIDA (usando a nova função)
+        displayLifeCycles(lifeCycles);
+        
         displayPersonalYearSection(personalYear);
 
-        // 6. Mostrar exemplos de cálculo
-        console.log("Mostrando exemplos de cálculo...");
+        // 7. Mostrar exemplos de cálculo
         showCalculationExamples({
             fullName,
             formattedDate,
@@ -1194,16 +1182,14 @@
             personalYear
         });
 
-        // 7. Exibir container de resultados
+        // 8. Exibir container de resultados
         document.getElementById('resultContainer').style.display = 'block';
         document.getElementById('btnPdf').disabled = false;
         document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
 
-        console.log("Mapa gerado com sucesso!");
-
     } catch (error) {
         console.error("Erro crítico ao gerar mapa:", error);
-        alert("Ocorreu um erro grave. Verifique o console para detalhes.");
+        alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
     }
 }
 
@@ -1292,7 +1278,58 @@ function displayKarmicDebtsSection(karmicDebts) {
     }
     document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas identificadas)`;
 }
-
+function displayLifeCycles(lifeCycles) {
+    try {
+        const container = document.getElementById('lifeCyclesSection');
+        const numbersContainer = document.createElement('div');
+        const descElement = document.getElementById('lifeCyclesDescription');
+        
+        // Configuração dos elementos
+        numbersContainer.className = 'cycles-numbers-container';
+        descElement.innerHTML = '';
+        
+        // Exibir os números dos ciclos
+        lifeCycles.periods.forEach(period => {
+            const cycleBox = document.createElement('div');
+            cycleBox.className = 'cycle-number-box';
+            cycleBox.innerHTML = `
+                <div class="cycle-number">${period.number}</div>
+                <div class="cycle-range">${period.range}</div>
+            `;
+            numbersContainer.appendChild(cycleBox);
+        });
+        
+        // Inserir números no DOM
+        const section = document.getElementById('lifeCycles');
+        section.innerHTML = '';
+        section.appendChild(numbersContainer);
+        
+        // Exibir as interpretações completas
+        lifeCycles.periods.forEach((period, index) => {
+            const cycleInterpretation = interpretations.lifeCycles[period.cycle][period.number];
+            
+            const cycleDiv = document.createElement('div');
+            cycleDiv.className = 'cycle-description';
+            cycleDiv.innerHTML = `
+                <h4>${index+1}º Ciclo (${period.range}) - Número ${period.number}</h4>
+                <p>${cycleInterpretation}</p>
+                ${index < lifeCycles.periods.length - 1 ? '<hr class="cycle-divider">' : ''}
+            `;
+            
+            descElement.appendChild(cycleDiv);
+        });
+        
+        // Garantir visibilidade
+        container.style.display = 'block';
+        numbersContainer.style.display = 'flex';
+        descElement.style.display = 'block';
+        
+    } catch (error) {
+        console.error("Erro ao exibir ciclos de vida:", error);
+        document.getElementById('lifeCyclesDescription').innerHTML = 
+            '<p class="error">Erro ao carregar interpretações dos ciclos de vida</p>';
+    }
+}
 function displayPersonalYearSection(personalYear) {
     document.getElementById('personalYear').textContent = personalYear;
     displayRandomInterpretation('personalYear', personalYear);
