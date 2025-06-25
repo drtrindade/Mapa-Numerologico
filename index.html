@@ -8,6 +8,56 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
+
+.cycles-numbers-container {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    gap: 10px;
+}
+
+.cycle-number-box {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    background: rgba(212, 175, 55, 0.1);
+    border-radius: 8px;
+    border: 1px solid var(--ouro);
+}
+
+.cycle-number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--ouro);
+    margin-bottom: 5px;
+}
+
+.cycle-range {
+    font-size: 0.9rem;
+    color: var(--roxo-claro);
+}
+
+.cycle-description {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(24, 24, 24, 0.6);
+    border-radius: 5px;
+    border-left: 4px solid var(--roxo);
+}
+
+.cycle-description h4 {
+    color: var(--ouro-claro);
+    margin-top: 0;
+}
+
+.cycle-divider {
+    border: none;
+    height: 1px;
+    background-color: var(--roxo);
+    opacity: 0.3;
+    margin: 20px 0;
+}
+
         :root {
             --ouro: #D4AF37;
             --roxo: #6A0DAD;
@@ -936,25 +986,19 @@
         
         // Função para calcular os ciclos de vida
         function calculateLifeCycles(date) {
-            const [day, month, year] = date.split('/').map(Number);
-            
-            // Primeiro ciclo: mês de nascimento (0-30 anos)
-            const firstCycleNumber = reduceToSingleDigit(month);
-            
-            // Segundo ciclo: dia de nascimento (30-60 anos)
-            const secondCycleNumber = reduceToSingleDigit(day);
-            
-            // Terceiro ciclo: ano de nascimento (60+ anos)
-            const thirdCycleNumber = reduceToSingleDigit(year);
-            
-            return {
-                first: firstCycleNumber,
-                second: secondCycleNumber,
-                third: thirdCycleNumber,
-                firstEndAge: 30,
-                secondEndAge: 60
-            };
-        }
+    const [day, month, year] = date.split('/').map(Number);
+    
+    return {
+        first: reduceToSingleDigit(month),       // 0-30 anos
+        second: reduceToSingleDigit(day),        // 30-60 anos
+        third: reduceToSingleDigit(day + month + year),  // 60+ anos
+        periods: [
+            { number: reduceToSingleDigit(month), range: "0-30 anos", cycle: "first" },
+            { number: reduceToSingleDigit(day), range: "30-60 anos", cycle: "second" },
+            { number: reduceToSingleDigit(day + month + year), range: "60+ anos", cycle: "third" }
+        ]
+    };
+}
         
         // Função para calcular o ano pessoal atual
         function calculatePersonalYear(date) {
@@ -1114,7 +1158,8 @@
         const challengeNumbers = calculateChallengeNumbers(formattedDate);
         const karmicLessons = calculateKarmicLessons(fullName);
         const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
-        const lifeCycles = calculateLifeCycles(formattedDate);
+ const lifeCycles = calculateLifeCycles(formattedDate);
+    
         const personalYear = calculatePersonalYear(formattedDate);
 
         // 4. Exibir resultados básicos
@@ -1130,7 +1175,7 @@
         displayChallengeSection(challengeNumbers);
         displayKarmicLessonsSection(karmicLessons);
         displayKarmicDebtsSection(karmicDebts);
-        displayLifeCyclesSection(lifeCycles); // Foco principal
+        displayLifeCycles(lifeCycles); // Foco principal
         displayPersonalYearSection(personalYear);
 
         // 6. Mostrar exemplos de cálculo
@@ -1163,70 +1208,19 @@
 }
 
 // Função dedicada para exibir a seção de Ciclos de Vida
-function displayLifeCyclesSection(lifeCycles) {
-    try {
-        console.log("Exibindo seção de Ciclos de Vida...");
-        const cyclesStr = `1º ciclo (0-30 anos): ${lifeCycles.first} | ` +
-                         `2º ciclo (30-60 anos): ${lifeCycles.second} | ` +
-                         `3º ciclo (60+ anos): ${lifeCycles.third}`;
-        
-        // Elemento para o texto simples dos ciclos
-        const cyclesElement = document.getElementById('lifeCycles');
-        cyclesElement.textContent = cyclesStr;
-        
-        // Elemento para a descrição detalhada
-        const descElement = document.getElementById('lifeCyclesDescription');
-        
-        // Resetar estilos críticos (garantir visibilidade)
-        descElement.style.display = 'block';
-        descElement.style.visibility = 'visible';
-        descElement.style.opacity = '1';
-        descElement.style.color = '#f0f0f0';
-        descElement.style.fontSize = '1rem';
-        descElement.style.padding = '15px';
-        descElement.style.marginTop = '10px';
-        descElement.style.background = 'rgba(24, 24, 24, 0.6)';
-        descElement.style.borderLeft = '4px solid #6A0DAD';
-        descElement.style.borderRadius = '0 5px 5px 0';
-        
-        // Limpar conteúdo anterior
-        descElement.innerHTML = '';
-        
-        // Verificar disponibilidade das interpretações
-        if (interpretations.lifeCycles && 
-            interpretations.lifeCycles.first && 
-            interpretations.lifeCycles.first[lifeCycles.first] &&
-            interpretations.lifeCycles.second && 
-            interpretations.lifeCycles.second[lifeCycles.second] &&
-            interpretations.lifeCycles.third && 
-            interpretations.lifeCycles.third[lifeCycles.third]) {
-            
-            // Criar conteúdo formatado
-            const firstCycleText = interpretations.lifeCycles.first[lifeCycles.first][0];
-            const secondCycleText = interpretations.lifeCycles.second[lifeCycles.second][0];
-            const thirdCycleText = interpretations.lifeCycles.third[lifeCycles.third][0];
-            
-            const contentHTML = `
-                <p><strong>1º Ciclo (0-30 anos):</strong> ${firstCycleText}</p>
-                <p><strong>2º Ciclo (30-60 anos):</strong> ${secondCycleText}</p>
-                <p><strong>3º Ciclo (60+ anos):</strong> ${thirdCycleText}</p>
-            `;
-            
-            descElement.innerHTML = contentHTML;
-            console.log("Conteúdo dos ciclos inserido com sucesso");
-        } else {
-            descElement.innerHTML = '<p>Interpretações não disponíveis para os ciclos calculados</p>';
-            console.warn("Dados de interpretação incompletos para ciclos");
-        }
-        
-        // Atualizar contador de variações
-        document.getElementById('lifeCyclesVariationCount').textContent = '(3 ciclos descritos)';
-        
-    } catch (error) {
-        console.error("Erro ao exibir ciclos de vida:", error);
-        const descElement = document.getElementById('lifeCyclesDescription');
-        descElement.innerHTML = '<p style="color:red">Erro ao carregar interpretações</p>';
-    }
+function calculateLifeCycles(date) {
+    const [day, month, year] = date.split('/').map(Number);
+    
+    return {
+        first: reduceToSingleDigit(month),       // 0-30 anos
+        second: reduceToSingleDigit(day),        // 30-60 anos
+        third: reduceToSingleDigit(day + month + year),  // 60+ anos
+        periods: [
+            { number: reduceToSingleDigit(month), range: "0-30 anos", cycle: "first" },
+            { number: reduceToSingleDigit(day), range: "30-60 anos", cycle: "second" },
+            { number: reduceToSingleDigit(day + month + year), range: "60+ anos", cycle: "third" }
+        ]
+    };
 }
 
 // Funções de exibição para outras seções
