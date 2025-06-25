@@ -1186,12 +1186,19 @@ const cyclesStr = `1º ciclo (0-30 anos): ${lifeCycles.first} | ` +
 document.getElementById('lifeCycles').textContent = cyclesStr; // ✅ Usa textContent
 
 // Descrição formatada (com HTML para negrito, se necessário)
-let cyclesDescription = `
-    <strong>1º Ciclo (0-30 anos):</strong> ${interpretations.lifeCycles.first[lifeCycles.first][0]}<br><br>
-    <strong>2º Ciclo (30-60 anos):</strong> ${interpretations.lifeCycles.second[lifeCycles.second][0]}<br><br>
-    <strong>3º Ciclo (60+ anos):</strong> ${interpretations.lifeCycles.third[lifeCycles.third][0]}
+const firstCycleText = interpretations.lifeCycles.first[lifeCycles.first][0];
+const secondCycleText = interpretations.lifeCycles.second[lifeCycles.second][0];
+const thirdCycleText = interpretations.lifeCycles.third[lifeCycles.third][0];
+
+const cyclesDescription = `
+    <p><strong>1º Ciclo (0-30 anos):</strong> ${firstCycleText}</p>
+    <p><strong>2º Ciclo (30-60 anos):</strong> ${secondCycleText}</p>
+    <p><strong>3º Ciclo (60+ anos):</strong> ${thirdCycleText}</p>
 `;
-document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
+
+const descriptionElement = document.getElementById('lifeCyclesDescription');
+descriptionElement.innerHTML = cyclesDescription; // Insere o HTML formatado
+descriptionElement.style.display = 'block'; // Garante que está visível
             
             // Ano Pessoal
             document.getElementById('personalYear').textContent = personalYear;
@@ -1219,6 +1226,8 @@ document.getElementById('lifeCyclesDescription').innerHTML = cyclesDescription;
             
             // Rolar para os resultados
             document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+
+            console.log("Conteúdo de lifeCyclesDescription:", document.getElementById('lifeCyclesDescription').innerHTML);
         }
         
         // Função para exibir uma interpretação aleatória
