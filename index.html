@@ -1075,9 +1075,14 @@
 
 function formatDate(dateString) {
     const date = new Date(dateString);
+    // Ajuste para o fuso horário brasileiro (UTC-3)
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() + offset);
+    
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
+    
     return `${day}/${month}/${year}`;
 }
         
@@ -1378,12 +1383,12 @@ function displayRandomInterpretation(type, number) {
         }
         
         // Função para gerar o PDF
-      async function generatePDF() {
+    async function generatePDF() {
     try {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // Configurações
+        // 1. Configurações iniciais
         const primaryColor = '#D4AF37';
         const secondaryColor = '#6A0DAD';
         const textColor = '#333333';
@@ -1393,96 +1398,94 @@ function displayRandomInterpretation(type, number) {
         const lineHeight = 7;
         const fontSize = 12;
         
-        // 1. Criar bookmark para a capa
-        doc.outline.add(null, "Capa", { pageNumber: 1 });
+        // 2. Obter dados corretamente formatados
+        const fullName = document.getElementById('clientName').textContent;
+        const birthDate = document.getElementById('birthDateDisplay').textContent;
         
-        // 2. Adicionar capa (código anterior mantido)
-        // ... [código da capa existente] ...
+        // 3. Capa simplificada (evitando problemas)
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(secondaryColor);
+        doc.setFontSize(24);
+        doc.text('OURO ORACULAR', centerX, 50, { align: 'center' });
         
-        // 3. ÍNDICE CLICÁVEL MELHORADO
-        doc.addPage();
-        const outline = doc.outline;
-        const sectionPages = {};
+        doc.setFontSize(20);
+        doc.text('Mapa Numerológico', centerX, 70, { align: 'center' });
         
-        createSectionHeader(doc, 'ÍNDICE', margin, pageWidth);
+        doc.setTextColor(primaryColor);
+        doc.setFontSize(18);
+        doc.text(fullName, centerX, 90, { align: 'center' });
         
+        doc.setTextColor(textColor);
+        doc.setFontSize(14);
+        doc.text(`Data de Nascimento: ${birthDate}`, centerX, 110, { align: 'center' });
+        
+        // 4. Adicionar seções de forma robusta
         const sections = [
-            { 
-                title: 'Número do Destino', 
-                description: 'Representa o caminho que sua alma escolheu para esta encarnação',
-                element: 'destiny'
+            {
+                title: 'Número do Destino',
+                element: 'destiny',
+                description: 'Representa o caminho que sua alma escolheu para esta encarnação'
             },
-            // ... [todas as outras seções] ...
+            // ... adicione todas as outras seções aqui
         ];
         
-        // Primeiro passada: coletar números de página
+        // Adicionar conteúdo das seções
         sections.forEach(section => {
-            // Adiciona página placeholder para a seção
             doc.addPage();
-            sectionPages[section.element] = doc.internal.getNumberOfPages();
-            doc.deletePage(doc.internal.getNumberOfPages()); // Remove a página após obter o número
-        });
-        
-        // Voltar para a página do índice
-        doc.setPage(2);
-        
-        // Adicionar itens do índice com links
-        doc.setFontSize(fontSize);
-        let y = 40;
-        
-        sections.forEach((section, index) => {
-            const targetPage = sectionPages[section.element];
             
-            // Adicionar bookmark
-            outline.add(null, section.title, { pageNumber: targetPage });
-            
-            // Texto clicável (usando textWithLink)
-            doc.setTextColor(primaryColor);
-            doc.textWithLink(`${index + 1}.`, margin, y, {
-                pageNumber: targetPage,
-                magFactor: 1, // Zoom normal
-                fitHeight: true
-            });
-            
+            // Cabeçalho
+            doc.setFont('helvetica', 'bold');
             doc.setTextColor(secondaryColor);
-            doc.textWithLink(section.title, margin + 10, y, {
-                pageNumber: targetPage,
-                magFactor: 1,
-                fitHeight: true
-            });
+            doc.setFontSize(16);
+            doc.text(section.title.toUpperCase(), margin, 30);
             
-            // Descrição (não clicável)
-            doc.setFont('helvetica', 'normal');
+            // Linha decorativa
+            doc.setDrawColor(212, 175, 55);
+            doc.setLineWidth(0.5);
+            doc.line(margin, 35, pageWidth - margin, 35);
+            
+            // Descrição da seção
+            doc.setFont('helvetica', 'italic');
             doc.setTextColor(textColor);
-            doc.setFontSize(fontSize - 1);
-            const descLines = doc.splitTextToSize(section.description, pageWidth - 2 * margin);
-            doc.text(descLines, margin + 10, y + 5);
+            doc.setFontSize(fontSize);
+            doc.text(section.description, margin, 45);
             
-            y += (descLines.length * lineHeight) + 10;
+            // Valor numérico
+            const valueElement = document.getElementById(`${section.element}Number`);
+            if (valueElement) {
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(primaryColor);
+                doc.setFontSize(14);
+                doc.text(`Valor: ${valueElement.textContent}`, margin, 60);
+            }
+            
+            // Cálculo
+            const calcElement = document.getElementById(`${section.element}Calculation`);
+            if (calcElement) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(secondaryColor);
+                doc.setFontSize(fontSize - 1);
+                const calcText = doc.splitTextToSize(calcElement.textContent, pageWidth - 2 * margin);
+                doc.text(calcText, margin, 70);
+            }
+            
+            // Descrição completa
+            const descElement = document.getElementById(`${section.element}Description`);
+            if (descElement) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(textColor);
+                doc.setFontSize(fontSize);
+                const descText = doc.splitTextToSize(descElement.textContent, pageWidth - 2 * margin);
+                doc.text(descText, margin, calcElement ? 85 : 70);
+            }
         });
         
-        // 4. Adicionar seções reais
-        sections.forEach(section => {
-            doc.setPage(sectionPages[section.element]);
-            addContentSection(
-                doc,
-                section.title,
-                document.getElementById(`${section.element}Number`).textContent,
-                document.getElementById(`${section.element}Description`).textContent,
-                document.getElementById(`${section.element}Calculation`).textContent,
-                section.description,
-                margin,
-                lineHeight,
-                fontSize
-            );
-        });
-        
-        // 5. Salvar PDF
+        // 5. Salvar o PDF
         doc.save(`Mapa_Numerologico_${fullName.replace(/\s+/g, '_')}.pdf`);
         
     } catch (error) {
         console.error("Erro ao gerar PDF:", error);
-        alert("Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.");
+        alert("Erro ao gerar PDF. Por favor, verifique o console para detalhes.");
     }
 }
     </script>
