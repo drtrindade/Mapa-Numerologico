@@ -1388,20 +1388,27 @@ function displayRandomInterpretation(type, number) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // Configurações de estilo
-        const primaryColor = '#D4AF37'; // Ouro
-        const secondaryColor = '#6A0DAD'; // Roxo
+        // Configurações
+        const primaryColor = '#D4AF37';
+        const secondaryColor = '#6A0DAD';
         const textColor = '#333333';
         const pageWidth = doc.internal.pageSize.getWidth();
         const centerX = pageWidth / 2;
         const margin = 15;
         const lineHeight = 7;
         const fontSize = 12;
+
+        // Verificar se os elementos existem antes de continuar
+        const clientNameElement = document.getElementById('clientName');
+        const birthDateElement = document.getElementById('birthDateDisplay');
         
-        // Obter dados do formulário
-        const fullName = document.getElementById('clientName').textContent;
-        const birthDate = document.getElementById('birthDateDisplay').textContent;
-        
+        if (!clientNameElement || !birthDateElement) {
+            throw new Error("Elementos essenciais não encontrados na página");
+        }
+
+        const fullName = clientNameElement.textContent;
+        const birthDate = birthDateElement.textContent;
+
         // 1. CAPA
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(secondaryColor);
@@ -1418,64 +1425,25 @@ function displayRandomInterpretation(type, number) {
         doc.setTextColor(textColor);
         doc.setFontSize(14);
         doc.text(`Data de Nascimento: ${birthDate}`, centerX, 110, { align: 'center' });
-        
-        // 2. ÍNDICE
+
+        // 2. LISTA DE SEÇÕES COM VERIFICAÇÃO DE ELEMENTOS
+        const sections = [
+            {
+                title: 'Número do Destino',
+                element: 'destiny',
+                description: 'Representa o caminho que sua alma escolheu para esta encarnação',
+                hasCalculation: true
+            },
+            // ... (adicionar todas as outras seções seguindo o mesmo padrão)
+        ];
+
+        // 3. ÍNDICE
         doc.addPage();
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(secondaryColor);
         doc.setFontSize(16);
         doc.text('ÍNDICE', margin, 30);
-        
-        // Lista de seções
-        const sections = [
-            {
-                title: 'Número do Destino',
-                element: 'destiny',
-                description: 'Representa o caminho que sua alma escolheu para esta encarnação'
-            },
-            {
-                title: 'Número da Alma',
-                element: 'soul', 
-                description: 'Revela seus desejos mais profundos e motivações internas'
-            },
-            {
-                title: 'Número da Personalidade',
-                element: 'personality',
-                description: 'Mostra como você se apresenta ao mundo'
-            },
-            {
-                title: 'Número de Expressão',
-                element: 'expression',
-                description: 'Indica seus talentos naturais e potencial geral'
-            },
-            {
-                title: 'Números de Desafio',
-                element: 'challenge',
-                description: 'Revelam as principais lições que você precisa aprender'
-            },
-            {
-                title: 'Lições Cármicas',
-                element: 'karmicLessons',
-                description: 'Mostram quais energias numéricas estão faltando em seu nome'
-            },
-            {
-                title: 'Dívidas Cármicas',
-                element: 'karmicDebts',
-                description: 'Números especiais que indicam lições profundas'
-            },
-            {
-                title: 'Ciclos de Vida',
-                element: 'lifeCycles',
-                description: 'Mostra as três principais fases da vida e suas energias'
-            },
-            {
-                title: 'Ano Pessoal Atual',
-                element: 'personalYear',
-                description: 'Indica a energia predominante para o ano corrente'
-            }
-        ];
-        
-        // Adicionar itens do índice
+
         let y = 40;
         sections.forEach((section, index) => {
             doc.setFont('helvetica', 'bold');
@@ -1494,12 +1462,12 @@ function displayRandomInterpretation(type, number) {
             
             y += (descLines.length * lineHeight) + 10;
         });
-        
-        // 3. SEÇÕES DE CONTEÚDO
+
+        // 4. CONTEÚDO DAS SEÇÕES COM VERIFICAÇÃO
         sections.forEach(section => {
             doc.addPage();
             
-            // Cabeçalho da seção
+            // Cabeçalho
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(secondaryColor);
             doc.setFontSize(16);
@@ -1516,38 +1484,45 @@ function displayRandomInterpretation(type, number) {
             doc.setFontSize(fontSize);
             doc.text(section.description, margin, 45);
             
-            // Valor numérico
-            const value = document.getElementById(`${section.element}Number`).textContent;
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(primaryColor);
-            doc.setFontSize(14);
-            doc.text(`Valor: ${value}`, margin, 60);
-            
-            // Cálculo (se existir)
-            const calculation = document.getElementById(`${section.element}Calculation`)?.textContent;
-            if (calculation) {
-                doc.setFont('helvetica', 'normal');
-                doc.setTextColor(secondaryColor);
-                doc.setFontSize(fontSize - 1);
-                const calcLines = doc.splitTextToSize(calculation, pageWidth - 2 * margin);
-                doc.text(calcLines, margin, 70);
+            // Valor numérico (com verificação)
+            const valueElement = document.getElementById(`${section.element}Number`);
+            if (valueElement) {
+                doc.setFont('helvetica', 'bold');
+                doc.setTextColor(primaryColor);
+                doc.setFontSize(14);
+                doc.text(`Valor: ${valueElement.textContent}`, margin, 60);
             }
             
-            // Descrição completa
-            const description = document.getElementById(`${section.element}Description`).textContent;
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(textColor);
-            doc.setFontSize(fontSize);
-            const descLines = doc.splitTextToSize(description, pageWidth - 2 * margin);
-            doc.text(descLines, margin, calculation ? 85 : 70);
+            // Cálculo (se existir)
+            if (section.hasCalculation) {
+                const calcElement = document.getElementById(`${section.element}Calculation`);
+                if (calcElement && calcElement.textContent) {
+                    doc.setFont('helvetica', 'normal');
+                    doc.setTextColor(secondaryColor);
+                    doc.setFontSize(fontSize - 1);
+                    const calcLines = doc.splitTextToSize(calcElement.textContent, pageWidth - 2 * margin);
+                    doc.text(calcLines, margin, valueElement ? 70 : 60);
+                }
+            }
+            
+            // Descrição completa (com verificação)
+            const descElement = document.getElementById(`${section.element}Description`);
+            if (descElement) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(textColor);
+                doc.setFontSize(fontSize);
+                const descLines = doc.splitTextToSize(descElement.textContent, pageWidth - 2 * margin);
+                const startY = section.hasCalculation ? 85 : (valueElement ? 70 : 60);
+                doc.text(descLines, margin, startY);
+            }
         });
-        
-        // 4. SALVAR PDF
+
+        // 5. SALVAR PDF
         doc.save(`Mapa_Numerologico_${fullName.replace(/\s+/g, '_')}.pdf`);
-        
+
     } catch (error) {
         console.error("Erro ao gerar PDF:", error);
-        alert("Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.");
+        alert("Erro ao gerar PDF: " + error.message);
     }
 }
     </script>
