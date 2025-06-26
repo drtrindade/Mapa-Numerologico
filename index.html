@@ -1388,9 +1388,9 @@ function displayRandomInterpretation(type, number) {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // 1. Configurações iniciais
-        const primaryColor = '#D4AF37';
-        const secondaryColor = '#6A0DAD';
+        // Configurações de estilo
+        const primaryColor = '#D4AF37'; // Ouro
+        const secondaryColor = '#6A0DAD'; // Roxo
         const textColor = '#333333';
         const pageWidth = doc.internal.pageSize.getWidth();
         const centerX = pageWidth / 2;
@@ -1398,11 +1398,11 @@ function displayRandomInterpretation(type, number) {
         const lineHeight = 7;
         const fontSize = 12;
         
-        // 2. Obter dados corretamente formatados
+        // Obter dados do formulário
         const fullName = document.getElementById('clientName').textContent;
         const birthDate = document.getElementById('birthDateDisplay').textContent;
         
-        // 3. Capa simplificada (evitando problemas)
+        // 1. CAPA
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(secondaryColor);
         doc.setFontSize(24);
@@ -1419,21 +1419,87 @@ function displayRandomInterpretation(type, number) {
         doc.setFontSize(14);
         doc.text(`Data de Nascimento: ${birthDate}`, centerX, 110, { align: 'center' });
         
-        // 4. Adicionar seções de forma robusta
+        // 2. ÍNDICE
+        doc.addPage();
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(secondaryColor);
+        doc.setFontSize(16);
+        doc.text('ÍNDICE', margin, 30);
+        
+        // Lista de seções
         const sections = [
             {
                 title: 'Número do Destino',
                 element: 'destiny',
                 description: 'Representa o caminho que sua alma escolheu para esta encarnação'
             },
-            // ... adicione todas as outras seções aqui
+            {
+                title: 'Número da Alma',
+                element: 'soul', 
+                description: 'Revela seus desejos mais profundos e motivações internas'
+            },
+            {
+                title: 'Número da Personalidade',
+                element: 'personality',
+                description: 'Mostra como você se apresenta ao mundo'
+            },
+            {
+                title: 'Número de Expressão',
+                element: 'expression',
+                description: 'Indica seus talentos naturais e potencial geral'
+            },
+            {
+                title: 'Números de Desafio',
+                element: 'challenge',
+                description: 'Revelam as principais lições que você precisa aprender'
+            },
+            {
+                title: 'Lições Cármicas',
+                element: 'karmicLessons',
+                description: 'Mostram quais energias numéricas estão faltando em seu nome'
+            },
+            {
+                title: 'Dívidas Cármicas',
+                element: 'karmicDebts',
+                description: 'Números especiais que indicam lições profundas'
+            },
+            {
+                title: 'Ciclos de Vida',
+                element: 'lifeCycles',
+                description: 'Mostra as três principais fases da vida e suas energias'
+            },
+            {
+                title: 'Ano Pessoal Atual',
+                element: 'personalYear',
+                description: 'Indica a energia predominante para o ano corrente'
+            }
         ];
         
-        // Adicionar conteúdo das seções
+        // Adicionar itens do índice
+        let y = 40;
+        sections.forEach((section, index) => {
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(primaryColor);
+            doc.text(`${index + 1}.`, margin, y);
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(textColor);
+            doc.text(section.title, margin + 10, y);
+            
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(secondaryColor);
+            doc.setFontSize(fontSize - 1);
+            const descLines = doc.splitTextToSize(section.description, pageWidth - margin - 25);
+            doc.text(descLines, margin + 10, y + 5);
+            
+            y += (descLines.length * lineHeight) + 10;
+        });
+        
+        // 3. SEÇÕES DE CONTEÚDO
         sections.forEach(section => {
             doc.addPage();
             
-            // Cabeçalho
+            // Cabeçalho da seção
             doc.setFont('helvetica', 'bold');
             doc.setTextColor(secondaryColor);
             doc.setFontSize(16);
@@ -1451,41 +1517,37 @@ function displayRandomInterpretation(type, number) {
             doc.text(section.description, margin, 45);
             
             // Valor numérico
-            const valueElement = document.getElementById(`${section.element}Number`);
-            if (valueElement) {
-                doc.setFont('helvetica', 'bold');
-                doc.setTextColor(primaryColor);
-                doc.setFontSize(14);
-                doc.text(`Valor: ${valueElement.textContent}`, margin, 60);
-            }
+            const value = document.getElementById(`${section.element}Number`).textContent;
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(primaryColor);
+            doc.setFontSize(14);
+            doc.text(`Valor: ${value}`, margin, 60);
             
-            // Cálculo
-            const calcElement = document.getElementById(`${section.element}Calculation`);
-            if (calcElement) {
+            // Cálculo (se existir)
+            const calculation = document.getElementById(`${section.element}Calculation`)?.textContent;
+            if (calculation) {
                 doc.setFont('helvetica', 'normal');
                 doc.setTextColor(secondaryColor);
                 doc.setFontSize(fontSize - 1);
-                const calcText = doc.splitTextToSize(calcElement.textContent, pageWidth - 2 * margin);
-                doc.text(calcText, margin, 70);
+                const calcLines = doc.splitTextToSize(calculation, pageWidth - 2 * margin);
+                doc.text(calcLines, margin, 70);
             }
             
             // Descrição completa
-            const descElement = document.getElementById(`${section.element}Description`);
-            if (descElement) {
-                doc.setFont('helvetica', 'normal');
-                doc.setTextColor(textColor);
-                doc.setFontSize(fontSize);
-                const descText = doc.splitTextToSize(descElement.textContent, pageWidth - 2 * margin);
-                doc.text(descText, margin, calcElement ? 85 : 70);
-            }
+            const description = document.getElementById(`${section.element}Description`).textContent;
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(textColor);
+            doc.setFontSize(fontSize);
+            const descLines = doc.splitTextToSize(description, pageWidth - 2 * margin);
+            doc.text(descLines, margin, calculation ? 85 : 70);
         });
         
-        // 5. Salvar o PDF
+        // 4. SALVAR PDF
         doc.save(`Mapa_Numerologico_${fullName.replace(/\s+/g, '_')}.pdf`);
         
     } catch (error) {
         console.error("Erro ao gerar PDF:", error);
-        alert("Erro ao gerar PDF. Por favor, verifique o console para detalhes.");
+        alert("Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.");
     }
 }
     </script>
