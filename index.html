@@ -1071,11 +1071,14 @@
         }
         
         // Função auxiliar para reduzir a um único dígito
-        function reduceToSingleDigit(number) {
-    let num = number;
-    while (num > 9 && num !== 11 && num !== 22) {
-        num = num.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
-    }
+        
+function reduceToSingleDigit(num) {
+  while (num > 9 && num !== 11 && num !== 22) {
+    num = num.toString().split('').reduce((a, b) => a + parseInt(b), 0);
+  }
+  return num;
+}
+        
     return num;
 }
 
