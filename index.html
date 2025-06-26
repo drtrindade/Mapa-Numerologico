@@ -1073,11 +1073,17 @@
     return num;
 }
 
+// Substitua a função formatDate por esta versão corrigida
 function formatDate(dateString) {
     const date = new Date(dateString);
+    // Ajuste para o fuso horário brasileiro (UTC-3)
+    const offset = date.getTimezoneOffset();
+    date.setMinutes(date.getMinutes() + offset);
+    
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
+    
     return `${day}/${month}/${year}`;
 }
         
@@ -1380,136 +1386,176 @@ function displayRandomInterpretation(type, number) {
         // Função para gerar o PDF
         async function generatePDF() {
     try {
-        // 1. Configurações iniciais
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         
-        // Configurações de estilo
-        const primaryColor = '#D4AF37'; // Ouro
-        const secondaryColor = '#6A0DAD'; // Roxo
+        // Configurações aprimoradas
+        const primaryColor = '#D4AF37';
+        const secondaryColor = '#6A0DAD';
         const textColor = '#333333';
         const pageWidth = doc.internal.pageSize.getWidth();
         const centerX = pageWidth / 2;
-        const margin = 20;
-        const lineHeight = 7;
+        const margin = 10; // Margem reduzida para valorizar o texto
+        const lineHeight = 6; // Espaçamento reduzido
+        const fontSize = 13; // Fonte ligeiramente maior
         
-        // 2. Adicionar capa (sem logo para evitar problemas de CORS)
+        // Verificação dos elementos essenciais
+        const clientName = document.getElementById('clientName')?.textContent || 'Nome não encontrado';
+        const birthDate = document.getElementById('birthDateDisplay')?.textContent || 'Data não encontrada';
+
+        // 1. CAPA SIMPLIFICADA E ELEGANTE
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(secondaryColor);
-        doc.setFontSize(28);
-        doc.text('OURO ORACULAR', centerX, 60, { align: 'center' });
+        doc.setFontSize(22);
+        doc.text('OURO ORACULAR', centerX, 40, { align: 'center' });
         
-        doc.setFontSize(20);
-        doc.text('Mapa Numerológico', centerX, 80, { align: 'center' });
-        
-        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-        doc.setTextColor(primaryColor);
         doc.setFontSize(18);
-        doc.text(fullName, centerX, 100, { align: 'center' });
+        doc.text('Mapa Numerológico Completo', centerX, 55, { align: 'center' });
         
-        const birthDate = document.getElementById('birthDateDisplay').textContent;
+        doc.setTextColor(primaryColor);
+        doc.setFontSize(16);
+        doc.text(clientName, centerX, 75, { align: 'center' });
+        
         doc.setTextColor(textColor);
         doc.setFontSize(14);
-        doc.text(`Data de Nascimento: ${birthDate}`, centerX, 115, { align: 'center' });
-        
-        // 3. Adicionar índice
-        doc.addPage();
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(secondaryColor);
-        doc.setFontSize(16);
-        doc.text('ÍNDICE', margin, 30);
-        
+        doc.text(`Nascimento: ${birthDate}`, centerX, 90, { align: 'center' });
+
+        // 2. LISTA COMPLETA DE SEÇÕES
         const sections = [
-            { title: 'Número do Destino', page: 3 },
-            { title: 'Número da Alma', page: 4 },
-            { title: 'Número da Personalidade', page: 5 },
-            { title: 'Número de Expressão', page: 6 },
-            { title: 'Números de Desafio', page: 7 },
-            { title: 'Lições Cármicas', page: 8 },
-            { title: 'Dívidas Cármicas', page: 9 },
-            { title: 'Ciclos de Vida', page: 10 },
-            { title: 'Ano Pessoal Atual', page: 11 }
+            {
+                title: 'Número do Destino',
+                element: 'destiny',
+                description: 'Representa o caminho que sua alma escolheu para esta encarnação'
+            },
+            {
+                title: 'Número da Alma',
+                element: 'soul',
+                description: 'Revela seus desejos mais profundos e motivações internas'
+            },
+            {
+                title: 'Número da Personalidade',
+                element: 'personality',
+                description: 'Mostra como você se apresenta ao mundo'
+            },
+            {
+                title: 'Número de Expressão',
+                element: 'expression',
+                description: 'Indica seus talentos naturais e potencial geral'
+            },
+            {
+                title: 'Números de Desafio',
+                element: 'challenge',
+                description: 'Revelam as principais lições que você precisa aprender'
+            },
+            {
+                title: 'Lições Cármicas',
+                element: 'karmicLessons',
+                description: 'Mostram quais energias numéricas estão faltando em seu nome'
+            },
+            {
+                title: 'Dívidas Cármicas',
+                element: 'karmicDebts',
+                description: 'Números especiais que indicam lições profundas'
+            },
+            {
+                title: 'Ciclos de Vida',
+                element: 'lifeCycles',
+                description: 'Mostra as três principais fases da vida e suas energias'
+            },
+            {
+                title: 'Ano Pessoal Atual',
+                element: 'personalYear',
+                description: 'Indica a energia predominante para o ano corrente'
+            }
         ];
+
+        // 3. ÍNDICE COMPLETO
+        doc.addPage();
+        createSectionHeader(doc, 'ÍNDICE', margin, pageWidth);
         
-        doc.setFontSize(12);
-        let y = 40;
+        let yPosition = 40;
         sections.forEach((section, index) => {
+            // Item do índice
+            doc.setFont('helvetica', 'bold');
             doc.setTextColor(primaryColor);
-            doc.text(`${index + 1}.`, margin, y);
+            doc.setFontSize(fontSize);
+            doc.text(`${index + 1}.`, margin, yPosition);
+            
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(secondaryColor);
+            doc.text(section.title, margin + 10, yPosition);
+            
+            // Descrição
+            doc.setFont('helvetica', 'italic');
             doc.setTextColor(textColor);
-            doc.text(section.title, margin + 10, y);
-            y += lineHeight;
+            doc.setFontSize(fontSize - 1);
+            const descLines = doc.splitTextToSize(section.description, pageWidth - (margin * 2) - 15);
+            doc.text(descLines, margin + 10, yPosition + 5);
+            
+            yPosition += (descLines.length * lineHeight) + 10;
+            
+            // Quebra de página se necessário
+            if (yPosition > 250 && index < sections.length - 1) {
+                doc.addPage();
+                yPosition = 30;
+            }
         });
-        
-        // 4. Adicionar todas as seções
-        addSectionToPDF(doc, 'Número do Destino', 
-                       document.getElementById('destinyNumber').textContent, 
-                       document.getElementById('destinyDescription').textContent,
-                       document.getElementById('destinyCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Número da Alma', 
-                       document.getElementById('soulNumber').textContent, 
-                       document.getElementById('soulDescription').textContent,
-                       document.getElementById('soulCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Número da Personalidade', 
-                       document.getElementById('personalityNumber').textContent, 
-                       document.getElementById('personalityDescription').textContent,
-                       document.getElementById('personalityCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Número de Expressão', 
-                       document.getElementById('expressionNumber').textContent, 
-                       document.getElementById('expressionDescription').textContent,
-                       document.getElementById('expressionCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Números de Desafio', 
-                       document.getElementById('challengeNumbers').textContent, 
-                       document.getElementById('challengeDescription').textContent,
-                       document.getElementById('challengeCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Lições Cármicas', 
-                       document.getElementById('karmicLessons').textContent, 
-                       document.getElementById('karmicLessonsDescription').textContent,
-                       document.getElementById('karmicLessonsCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Dívidas Cármicas', 
-                       document.getElementById('karmicDebts').textContent, 
-                       document.getElementById('karmicDebtsDescription').textContent,
-                       document.getElementById('karmicDebtsCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Ciclos de Vida', 
-                       'Ver descrição completa abaixo', 
-                       document.getElementById('lifeCyclesDescription').textContent,
-                       document.getElementById('lifeCyclesCalculation').textContent);
-        
-        addSectionToPDF(doc, 'Ano Pessoal Atual', 
-                       document.getElementById('personalYear').textContent, 
-                       document.getElementById('personalYearDescription').textContent,
-                       document.getElementById('personalYearCalculation').textContent);
-        
-        // 5. Salvar o PDF
-        doc.save(`Mapa_Numerologico_${fullName.replace(/\s+/g, '_')}.pdf`);
-        
+
+        // 4. CONTEÚDO DAS SEÇÕES
+        sections.forEach(section => {
+            doc.addPage();
+            createSectionHeader(doc, section.title, margin, pageWidth);
+            
+            let y = 40;
+            
+            // Descrição da seção
+            doc.setFont('helvetica', 'italic');
+            doc.setTextColor(secondaryColor);
+            doc.setFontSize(fontSize - 1);
+            doc.text(section.description, margin, y);
+            y += lineHeight * 2;
+            
+            // Valor numérico
+            const value = document.getElementById(`${section.element}Number`)?.textContent || 'Não disponível';
+            doc.setFont('helvetica', 'bold');
+            doc.setTextColor(primaryColor);
+            doc.setFontSize(fontSize + 2);
+            doc.text(`Valor: ${value}`, margin, y);
+            y += lineHeight + 5;
+            
+            // Cálculo (se existir)
+            const calculation = document.getElementById(`${section.element}Calculation`)?.textContent;
+            if (calculation) {
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(textColor);
+                doc.setFontSize(fontSize - 1);
+                const calcLines = doc.splitTextToSize(calculation, pageWidth - (margin * 2));
+                doc.text(calcLines, margin, y);
+                y += (calcLines.length * lineHeight) + 5;
+            }
+            
+            // Descrição completa
+            const description = document.getElementById(`${section.element}Description`)?.textContent || 'Descrição não disponível';
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(textColor);
+            doc.setFontSize(fontSize);
+            const descLines = doc.splitTextToSize(description, pageWidth - (margin * 2));
+            doc.text(descLines, margin, y);
+        });
+
+        // 5. SALVAR O PDF
+        doc.save(`Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}.pdf`);
+
     } catch (error) {
         console.error("Erro ao gerar PDF:", error);
-        alert("Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.");
+        alert("Erro ao gerar o PDF. Por favor, verifique o console para detalhes.");
     }
 }
 
-// Função auxiliar para adicionar seções
-function addSectionToPDF(doc, title, value, description, calculation) {
-    const primaryColor = '#D4AF37';
-    const secondaryColor = '#6A0DAD';
-    const textColor = '#333333';
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const margin = 20;
-    const lineHeight = 7;
-    
-    doc.addPage();
-    
-    // Cabeçalho
+// Função auxiliar para cabeçalhos de seção
+function createSectionHeader(doc, title, margin, pageWidth) {
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(secondaryColor);
+    doc.setTextColor('#6A0DAD');
     doc.setFontSize(16);
     doc.text(title.toUpperCase(), margin, 30);
     
@@ -1517,40 +1563,6 @@ function addSectionToPDF(doc, title, value, description, calculation) {
     doc.setDrawColor(212, 175, 55);
     doc.setLineWidth(0.5);
     doc.line(margin, 35, pageWidth - margin, 35);
-    
-    // Conteúdo
-    let y = 45;
-    
-    // Valor
-    if (value) {
-        doc.setFont('helvetica', 'bold');
-        doc.setTextColor(primaryColor);
-        doc.setFontSize(14);
-        doc.text(`Valor: ${value}`, margin, y);
-        y += lineHeight + 5;
-    }
-    
-    // Cálculo
-    if (calculation) {
-        doc.setFont('helvetica', 'italic');
-        doc.setTextColor(secondaryColor);
-        doc.setFontSize(10);
-        const calcLines = doc.splitTextToSize(calculation, pageWidth - 2 * margin);
-        doc.text(calcLines, margin, y);
-        y += (calcLines.length * lineHeight) + 10;
-    }
-    
-    // Descrição
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(textColor);
-    doc.setFontSize(12);
-    const descLines = doc.splitTextToSize(description, pageWidth - 2 * margin);
-    doc.text(descLines, margin, y);
-    
-    // Rodapé
-    doc.setFontSize(10);
-    doc.setTextColor(150, 150, 150);
-    doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
 }
     </script>
 </body>
