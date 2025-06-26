@@ -7,6 +7,10 @@
     <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;700&family=Nexa:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Atualize os scripts no cabeçalho -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
     <style>
 .logo-container {
     text-align: center;
@@ -1377,189 +1381,142 @@ function displayRandomInterpretation(type, number) {
         }
         
         // Função para gerar o PDF
-        function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-            
-            // Adicionar conteúdo ao PDF
-            addPageToPDF(doc);
-            
-            // Salvar o PDF
-            const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-            doc.save(`Mapa Numerológico - ${fullName}.pdf`);
-        }
+        async function generatePDF() {
+    try {
+        // 1. Carregar o logo (usando fetch para converter em base64)
+        const logoResponse = await fetch('https://assets.zyrosite.com/AE02nZ6p4aF8Z3Gp/design-sem-nome-71-Yg2y7806klU5yR26.png');
+        const logoBlob = await logoResponse.blob();
+        const logoBase64 = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.readAsDataURL(logoBlob);
+        });
+
+        // 2. Criar o PDF
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
         
-        // Função para adicionar uma página ao PDF
-        function addPageToPDF(doc) {
-            const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-            const birthDate = document.getElementById('birthDateDisplay').textContent;
-            
-            // Configurações de estilo
-            const titleColor = '#6A0DAD';
-            const textColor = '#333333';
-            const accentColor = '#D4AF37';
-            
-            // Adicionar capa
-            doc.setFillColor(245, 245, 245);
-            doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
-            
-            doc.setFontSize(36);
-            doc.setTextColor(titleColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text('OURO ORACULAR', 105, 80, { align: 'center' });
-            
-            doc.setFontSize(24);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            doc.text('Mapa Numerológico', 105, 100, { align: 'center' });
-            
-            doc.setFontSize(28);
-            doc.setTextColor(accentColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text(fullName, 105, 130, { align: 'center' });
-            
-            doc.setFontSize(16);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            doc.text(`Data de Nascimento: ${birthDate}`, 105, 145, { align: 'center' });
-            
-            // Símbolo místico
-            doc.setFontSize(60);
-            doc.setTextColor(230, 230, 230);
-            doc.text('✧', 105, 200, { align: 'center' });
-            
-            doc.addPage();
-            
-            // Adicionar índice
-            doc.setFontSize(18);
-            doc.setTextColor(titleColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text('ÍNDICE', 20, 30);
-            
-            doc.setFontSize(12);
-            doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            
-            const items = [
-                'Número do Destino',
-                'Número da Alma',
-                'Número da Personalidade',
-                'Número de Expressão',
-                'Números de Desafio',
-                'Lições Cármicas',
-                'Dívidas Cármicas',
-                'Ciclos de Vida',
-                'Ano Pessoal Atual'
-            ];
-            
-            let y = 40;
-            items.forEach((item, index) => {
-                doc.setTextColor(accentColor);
-                doc.text(`${index + 1}.`, 20, y);
-                doc.setTextColor(textColor);
-                doc.text(item, 28, y);
-                y += 7;
-            });
-            
-            // Adicionar símbolos nos cantos
-            doc.setFontSize(20);
-            doc.setTextColor(220, 220, 220);
-            doc.text('✧', 15, 15);
-            doc.text('✧', 195, 15);
-            doc.text('✧', 15, 285);
-            doc.text('✧', 195, 285);
-            
-            doc.addPage();
-            
-            // Adicionar conteúdo
-            addSectionToPDF(doc, 'Número do Destino', 
-                           document.getElementById('destinyNumber').textContent, 
-                           document.getElementById('destinyDescription').textContent);
-            
-            addSectionToPDF(doc, 'Número da Alma', 
-                           document.getElementById('soulNumber').textContent, 
-                           document.getElementById('soulDescription').textContent);
-            
-            addSectionToPDF(doc, 'Número da Personalidade', 
-                           document.getElementById('personalityNumber').textContent, 
-                           document.getElementById('personalityDescription').textContent);
-            
-            addSectionToPDF(doc, 'Número de Expressão', 
-                           document.getElementById('expressionNumber').textContent, 
-                           document.getElementById('expressionDescription').textContent);
-            
-            addSectionToPDF(doc, 'Números de Desafio', 
-                           document.getElementById('challengeNumbers').textContent, 
-                           document.getElementById('challengeDescription').textContent);
-            
-            addSectionToPDF(doc, 'Lições Cármicas', 
-                           document.getElementById('karmicLessons').textContent, 
-                           document.getElementById('karmicLessonsDescription').textContent);
-            
-            addSectionToPDF(doc, 'Dívidas Cármicas', 
-                           document.getElementById('karmicDebts').textContent, 
-                           document.getElementById('karmicDebtsDescription').textContent);
-            
-            const lifeCyclesText = document.getElementById('lifeCycles').textContent;
-            const lifeCyclesDesc = document.getElementById('lifeCyclesDescription').innerHTML.replace(/<br><br>/g, '\n\n');
-            addSectionToPDF(doc, 'Ciclos de Vida', lifeCyclesText, lifeCyclesDesc);
-            
-            addSectionToPDF(doc, 'Ano Pessoal Atual', 
-                           document.getElementById('personalYear').textContent, 
-                           document.getElementById('personalYearDescription').textContent);
-            
-            // Adicionar rodapé
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(10);
-                doc.setTextColor(150, 150, 150);
-                doc.setFont('Nexa', 'normal');
-                doc.text(`Página ${i} de ${pageCount}`, 105, 285, { align: 'center' });
-                doc.text('Ouro Oracular - Todos os direitos reservados', 105, 290, { align: 'center' });
-            }
-        }
+        // Configurações gerais
+        const primaryColor = '#D4AF37'; // Ouro
+        const secondaryColor = '#6A0DAD'; // Roxo
+        const textColor = '#333333';
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const centerX = pageWidth / 2;
         
-        // Função para adicionar uma seção ao PDF
-        function addSectionToPDF(doc, title, value, description) {
-            const titleColor = '#6A0DAD';
-            const textColor = '#333333';
-            const accentColor = '#D4AF37';
-            
-            // Verificar se precisa de nova página
-            if (doc.internal.getCurrentPageInfo().pageNumber < doc.internal.getNumberOfPages()) {
-                const y = doc.internal.getCursor().y;
-                if (y > 250) {
-                    doc.addPage();
-                }
-            } else {
-                const y = doc.internal.getCursor().y;
-                if (y > 250) {
-                    doc.addPage();
-                }
-            }
-            
-            // Adicionar título
-            doc.setFontSize(16);
-            doc.setTextColor(titleColor);
-            doc.setFont('League Spartan', 'bold');
-            doc.text(title, 20, doc.internal.getCursor().y + 10);
-            
-            // Adicionar valor
-            doc.setFontSize(14);
-            doc.setTextColor(accentColor);
-            doc.text(`Valor: ${value}`, 20, doc.internal.getCursor().y + 5);
-            
-            // Adicionar descrição
-            doc.setFontSize(12);
+        // 3. Adicionar capa profissional
+        doc.addImage(logoBase64, 'PNG', centerX - 40, 60, 80, 80);
+        
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(secondaryColor);
+        doc.setFontSize(28);
+        doc.text('Mapa Numerológico', centerX, 160, { align: 'center' });
+        
+        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
+        doc.setTextColor(primaryColor);
+        doc.setFontSize(22);
+        doc.text(fullName, centerX, 180, { align: 'center' });
+        
+        const birthDate = document.getElementById('birthDateDisplay').textContent;
+        doc.setTextColor(textColor);
+        doc.setFontSize(16);
+        doc.text(`Data de Nascimento: ${birthDate}`, centerX, 195, { align: 'center' });
+        
+        doc.setTextColor(secondaryColor);
+        doc.setFontSize(14);
+        doc.text('Ouro Oracular - Todos os direitos reservados', centerX, 280, { align: 'center' });
+        
+        // 4. Adicionar índice clicável
+        doc.addPage();
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(secondaryColor);
+        doc.setFontSize(20);
+        doc.text('Índice', 20, 30);
+        
+        const sections = [
+            { title: 'Número do Destino', page: 3 },
+            { title: 'Número da Alma', page: 4 },
+            { title: 'Número da Personalidade', page: 5 },
+            { title: 'Número de Expressão', page: 6 },
+            { title: 'Números de Desafio', page: 7 },
+            { title: 'Lições Cármicas', page: 8 },
+            { title: 'Dívidas Cármicas', page: 9 },
+            { title: 'Ciclos de Vida', page: 10 },
+            { title: 'Ano Pessoal Atual', page: 11 }
+        ];
+        
+        doc.setFontSize(12);
+        let y = 40;
+        sections.forEach((section, index) => {
+            // Adicionar link clicável
+            doc.setTextColor(primaryColor);
+            doc.textWithLink(`${index + 1}.`, 20, y, { pageNumber: section.page });
             doc.setTextColor(textColor);
-            doc.setFont('Nexa', 'normal');
-            const splitText = doc.splitTextToSize(description, 170);
-            doc.text(splitText, 20, doc.internal.getCursor().y + 10);
-            
-            // Mover cursor para próxima seção
-            doc.setCursor(20, doc.internal.getCursor().y + splitText.length * 5 + 15);
-        }
+            doc.textWithLink(section.title, 28, y, { pageNumber: section.page });
+            y += 10;
+        });
+        
+        // 5. Adicionar conteúdo das seções (uma por página)
+        addSectionToPDF(doc, 'Número do Destino', 
+                       document.getElementById('destinyNumber').textContent, 
+                       document.getElementById('destinyDescription').textContent,
+                       logoBase64);
+        
+        addSectionToPDF(doc, 'Número da Alma', 
+                       document.getElementById('soulNumber').textContent, 
+                       document.getElementById('soulDescription').textContent,
+                       logoBase64);
+        
+        // ... adicione todas as outras seções da mesma forma
+        
+        // 6. Salvar o PDF
+        doc.save(`Mapa Numerológico - ${fullName}.pdf`);
+        
+    } catch (error) {
+        console.error("Erro ao gerar PDF:", error);
+        alert("Ocorreu um erro ao gerar o PDF. Por favor, tente novamente.");
+    }
+}
+
+// Função auxiliar melhorada para adicionar seções
+function addSectionToPDF(doc, title, value, description, logoBase64) {
+    const primaryColor = '#D4AF37';
+    const secondaryColor = '#6A0DAD';
+    const textColor = '#333333';
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const centerX = pageWidth / 2;
+    
+    // Adicionar nova página
+    doc.addPage();
+    
+    // Cabeçalho da página
+    doc.addImage(logoBase64, 'PNG', 20, 15, 30, 30);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(secondaryColor);
+    doc.setFontSize(16);
+    doc.text(title, centerX, 30, { align: 'center' });
+    
+    // Linha decorativa
+    doc.setDrawColor(212, 175, 55);
+    doc.setLineWidth(0.5);
+    doc.line(20, 35, pageWidth - 20, 35);
+    
+    // Conteúdo
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(primaryColor);
+    doc.setFontSize(14);
+    doc.text(`Valor: ${value}`, 20, 50);
+    
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(textColor);
+    doc.setFontSize(12);
+    const splitText = doc.splitTextToSize(description, pageWidth - 40);
+    doc.text(splitText, 20, 60);
+    
+    // Rodapé
+    doc.setFontSize(10);
+    doc.setTextColor(150, 150, 150);
+    doc.text(`Ouro Oracular - Página ${doc.internal.getNumberOfPages()}`, centerX, 285, { align: 'center' });
+}
     </script>
 </body>
 </html>
