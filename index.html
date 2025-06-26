@@ -9,302 +9,57 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
    
     <style>
-.logo-container {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-.site-logo {
-    max-width: 150px;
-    height: auto;
-    margin-bottom: 10px;
-}
-
-/* Mantenha o logo existente (texto gradiente) escondido */
-.logo {
-    display: none;
-}
-.cycles-numbers-container {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px 0;
-    gap: 10px;
-}
-
-.cycle-number-box {
-    flex: 1;
-    text-align: center;
-    padding: 15px;
-    background: rgba(212, 175, 55, 0.1);
-    border-radius: 8px;
-    border: 1px solid var(--ouro);
-}
-
-.cycle-number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: var(--ouro);
+  body {
+    font-family: 'Nexa', sans-serif;
+    color: #000;
+    background-color: #fff;
+    margin: 40px;
+    padding: 0;
+    line-height: 1.7;
+    position: relative;
+  }
+  h2 {
+    font-family: 'League Spartan', sans-serif;
+    font-size: 28px;
+    color: #3b2c60;
+    margin-top: 40px;
     margin-bottom: 5px;
-}
-
-.cycle-range {
-    font-size: 0.9rem;
-    color: var(--roxo-claro);
-}
-
-.cycle-description {
-    margin: 20px 0;
-    padding: 15px;
-    background: rgba(24, 24, 24, 0.6);
-    border-radius: 5px;
-    border-left: 4px solid var(--roxo);
-}
-
-.cycle-description h4 {
-    color: var(--ouro-claro);
-    margin-top: 0;
-}
-
-.cycle-divider {
-    border: none;
-    height: 1px;
-    background-color: var(--roxo);
-    opacity: 0.3;
-    margin: 20px 0;
-}
-
-        :root {
-            --ouro: #D4AF37;
-            --roxo: #6A0DAD;
-            --preto: #121212;
-            --preto-claro: #1E1E1E;
-            --preto-medio: #181818;
-            --roxo-claro: #9B59B6;
-            --ouro-claro: #F5D090;
-        }
-        
-        body {
-            font-family: 'Nexa', sans-serif;
-            background: linear-gradient(135deg, var(--preto), var(--preto-medio));
-            color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--ouro);
-            padding-bottom: 20px;
-            position: relative;
-        }
-        
-        h1, h2, h3, h4 {
-            font-family: 'League Spartan', sans-serif;
-            color: var(--ouro);
-        }
-        
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-        
-        .logo {
-            font-size: 3rem;
-            font-weight: 700;
-            background: linear-gradient(to right, var(--ouro), var(--roxo-claro));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-        
-        .subtitle {
-            color: var(--roxo-claro);
-            font-style: italic;
-            margin-top: 0;
-        }
-        
-        .form-container {
-            background: rgba(30, 30, 30, 0.8);
-            padding: 25px;
-            border-radius: 10px;
-            border: 1px solid var(--ouro);
-            box-shadow: 0 0 20px rgba(106, 13, 173, 0.5);
-            margin-bottom: 30px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--ouro-claro);
-            font-weight: bold;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--roxo);
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        input:focus {
-            outline: none;
-            border-color: var(--ouro);
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
-        }
-        
-        button {
-            background: linear-gradient(45deg, var(--roxo), var(--preto));
-            color: white;
-            border: 1px solid var(--ouro);
-            padding: 12px 25px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'League Spartan', sans-serif;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        button:hover {
-            background: linear-gradient(45deg, var(--roxo-claro), var(--preto));
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.7);
-            transform: translateY(-2px);
-        }
-        
-        .btn-generate {
-            background: linear-gradient(45deg, var(--ouro), var(--roxo));
-            margin-right: 10px;
-        }
-        
-        .btn-generate:hover {
-            background: linear-gradient(45deg, var(--ouro-claro), var(--roxo-claro));
-        }
-        
-        .result-container {
-            display: none;
-            margin-top: 30px;
-            background: rgba(30, 30, 30, 0.8);
-            padding: 25px;
-            border-radius: 10px;
-            border: 1px solid var(--ouro);
-            box-shadow: 0 0 20px rgba(106, 13, 173, 0.5);
-        }
-        
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--roxo);
-            padding-bottom: 15px;
-        }
-        
-        .result-title {
-            margin: 0;
-        }
-        
-        .result-section {
-            margin-bottom: 30px;
-            padding: 15px;
-            background: rgba(24, 24, 24, 0.6);
-            border-left: 4px solid var(--roxo);
-            border-radius: 0 5px 5px 0;
-        }
-        
-        .result-section h3 {
-            margin-top: 0;
-            color: var(--ouro-claro);
-            position: relative;
-        }
-        
-        .section-subtitle {
-            font-size: 0.9rem;
-            color: var(--roxo-claro);
-            font-style: italic;
-            margin-top: 5px;
-            margin-bottom: 15px;
-        }
-        
-        .calculation-example {
-            font-size: 0.85rem;
-            color: #aaa;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 8px;
-            border-radius: 4px;
-            margin: 10px 0;
-            font-family: monospace;
-        }
-        
-        .result-value {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--ouro);
-            margin: 10px 0;
-        }
-        
-        .result-description {
-            line-height: 1.6;
-            font-size: 1rem;
-        }
-        
-        .variation-controls {
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-        }
-        
-        .variation-btn {
-            padding: 5px 10px;
-            font-size: 12px;
-            margin-right: 10px;
-            background: var(--preto);
-        }
-        
-        .variation-count {
-            font-size: 12px;
-            color: var(--roxo-claro);
-        }
-        
-        .pdf-preview {
-            display: none;
-        }
-        
-        .symbol {
-            font-size: 24px;
-            margin: 0 5px;
-            color: var(--ouro);
-        }
-        
-        footer {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px;
-            border-top: 1px solid var(--roxo);
-            color: var(--roxo-claro);
-            font-size: 14px;
-        }
-    </style>
+  }
+  .sub-explicacao {
+    font-style: italic;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  .bloco {
+    border-top: 1px dashed #ccc;
+    padding-top: 30px;
+    margin-top: 30px;
+  }
+  .rodape {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 10px;
+    color: #888;
+  }
+  .fundo-simbolo::before {
+    content: "";
+    position: fixed;
+    top: 20%;
+    left: 30%;
+    width: 300px;
+    height: 300px;
+    background-image: url('https://i.imgur.com/Z5VhWiM.png'); /* símbolo místico sutil */
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0.05;
+    z-index: 0;
+  }
+</style>
 </head>
-<body>
+<body class='fundo-simbolo'>
     <div class="container">
        <header>
     <div class="logo-container">
@@ -1497,5 +1252,6 @@ function displayRandomInterpretation(type, number) {
     }
 }
     </script>
+<div class='rodape'>Ouro Oracular — todos os direitos reservados</div>
 </body>
 </html>
