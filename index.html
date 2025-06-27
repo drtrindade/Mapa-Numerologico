@@ -1175,9 +1175,9 @@ function formatDate(dateString) {
         const soulNumber = calculateSoulNumber(fullName);
         const personalityNumber = calculatePersonalityNumber(fullName);
         const expressionNumber = calculateExpressionNumber(fullName);
-        const challengeNumbers = calculateChallengeNumbers(formattedDate);
+        const challengeNumbers = calculateChallengeNumbers(day, month, year);
         const karmicLessons = calculateKarmicLessons(fullName);
-        const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
+        const karmicDebts = calculateKarmicDebts(fullName, birthDate);
         const lifeCycles = calculateLifeCycles(formattedDate);
         const personalYear = calculatePersonalYear(formattedDate);
 
@@ -1223,7 +1223,8 @@ function formatDate(dateString) {
         console.error("Erro crítico ao gerar mapa:", error);
         alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
     }
-}
+}window.generateMap = generateMap;
+
 
 // Função dedicada para exibir a seção de Ciclos de Vida
 function calculateLifeCycles(date) {
