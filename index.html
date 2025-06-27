@@ -1345,7 +1345,7 @@ function displayLifeCycles(lifeCycles) {
             cycleDiv.innerHTML = `
                 <h4>${index+1}º Ciclo (${period.range}) - Número ${period.number}</h4>
                 <p>${cycleInterpretation}</p>
-                ${index < lifeCycles.periods.length - 1 ? '<hr class="cycle-divider">' : ''}
+                ${index < lifeCycles.periods.length - 1 ? '' : ''}
             `;
             
             descElement.appendChild(cycleDiv);
