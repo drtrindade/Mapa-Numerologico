@@ -1379,9 +1379,15 @@
         // 1. CAPA PROFISSIONAL (com efeito degradê)
         doc.addImage(logoBase64, 'PNG', pageWidth/2 - 25, 40, 50, 50);
         
-        // EFEITO DEGRADÊ NA BARRA SUPERIOR (6 faixas de 2px)
-        const startColor = { r: 212, g: 175, b: 55 };    // Dourado principal (agora começa com o mais escuro)
-const endColor = { r: 245, g: 230, b: 150 };     // Dourado mais claro (termina com o mais claro)
+       // CAPA PROFISSIONAL - BARRA SUPERIOR COM DEGRADÊ INVERTIDO
+
+// 1. Faixa PRINCIPAL grossa (20px) - Dourado escuro em cima
+doc.setFillColor(212, 175, 55); // Dourado principal
+doc.rect(0, 0, pageWidth, 20, 'F'); // Faixa principal grossa
+
+// 2. Degradê FINO abaixo (6 faixas de 2px) - Do ESCURO para o CLARO
+const startColor = { r: 212, g: 175, b: 55 };  // Começa com o mesmo dourado escuro
+const endColor = { r: 245, g: 230, b: 150 };   // Termina no dourado claro
 
 for (let i = 0; i < 6; i++) {
     const ratio = i / 5;
@@ -1390,12 +1396,12 @@ for (let i = 0; i < 6; i++) {
     const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
     
     doc.setFillColor(r, g, b);
-    doc.rect(0, i * 2, pageWidth, 2, 'F'); // Cada faixa tem 2px de altura
+    doc.rect(0, 20 + (i * 2), pageWidth, 2, 'F'); // Posiciona abaixo da faixa principal
 }
 
-// Barra principal abaixo do degradê (13px) - mantém o dourado mais claro
-doc.setFillColor(245, 230, 150); // Agora usando o dourado mais claro
-doc.rect(0, 12, pageWidth, 13, 'F');
+// 3. Barra de TÍTULO (opcional, se quiser manter)
+doc.setFillColor(245, 230, 150); // Dourado mais claro
+doc.rect(0, 32, pageWidth, 5, 'F'); // Pequena barra final (opcional)
         
         // Título principal
         doc.setFont(titleFont, 'bold');
