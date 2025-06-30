@@ -1380,22 +1380,22 @@
         doc.addImage(logoBase64, 'PNG', pageWidth/2 - 25, 40, 50, 50);
         
         // EFEITO DEGRADÊ NA BARRA SUPERIOR (6 faixas de 2px)
-        const startColor = { r: 245, g: 230, b: 150 }; // Dourado mais claro
-        const endColor = { r: 212, g: 175, b: 55 };    // Dourado principal
-        
-        for (let i = 0; i < 6; i++) {
-            const ratio = i / 5;
-            const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
-            const g = Math.round(startColor.g + (endColor.g - startColor.g) * ratio);
-            const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
-            
-            doc.setFillColor(r, g, b);
-            doc.rect(0, i * 2, pageWidth, 2, 'F');
-        }
-        
-        // Barra principal abaixo do degradê (13px)
-        doc.setFillColor(212, 175, 55);
-        doc.rect(0, 12, pageWidth, 13, 'F');
+        const startColor = { r: 212, g: 175, b: 55 };    // Dourado principal (agora começa com o mais escuro)
+const endColor = { r: 245, g: 230, b: 150 };     // Dourado mais claro (termina com o mais claro)
+
+for (let i = 0; i < 6; i++) {
+    const ratio = i / 5;
+    const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
+    const g = Math.round(startColor.g + (endColor.g - startColor.g) * ratio);
+    const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
+    
+    doc.setFillColor(r, g, b);
+    doc.rect(0, i * 2, pageWidth, 2, 'F'); // Cada faixa tem 2px de altura
+}
+
+// Barra principal abaixo do degradê (13px) - mantém o dourado mais claro
+doc.setFillColor(245, 230, 150); // Agora usando o dourado mais claro
+doc.rect(0, 12, pageWidth, 13, 'F');
         
         // Título principal
         doc.setFont(titleFont, 'bold');
