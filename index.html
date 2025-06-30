@@ -1379,9 +1379,13 @@
         // 1. CAPA PROFISSIONAL (com fundo dourado sólido)
         doc.addImage(logoBase64, 'PNG', pageWidth/2 - 25, 40, 50, 50);
         
-        // Fundo dourado sólido (sem gradiente)
-        doc.setFillColor(212, 175, 55); // Dourado principal
-        doc.rect(0, 0, pageWidth, 25, 'F'); // Faixa superior
+        // Faixa superior principal (dourado mais escuro)
+doc.setFillColor(212, 175, 55); // Dourado principal
+doc.rect(0, 0, pageWidth, 20, 'F'); // Faixa principal (20px de altura)
+
+// Faixa inferior (dourado mais claro)
+doc.setFillColor(230, 200, 100); // Dourado mais claro
+doc.rect(0, 20, pageWidth, 5, 'F'); // Faixa secundária (5px de altura)
         
         // Título principal
         doc.setFont(titleFont, 'bold');
