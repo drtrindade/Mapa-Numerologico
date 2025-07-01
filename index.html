@@ -1715,54 +1715,73 @@ async function generatePDF() {
         });
 
         // 4. PÁGINA FINAL (CONCLUSÃO sem logo)
-        doc.addPage();
-        doc.setFont(titleFont, 'bold');
-        doc.setTextColor(darkColor);
-        doc.setFontSize(18);
-        doc.text('CONCLUSÃO', pageWidth/2, 50, { align: 'center' });
-        
-        doc.setDrawColor(212, 175, 55);
-        doc.setLineWidth(0.5);
-        doc.line(margin, 55, pageWidth - margin, 55);
-        
-        doc.setFont(bodyFont, 'normal');
-        doc.setTextColor(textColor);
-        doc.setFontSize(12);
-        
-        const conclusionText = [
-            `Este relatório numerológico foi preparado com cuidado para ${clientName}`,
-            `com base na data de nascimento ${document.getElementById('birthDateDisplay').textContent}.`,
-            ``,
-            `Os números revelam potenciais, desafios e lições que podem guiar seu caminho de autoconhecimento`,
-            `e desenvolvimento pessoal. Lembre-se que a numerologia oferece insights, mas você sempre tem`,
-            `o livre arbítrio para moldar seu destino.`,
-            ``,
-            `Que esta análise sirva como ferramenta para seu crescimento e realização pessoal.`
-        ];
-        
-        let yPosFinal = 70;
-        conclusionText.forEach(line => {
-            doc.text(line, pageWidth/2, yPosFinal, { align: 'center' });
-            yPosFinal += 7;
+doc.addPage();
+
+// Configurar margens
+const leftMargin = 20;
+const rightMargin = 20;
+const contentWidth = pageWidth - leftMargin - rightMargin;
+
+// Título "CONCLUSÃO" centralizado
+doc.setFont(titleFont, 'bold');
+doc.setTextColor(darkColor);
+doc.setFontSize(18);
+doc.text('CONCLUSÃO', pageWidth/2, 40, { align: 'center' });
+
+// Linha decorativa dourada abaixo do título
+doc.setDrawColor(212, 175, 55);
+doc.setLineWidth(0.5);
+doc.line(leftMargin, 45, pageWidth - rightMargin, 45);
+
+// Texto da conclusão - respeitando margens
+doc.setFont(bodyFont, 'normal');
+doc.setTextColor(textColor);
+doc.setFontSize(12);
+
+const conclusionText = [
+    `Este relatório numerológico foi preparado com cuidado para ${clientName}`,
+    `com base na data de nascimento ${document.getElementById('birthDateDisplay').textContent}.`,
+    ``,
+    `Os números revelam potenciais, desafios e lições que podem guiar seu caminho de autoconhecimento`,
+    `e desenvolvimento pessoal. Lembre-se que a numerologia oferece insights, mas você sempre tem`,
+    `o livre arbítrio para moldar seu destino.`,
+    ``,
+    `Que esta análise sirva como ferramenta para seu crescimento e realização pessoal.`
+];
+
+let yPosFinal = 60; // Posição inicial abaixo do título
+const lineHeight = 7; // Espaçamento entre linhas
+
+// Adicionar cada linha do texto, respeitando as margens
+conclusionText.forEach(line => {
+    if (line.trim() === '') {
+        yPosFinal += lineHeight; // Espaço extra para parágrafos
+    } else {
+        const lines = doc.splitTextToSize(line, contentWidth);
+        lines.forEach(textLine => {
+            doc.text(textLine, leftMargin, yPosFinal, { align: 'left' });
+            yPosFinal += lineHeight;
         });
-        
-        // Assinatura
-        doc.setFont(titleFont, 'bold');
-        doc.setTextColor(primaryColor);
-        doc.setFontSize(14);
-        doc.text('Ouro Oracular', pageWidth/2, 150, { align: 'center' });
-        
-        doc.setFont(bodyFont, 'normal');
-        doc.setTextColor(darkColor);
-        doc.setFontSize(10);
-        doc.text('Especialistas em Numerologia e Autoconhecimento', pageWidth/2, 155, { align: 'center' });
-        
-        // Rodapé final
-        doc.setFont(bodyFont, 'normal');
-        doc.setTextColor(150, 150, 150);
-        doc.setFontSize(8);
-        doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
-        doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
+    }
+});
+
+// Assinatura centralizada
+doc.setFont(titleFont, 'bold');
+doc.setTextColor(primaryColor);
+doc.setFontSize(14);
+doc.text('Ouro Oracular', pageWidth/2, yPosFinal + 20, { align: 'center' });
+
+doc.setFont(bodyFont, 'normal');
+doc.setTextColor(darkColor);
+doc.setFontSize(10);
+doc.text('Especialistas em Numerologia e Autoconhecimento', pageWidth/2, yPosFinal + 25, { align: 'center' });
+
+// Rodapé final com margens
+doc.setFont(bodyFont, 'normal');
+doc.setTextColor(150, 150, 150);
+doc.setFontSize(8);
+doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - rightMargin, 285, { align: 'right' });
         
         // SALVAR O PDF
         const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
