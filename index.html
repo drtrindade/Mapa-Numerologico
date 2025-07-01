@@ -1379,9 +1379,23 @@
         // 1. CAPA PROFISSIONAL (com fundo dourado sólido)
         doc.addImage(logoBase64, 'PNG', pageWidth/2 - 25, 40, 50, 50);
         
-        // Fundo dourado sólido (sem gradiente)
-        doc.setFillColor(212, 175, 55); // Dourado principal
-        doc.rect(0, 0, pageWidth, 25, 'F'); // Faixa superior
+       // 1. Faixa PRINCIPAL grossa (20px) - Dourado escuro em cima
+doc.setFillColor(212, 175, 55); // Dourado principal
+doc.rect(0, 0, pageWidth, 20, 'F'); // Faixa principal grossa
+
+// 2. Degradê FINO abaixo (6 faixas de 2px) - Do ESCURO para o CLARO
+const startColor = { r: 212, g: 175, b: 55 };  // Começa com o mesmo dourado escuro
+const endColor = { r: 245, g: 230, b: 150 };   // Termina no dourado claro
+
+for (let i = 0; i < 6; i++) {
+    const ratio = i / 5;
+    const r = Math.round(startColor.r + (endColor.r - startColor.r) * ratio);
+    const g = Math.round(startColor.g + (endColor.g - startColor.g) * ratio);
+    const b = Math.round(startColor.b + (endColor.b - startColor.b) * ratio);
+    
+    doc.setFillColor(r, g, b);
+    doc.rect(0, 20 + (i * 2), pageWidth, 2, 'F'); // Posiciona abaixo da faixa principal
+}
         
         // Título principal
         doc.setFont(titleFont, 'bold');
