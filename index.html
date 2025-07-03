@@ -908,36 +908,28 @@
         }
         
         // Função para calcular as lições cármicas (letras ausentes)
-        function calculateKarmicLessons(name) {
-            const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            const presentLetters = new Set();
-            
-            const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-            
-            for (const letter of normalizedName) {
-                if (/[A-Z]/.test(letter)) {
-                    presentLetters.add(letter);
-                }
+       function calculateKarmicLessons(name) {
+    const presentNumbers = new Set();
+    const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    
+    for (const letter of normalizedName) {
+        if (/[A-Z]/.test(letter)) {
+            const number = getLetterValue(letter); // A=1, B=2, ..., I=9, J=1, etc.
+            if (number >= 1 && number <= 9) {
+                presentNumbers.add(number);
             }
-            
-            const missingLetters = [];
-            const missingNumbers = [];
-            
-            for (const letter of allLetters) {
-                if (!presentLetters.has(letter)) {
-                    missingLetters.push(letter);
-                    const number = getLetterValue(letter);
-                    if (!missingNumbers.includes(number)) {
-                        missingNumbers.push(number);
-                    }
-                }
-            }
-            
-            return {
-                letters: missingLetters,
-                numbers: missingNumbers.sort((a, b) => a - b)
-            };
         }
+    }
+    
+    const missingNumbers = [];
+    for (let i = 1; i <= 9; i++) {
+        if (!presentNumbers.has(i)) {
+            missingNumbers.push(i);
+        }
+    }
+    
+    return missingNumbers.sort((a, b) => a - b);
+}
         
         // Função para calcular dívidas cármicas
         function calculateKarmicDebts(name, date) {
