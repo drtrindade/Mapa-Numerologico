@@ -1163,6 +1163,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
                 const lifeCycles = calculateLifeCycles(formattedDate);
                 const personalYear = calculatePersonalYear(formattedDate);
+                const karmicLessons = calculateKarmicLessons(fullName);
 
                 // 4. Exibir resultados básicos
                 document.getElementById('clientName').textContent = fullName;
@@ -1178,6 +1179,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 displayKarmicDebtsSection(karmicDebts);
                 displayLifeCycles(lifeCycles);
                 displayPersonalYearSection(personalYear);
+                displayKarmicLessonsSection(karmicLessons);
 
                 // 6. Mostrar exemplos de cálculo
                 showCalculationExamples({
@@ -1253,41 +1255,43 @@ if (data.karmicLessons.numbers.length > 0) {
             document.getElementById('challengeVariationCount').textContent = `(4 desafios identificados)`;
         }
 
-        function displayKarmicLessonsSection(missingNumbers) { // Agora recebe o array diretamente
-    const lessonsStr = missingNumbers.length > 0 ? 
-        `Números ausentes: ${missingNumbers.join(', ')}` : 
-        'Nenhuma lição cármica (todos os números presentes)';
-    document.getElementById('karmicLessons').textContent = lessonsStr;
-    
-    if (missingNumbers.length > 0) {
-        let description = '';
-        for (const num of missingNumbers) {
-            description += interpretations.karmicLessons[num] + '\n\n';
-        }
-        document.getElementById('karmicLessonsDescription').textContent = description.trim();
-    } else {
-        document.getElementById('karmicLessonsDescription').textContent = 'Você tem todas as vibrações numéricas em seu nome.';
+      function displayKarmicLessonsSection(karmicLessons) {
+    // Verifica se karmicLessons é válido
+    if (!karmicLessons || !karmicLessons.numbers) {
+        console.error("Dados de lições cármicas inválidos:", karmicLessons);
+        return;
     }
-    document.getElementById('karmicLessonsVariationCount').textContent = `(${missingNumbers.length} lições identificadas)`;
-}
 
-        function displayKarmicDebtsSection(karmicDebts) {
-            const debtsStr = karmicDebts.length > 0 ? 
-                karmicDebts.join(', ') : 
-                'Nenhuma dívida cármica identificada';
-            document.getElementById('karmicDebts').textContent = debtsStr;
-            
-            if (karmicDebts.length > 0) {
-                let description = '';
-                for (const debt of karmicDebts) {
-                    description += interpretations.karmicDebts[debt] + '\n\n';
-                }
-                document.getElementById('karmicDebtsDescription').textContent = description.trim();
-            } else {
-                document.getElementById('karmicDebtsDescription').textContent = 'Nenhuma dívida cármica significativa.';
+    const hasLessons = karmicLessons.numbers.length > 0;
+    
+    // Atualiza o cálculo mostrado
+    document.getElementById('karmicLessonsCalculation').textContent = hasLessons ?
+        `Letras ausentes: ${karmicLessons.letters.join(', ')}\nNúmeros correspondentes: ${karmicLessons.numbers.join(', ')}` :
+        "Todas as letras/números estão presentes no nome";
+    
+    // Atualiza o resultado
+    document.getElementById('karmicLessons').textContent = hasLessons ?
+        `Números ausentes: ${karmicLessons.numbers.join(', ')}` :
+        'Nenhuma lição cármica (todos os números presentes)';
+    
+    // Atualiza a descrição
+    if (hasLessons) {
+        let description = '';
+        for (const num of karmicLessons.numbers) {
+            if (interpretations.karmicLessons[num]) {
+                description += interpretations.karmicLessons[num] + '\n\n';
             }
-            document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas identificadas)`;
         }
+        document.getElementById('karmicLessonsDescription').textContent = description || 
+            'Interpretação não disponível para os números ausentes.';
+    } else {
+        document.getElementById('karmicLessonsDescription').textContent = 
+            'Você tem todas as vibrações numéricas em seu nome.';
+    }
+    
+    document.getElementById('karmicLessonsVariationCount').textContent = 
+        `(${karmicLessons.numbers.length} lições identificadas)`;
+}
 
         function displayLifeCycles(lifeCycles) {
             try {
