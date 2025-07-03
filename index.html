@@ -908,27 +908,43 @@
         }
         
         // Função para calcular as lições cármicas (letras ausentes)
-       function calculateKarmicLessons(name) {
+       ffunction calculateKarmicLessons(name) {
     const presentNumbers = new Set();
+    const presentLetters = new Set();
     const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
     
+    // Rastreia letras e números presentes
     for (const letter of normalizedName) {
         if (/[A-Z]/.test(letter)) {
-            const number = getLetterValue(letter); // A=1, B=2, ..., I=9, J=1, etc.
+            presentLetters.add(letter);
+            const number = getLetterValue(letter);
             if (number >= 1 && number <= 9) {
                 presentNumbers.add(number);
             }
         }
     }
     
+    // Encontra letras e números ausentes
+    const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const missingLetters = [];
     const missingNumbers = [];
+    
     for (let i = 1; i <= 9; i++) {
         if (!presentNumbers.has(i)) {
             missingNumbers.push(i);
         }
     }
     
-    return missingNumbers.sort((a, b) => a - b);
+    for (const letter of allLetters) {
+        if (!presentLetters.has(letter)) {
+            missingLetters.push(letter);
+        }
+    }
+    
+    return {
+        letters: missingLetters, // Letras do alfabeto ausentes no nome
+        numbers: missingNumbers.sort((a, b) => a - b) // Números de 1 a 9 ausentes
+    };
 }
         
         // Função para calcular dívidas cármicas
@@ -1092,15 +1108,14 @@
         `1º: ${month} (mês) - ${day} (dia) = ${challenges.first}\n2º: ${day} (dia) - ${yearReduced} (ano reduzido) = ${challenges.second}\n3º: ${challenges.first} - ${challenges.second} = ${challenges.third}\n4º: ${month} (mês) - ${yearReduced} (ano reduzido) = ${challenges.fourth}`;
 
             
-            // Lições Cármicas
-    if (data.karmicLessons.numbers.length > 0) {
-        document.getElementById('karmicLessonsCalculation').textContent = 
-            `Letras ausentes: ${data.karmicLessons.letters.join(', ')}\nNúmeros correspondentes: ${data.karmicLessons.numbers.join(', ')}`;
-    } else {
-        document.getElementById('karmicLessonsCalculation').textContent = 
-            "Todas as letras estão presentes no nome, nenhuma lição cármica identificada";
-    }
-    
+            /// Lições Cármicas (no trecho que mostra exemplos de cálculo)
+if (data.karmicLessons.numbers.length > 0) {
+    document.getElementById('karmicLessonsCalculation').textContent = 
+        `Letras ausentes: ${data.karmicLessons.letters.join(', ')}\nNúmeros correspondentes: ${data.karmicLessons.numbers.join(', ')}`;
+} else {
+    document.getElementById('karmicLessonsCalculation').textContent = 
+        "Todas as letras/números estão presentes no nome, nenhuma lição cármica identificada.";
+}
             
             // Exemplo para Dívidas Cármicas
             if (data.karmicDebts.length > 0) {
@@ -1173,7 +1188,7 @@
                     personalityNumber,
                     expressionNumber,
                     challengeNumbers,
-                    karmicLessons,
+                    karmicLessons: calculateKarmicLessons(fullName),
                     karmicDebts,
                     lifeCycles,
                     personalYear
