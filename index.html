@@ -1144,7 +1144,7 @@
                 const personalityNumber = calculatePersonalityNumber(fullName);
                 const expressionNumber = calculateExpressionNumber(fullName);
                 const challengeNumbers = calculateChallengeNumbers(formattedDate);
-                const karmicLessons = calculateKarmicLessons(fullName);
+                const missingNumbers = calculateKarmicLessons(name);
                 const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
                 const lifeCycles = calculateLifeCycles(formattedDate);
                 const personalYear = calculatePersonalYear(formattedDate);
@@ -1159,7 +1159,7 @@
                 displayPersonalitySection(personalityNumber);
                 displayExpressionSection(expressionNumber);
                 displayChallengeSection(challengeNumbers);
-                displayKarmicLessonsSection(karmicLessons);
+                displayKarmicLessonsSection(missingNumbers);
                 displayKarmicDebtsSection(karmicDebts);
                 displayLifeCycles(lifeCycles);
                 displayPersonalYearSection(personalYear);
@@ -1238,23 +1238,23 @@
             document.getElementById('challengeVariationCount').textContent = `(4 desafios identificados)`;
         }
 
-        function displayKarmicLessonsSection(karmicLessons) {
-            const lessonsStr = karmicLessons.numbers.length > 0 ? 
-                `Números ausentes: ${karmicLessons.numbers.join(', ')}` : 
-                'Nenhuma lição cármica (todos os números presentes)';
-            document.getElementById('karmicLessons').textContent = lessonsStr;
-            
-            if (karmicLessons.numbers.length > 0) {
-                let description = '';
-                for (const num of karmicLessons.numbers) {
-                    description += interpretations.karmicLessons[num] + '\n\n';
-                }
-                document.getElementById('karmicLessonsDescription').textContent = description.trim();
-            } else {
-                document.getElementById('karmicLessonsDescription').textContent = 'Você tem todas as vibrações numéricas em seu nome.';
-            }
-            document.getElementById('karmicLessonsVariationCount').textContent = `(${karmicLessons.numbers.length} lições identificadas)`;
+        function displayKarmicLessonsSection(missingNumbers) { // Agora recebe o array diretamente
+    const lessonsStr = missingNumbers.length > 0 ? 
+        `Números ausentes: ${missingNumbers.join(', ')}` : 
+        'Nenhuma lição cármica (todos os números presentes)';
+    document.getElementById('karmicLessons').textContent = lessonsStr;
+    
+    if (missingNumbers.length > 0) {
+        let description = '';
+        for (const num of missingNumbers) {
+            description += interpretations.karmicLessons[num] + '\n\n';
         }
+        document.getElementById('karmicLessonsDescription').textContent = description.trim();
+    } else {
+        document.getElementById('karmicLessonsDescription').textContent = 'Você tem todas as vibrações numéricas em seu nome.';
+    }
+    document.getElementById('karmicLessonsVariationCount').textContent = `(${missingNumbers.length} lições identificadas)`;
+}
 
         function displayKarmicDebtsSection(karmicDebts) {
             const debtsStr = karmicDebts.length > 0 ? 
