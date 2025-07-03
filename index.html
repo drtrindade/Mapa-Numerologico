@@ -1253,7 +1253,33 @@ if (data.karmicLessons.numbers.length > 0) {
             document.getElementById('challengeDescription').innerHTML = description;
             document.getElementById('challengeVariationCount').textContent = `(4 desafios identificados)`;
         }
-
+function displayKarmicDebtsSection(karmicDebts) {
+    const debtsStr = karmicDebts.length > 0 ? 
+        karmicDebts.join(', ') : 
+        'Nenhuma dívida cármica identificada';
+    
+    // Atualiza o valor principal
+    document.getElementById('karmicDebts').textContent = debtsStr;
+    
+    // Atualiza a descrição
+    if (karmicDebts.length > 0) {
+        let description = '';
+        for (const debt of karmicDebts) {
+            if (interpretations.karmicDebts[debt]) {
+                description += interpretations.karmicDebts[debt] + '\n\n';
+            }
+        }
+        document.getElementById('karmicDebtsDescription').textContent = description || 
+            'Interpretação não disponível para estas dívidas cármicas.';
+    } else {
+        document.getElementById('karmicDebtsDescription').textContent = 
+            'Nenhuma dívida cármica significativa encontrada.';
+    }
+    
+    // Atualiza o contador
+    document.getElementById('karmicDebtsVariationCount').textContent = 
+        `(${karmicDebts.length} dívidas identificadas)`;
+}
       function displayKarmicLessonsSection(karmicLessons) {
     // Verifica se karmicLessons é válido
     if (!karmicLessons || !karmicLessons.numbers) {
@@ -1261,24 +1287,6 @@ if (data.karmicLessons.numbers.length > 0) {
         return;
     }
           
-function displayKarmicDebtsSection(karmicDebts) {
-            const debtsStr = karmicDebts.length > 0 ? 
-                karmicDebts.join(', ') : 
-                'Nenhuma dívida cármica identificada';
-            document.getElementById('karmicDebts').textContent = debtsStr;
-            
-            if (karmicDebts.length > 0) {
-                let description = '';
-                for (const debt of karmicDebts) {
-                    description += interpretations.karmicDebts[debt] + '\n\n';
-                }
-                document.getElementById('karmicDebtsDescription').textContent = description.trim();
-            } else {
-                document.getElementById('karmicDebtsDescription').textContent = 'Nenhuma dívida cármica significativa.';
-            }
-            document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas identificadas)`;
-        }
-
     const hasLessons = karmicLessons.numbers.length > 0;
     
     // Atualiza o cálculo mostrado
