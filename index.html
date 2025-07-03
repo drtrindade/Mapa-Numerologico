@@ -1260,6 +1260,24 @@ if (data.karmicLessons.numbers.length > 0) {
         console.error("Dados de lições cármicas inválidos:", karmicLessons);
         return;
     }
+          
+function displayKarmicDebtsSection(karmicDebts) {
+            const debtsStr = karmicDebts.length > 0 ? 
+                karmicDebts.join(', ') : 
+                'Nenhuma dívida cármica identificada';
+            document.getElementById('karmicDebts').textContent = debtsStr;
+            
+            if (karmicDebts.length > 0) {
+                let description = '';
+                for (const debt of karmicDebts) {
+                    description += interpretations.karmicDebts[debt] + '\n\n';
+                }
+                document.getElementById('karmicDebtsDescription').textContent = description.trim();
+            } else {
+                document.getElementById('karmicDebtsDescription').textContent = 'Nenhuma dívida cármica significativa.';
+            }
+            document.getElementById('karmicDebtsVariationCount').textContent = `(${karmicDebts.length} dívidas identificadas)`;
+        }
 
     const hasLessons = karmicLessons.numbers.length > 0;
     
