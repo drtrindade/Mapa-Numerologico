@@ -908,7 +908,7 @@
         }
         
         // Função para calcular as lições cármicas (letras ausentes)
-       ffunction calculateKarmicLessons(name) {
+      function calculateKarmicLessons(name) {
     const presentNumbers = new Set();
     const presentLetters = new Set();
     const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
@@ -942,8 +942,8 @@
     }
     
     return {
-        letters: missingLetters, // Letras do alfabeto ausentes no nome
-        numbers: missingNumbers.sort((a, b) => a - b) // Números de 1 a 9 ausentes
+        letters: missingLetters,
+        numbers: missingNumbers.sort((a, b) => a - b)
     };
 }
         
@@ -1159,7 +1159,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 const personalityNumber = calculatePersonalityNumber(fullName);
                 const expressionNumber = calculateExpressionNumber(fullName);
                 const challengeNumbers = calculateChallengeNumbers(formattedDate);
-                const missingNumbers = calculateKarmicLessons(name);
+                const missingNumbers = calculateKarmicLessons(fullName);
                 const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
                 const lifeCycles = calculateLifeCycles(formattedDate);
                 const personalYear = calculatePersonalYear(formattedDate);
