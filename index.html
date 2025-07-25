@@ -2149,60 +2149,63 @@ if (section.element === 'numericalPatterns') {
     }
     
     // DESCRIÇÕES DETALHADAS
-    const description = document.getElementById('patternsDescription')?.textContent;
-    if (description) {
-        // Divisor
-        doc.setDrawColor(212, 175, 55, 50);
-        doc.setLineWidth(0.3);
-        doc.line(margin, yPosition, pageWidth - margin, yPosition);
-        yPosition += 10;
-        
-        // Título "INTERPRETAÇÕES"
-        doc.setFont(titleFont, 'bold');
-        doc.setTextColor(primaryColor);
-        doc.setFontSize(14);
-        doc.text('INTERPRETAÇÕES DOS PADRÕES', pageWidth/2, yPosition, { align: 'center' });
-        yPosition += 10;
-        
-        // Texto da descrição
-        doc.setFont(bodyFont, 'normal');
-        doc.setTextColor(textColor);
-        doc.setFontSize(11);
-        
-        const paragraphs = description.split('\n\n');
-        paragraphs.forEach(para => {
-            if (para.trim()) {
-                // Verifica se é um título de padrão (começa com •)
-                if (para.startsWith('•')) {
-                    doc.setFont(bodyFont, 'bold');
-                    doc.setTextColor(primaryColor);
-                    doc.setFontSize(11);
-                    doc.text(para.split(':')[0] + ':', margin, yPosition);
-                    
-                    const descText = para.split(':').slice(1).join(':');
-                    const descLines = doc.splitTextToSize(descText, pageWidth - (margin * 2));
-                    
-                    doc.setFont(bodyFont, 'normal');
-                    doc.setTextColor(textColor);
-                    doc.text(descLines, margin + 10, yPosition + 5);
-                    yPosition += (descLines.length * 6) + 10;
-                } else {
-                    const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
-                    doc.text(descLines, margin, yPosition);
-                    yPosition += (descLines.length * 6) + 5;
-                }
-            }
-        });
-    }
+    // DESCRIÇÕES DETALHADAS
+const description = document.getElementById('patternsDescription')?.textContent;
+if (description) {
+    // Divisor
+    doc.setDrawColor(212, 175, 55, 50);
+    doc.setLineWidth(0.3);
+    doc.line(margin, yPosition, pageWidth - margin, yPosition);
+    yPosition += 10;
     
-    // Rodapé da página
+    // Título "INTERPRETAÇÕES"
+    doc.setFont(titleFont, 'bold');
+    doc.setTextColor(primaryColor);
+    doc.setFontSize(14);
+    doc.text('INTERPRETAÇÕES DOS PADRÕES', pageWidth/2, yPosition, { align: 'center' });
+    yPosition += 10;
+    
+    // Texto da descrição
     doc.setFont(bodyFont, 'normal');
-    doc.setTextColor(150, 150, 150);
-    doc.setFontSize(8);
-    doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
-    doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
+    doc.setTextColor(textColor);
+    doc.setFontSize(11);
     
-    continue; // Pula para a próxima seção
+    const paragraphs = description.split('\n\n');
+    paragraphs.forEach(para => {
+        if (para.trim()) {
+            // Verifica se é um título de padrão (começa com •)
+            if (para.startsWith('•')) {
+                doc.setFont(bodyFont, 'bold');
+                doc.setTextColor(primaryColor);
+                doc.setFontSize(11);
+                doc.text(para.split(':')[0] + ':', margin, yPosition);
+                
+                const descText = para.split(':').slice(1).join(':');
+                const descLines = doc.splitTextToSize(descText, pageWidth - (margin * 2));
+                
+                doc.setFont(bodyFont, 'normal');
+                doc.setTextColor(textColor);
+                doc.text(descLines, margin + 10, yPosition + 5);
+                yPosition += (descLines.length * 6) + 10;
+            } else {
+                const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
+                doc.text(descLines, margin, yPosition);
+                yPosition += (descLines.length * 6) + 5;
+            }
+        }
+    });
+}
+
+// Rodapé da página (APENAS UMA VEZ, REMOVA A DUPLICAÇÃO)
+doc.setFont(bodyFont, 'normal');
+doc.setTextColor(150, 150, 150);
+doc.setFontSize(8);
+doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
+
+continue; // Pula para a próxima seção
+    
+    // Pula para a próxima seção
 }            
         
     else {
