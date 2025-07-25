@@ -1229,16 +1229,16 @@ function findTriples(name, date) {
 function getAllNumbersFromNameAndDate(name, date) {
     const numbers = [];
     
-    // Números do NOME (somente letras)
-    const letters = name.replace(/\s+/g, '').match(/[A-ZÀ-Ü]/gi) || [];
+    // Extrai números do NOME (letras convertidas para valores)
+    const letters = name.replace(/\s+/g, '').toUpperCase().match(/[A-ZÀ-ÜÇ]/g) || [];
     letters.forEach(letter => {
-        const num = getLetterValue(letter.toUpperCase());
-        numbers.push(num); // Número reduzido (ex: D=4)
+        const num = getLetterValue(letter); // Sem parêntese extra!
+        numbers.push(num);
     });
     
-    // Números da DATA (dígitos separados)
-    const dateNumbers = date.replace(/\D/g, '').split('').map(Number);
-    numbers.push(...dateNumbers); // Ex: 25/10/1986 → [2,5,1,0,1,9,8,6]
+    // Extrai números da DATA (dígitos separados)
+    const dateDigits = date.replace(/\D/g, '').split('').map(Number);
+    numbers.push(...dateDigits);
     
     return numbers;
 }
@@ -1257,38 +1257,21 @@ function getAllNumbersFromNameAndDate(name, date) {
         }
         
         // Função auxiliar para obter o valor numérico de uma letra
-        function getLetterValue(letter) {
-            const letterMap = {
-                'A': 1, 'Á': 1, 'Â': 1, 'À': 1, 'Ã': 1, 'Ä': 1,
-                'B': 2,
-                'C': 3, 'Ç': 3,
-                'D': 4,
-                'E': 5, 'É': 5, 'Ê': 5, 'È': 5, 'Ë': 5,
-                'F': 6,
-                'G': 7,
-                'H': 8,
-                'I': 9, 'Í': 9, 'Î': 9, 'Ì': 9, 'Ï': 9,
-                'J': 1,
-                'K': 2,
-                'L': 3,
-                'M': 4,
-                'N': 5,
-                'O': 6, 'Ó': 6, 'Ô': 6, 'Ò': 6, 'Õ': 6, 'Ö': 6,
-                'P': 7,
-                'Q': 8,
-                'R': 9,
-                'S': 1,
-                'T': 2,
-                'U': 3, 'Ú': 3, 'Û': 3, 'Ù': 3, 'Ü': 3,
-                'V': 4,
-                'W': 5,
-                'X': 6,
-                'Y': 7,
-                'Z': 8
-            };
-            
-            return letterMap[letter] || 0;
-        }
+       function getLetterValue(letter) {
+    const letterMap = {
+        'A': 1, 'Á': 1, 'À': 1, 'Ã': 1, 'Â': 1, 'Ä': 1,
+        'B': 2, 'C': 3, 'Ç': 3,
+        'D': 4, 'E': 5, 'É': 5, 'È': 5, 'Ê': 5, 'Ë': 5,
+        'F': 6, 'G': 7, 'H': 8,
+        'I': 9, 'Í': 9, 'Ì': 9, 'Î': 9, 'Ï': 9,
+        'J': 1, 'K': 2, 'L': 3, 'M': 4, 'N': 5,
+        'O': 6, 'Ó': 6, 'Ò': 6, 'Ô': 6, 'Õ': 6, 'Ö': 6,
+        'P': 7, 'Q': 8, 'R': 9,
+        'S': 1, 'T': 2, 'U': 3, 'Ú': 3, 'Ù': 3, 'Û': 3, 'Ü': 3,
+        'V': 4, 'W': 5, 'X': 6, 'Y': 7, 'Z': 8
+    };
+    return letterMap[letter] || 0; // Retorna 0 se não encontrado
+}
         
         // Função auxiliar para reduzir a um único dígito
         function reduceToSingleDigit(number) {
@@ -1825,7 +1808,11 @@ async function generatePDF() {
         // Nome do cliente
         doc.setTextColor(primaryColor);
         doc.setFontSize(18);
-        const clientName = document.getElementById('clientName').textContent;
+       const clientName = document.getElementById('clientName')?.textContent || "Nome não encontrado";
+if (!clientName) {
+    alert("Gere o mapa antes de criar o PDF.");
+    return;
+}
         const clientLines = doc.splitTextToSize(clientName.toUpperCase(), pageWidth - (margin * 2));
         clientLines.forEach((line, i) => {
             doc.text(line, pageWidth/2, 130 + (i * 10), { align: 'center' });
