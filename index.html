@@ -1229,15 +1229,16 @@ function findTriples(name, date) {
 function getAllNumbersFromNameAndDate(name, date) {
     const numbers = [];
     
-    // Adicionar números do nome
-    const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
+    // Números do NOME (somente letras)
+    const letters = name.replace(/\s+/g, '').match(/[A-ZÀ-Ü]/gi) || [];
     letters.forEach(letter => {
-        numbers.push(getLetterValue(letter.toUpperCase()));
+        const num = getLetterValue(letter.toUpperCase());
+        numbers.push(num); // Número reduzido (ex: D=4)
     });
     
-    // Adicionar números da data
-    const dateNumbers = date.split('/').join('').split('').map(Number);
-    numbers.push(...dateNumbers);
+    // Números da DATA (dígitos separados)
+    const dateNumbers = date.replace(/\D/g, '').split('').map(Number);
+    numbers.push(...dateNumbers); // Ex: 25/10/1986 → [2,5,1,0,1,9,8,6]
     
     return numbers;
 }
@@ -2097,10 +2098,12 @@ async function generatePDF() {
             
             // Descrição formatada
             const description = document.getElementById(`${section.element}Description`)?.textContent;
-            if (description) {
-                doc.setFont(bodyFont, 'normal');
-                doc.setTextColor(textColor);
-                doc.setFontSize(11);
+if (description) {
+    const lines = doc.splitTextToSize(description, pageWidth - (margin * 2));
+    doc.text(lines, margin, yPosition); // Quebra o texto em linhas
+    yPosition += (lines.length * lineHeight) + 5;
+}
+                
                 
                 // Tratamento especial para Lições Cármicas (espaçamento reduzido)
                 if (section.element === 'karmicLessons') {
