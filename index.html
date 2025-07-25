@@ -423,7 +423,19 @@
                     <button class="variation-btn" onclick="changeVariation('karmicDebts')">Outra Interpretação</button>
                     <span class="variation-count" id="karmicDebtsVariationCount"></span>
                 </div>
+            
             </div>
+            <div class="result-section" id="missionNumberSection">
+    <h3>Número de Missão</h3>
+    <p class="section-subtitle">Representa seu propósito de vida mais elevado, calculado pela soma do Número do Destino e Número de Expressão reduzidos a um único dígito (ou 11/22).</p>
+    <div class="calculation-example" id="missionCalculation"></div>
+    <div class="result-value" id="missionNumber"></div>
+    <div class="result-description" id="missionDescription"></div>
+    <div class="variation-controls">
+        <button class="variation-btn" onclick="changeVariation('mission')">Outra Interpretação</button>
+        <span class="variation-count" id="missionVariationCount"></span>
+    </div>
+</div>
             
             <div class="result-section" id="lifeCyclesSection">
                 <h3>Ciclos de Vida</h3>
@@ -469,6 +481,63 @@
         
         // Dados de interpretação numerológica
         const interpretations = {
+            mission: {
+    1: [
+        "Número 1 de Missão: Sua missão de vida é pioneirismo e liderança. Você está aqui para iniciar projetos inovadores, mostrar independência e inspirar outros a confiarem em sua própria força. Seu caminho envolve desenvolver coragem para seguir sua visão única, mesmo contra a corrente. A vida testará sua capacidade de tomar iniciativas e sustentar seus projetos com autoconfiança. Você aprenderá que verdadeira liderança vem do exemplo, não da imposição. Seu maior desafio será equilibrar individualidade com cooperação, mantendo sua autenticidade enquanto trabalha com outros. Quando você vive sua missão, torna-se um farol de originalidade e força de vontade, mostrando que é possível criar novos caminhos onde antes parecia não haver possibilidade.",
+        "Missão do Líder: Como um 1 de Missão, você está destinado a quebrar padrões e estabelecer novos paradigmas. Sua alma escolheu este caminho para desenvolver autossuficiência e capacidade de manifestar ideias no mundo físico. Você encontrará situações que exigirão que você 'se mantenha em seus próprios pés' e confie em seu julgamento interior. Esta missão muitas vezes vem de vidas passadas onde você foi excessivamente dependente ou, no extremo oposto, autoritário. Agora, o universo está lhe dando oportunidades para encontrar o equilíbrio saudável entre independência e colaboração. Seu papel é mostrar que é possível liderar sem dominar, inspirando outros a descobrir sua própria força interior.",
+        "Caminho do Pioneiro: Sua missão envolve demonstrar coragem para ser o primeiro - seja em ideias, projetos ou formas de viver. Você está aqui para aprender que segurança verdadeira vem de dentro, não de circunstâncias externas. Muitas vezes você se encontrará em posições de vanguarda, mesmo que não as busque ativamente. Esta missão traz oportunidades para desenvolver originalidade e criatividade na solução de problemas. Seu desafio cármico será evitar o isolamento e aprender que verdadeira força inclui a vulnerabilidade de pedir ajuda quando necessário. Quando você abraça plenamente esta missão, torna-se um catalisador para que outros descubram seu próprio potencial criador."
+    ],
+    2: [
+        "Número 2 de Missão: Sua missão de vida é harmonia e cooperação. Você está aqui para ser um pacificador, criando entendimento mútuo em situações de conflito. Seu caminho envolve desenvolver paciência, diplomacia e sensibilidade às necessidades alheias. A vida testará sua capacidade de trabalhar em equipe e considerar múltiplas perspectivas. Você aprenderá que verdadeira força vem da capacidade de unir, não de dividir. Seu maior desafio será encontrar sua voz sem perder a gentileza, afirmando suas necessidades com tato. Quando você vive sua missão, torna-se um canal de cura relacional, mostrando que diferenças podem coexistir em respeito mútuo.",
+        "Missão do Diplomata: Como um 2 de Missão, você está destinado a mediar conflitos e criar atmosferas de colaboração. Sua alma escolheu este caminho para desenvolver habilidades de escuta ativa e compreensão emocional profunda. Você encontrará situações que exigirão que você equilibre diversas necessidades e encontre terreno comum. Esta missão muitas vezes vem de vidas passadas onde você experimentou desarmonia relacional ou evitou confrontos a qualquer custo. Agora, o universo está lhe dando oportunidades para curar estes padrões. Seu papel é demonstrar que é possível resolver diferenças com sabedoria e compaixão, não com força bruta.",
+        "Caminho do Unificador: Sua missão envolve reconhecer a interconexão entre todos os seres. Você está aqui para aprender que verdadeira paz começa com aceitação interior. Muitas vezes você se encontrará em posições onde poderá suavizar tensões e criar pontes entre visões opostas. Esta missão traz oportunidades para desenvolver artes relacionais como aconselhamento, mediação ou qualquer atividade que una pessoas. Seu desafio cármico será evitar a dependência emocional e aprender que verdadeira harmonia inclui autenticidade. Quando você abraça plenamente esta missão, torna-se um instrumento de reconciliação em seu círculo e além."
+    ],
+    3: [
+        "Número 3 de Missão: Sua missão de vida é expressão criativa e alegria. Você está aqui para inspirar outros através de seus talentos artísticos, comunicação ou simplesmente seu entusiasmo pela vida. Seu caminho envolve desenvolver confiança para compartilhar seus dons com o mundo sem medo de julgamento. A vida testará sua capacidade de manter otimismo mesmo em desafios. Você aprenderá que verdadeira criatividade requer tanto inspiração quanto disciplina. Seu maior desafio será evitar dispersão e focar sua energia em projetos significativos. Quando você vive sua missão, ilumina o mundo com sua visão colorida, lembrando a todos do poder transformador da autoexpressão autêntica.",
+        "Missão do Comunicador: Como um 3 de Missão, você está destinado a ser um canal de ideias inspiradoras. Sua alma escolheu este caminho para desenvolver habilidades de expressão e capacidade de ver beleza em tudo. Você encontrará situações que exigirão que você fale sua verdade com charme e clareza. Esta missão muitas vezes vem de vidas passadas onde sua criatividade foi suprimida ou usada de forma irresponsável. Agora, o universo está lhe dando oportunidades para encontrar equilíbrio. Seu papel é mostrar que a vida pode ser vivida com leveza e profundidade simultaneamente, usando humor, arte ou palavras para elevar os outros.",
+        "Caminho do Inspirador: Sua missão envolve ativar a criatividade nos outros. Você está aqui para aprender que sua voz única é um presente para o mundo. Muitas vezes você se encontrará em posições onde poderá encorajar outros a abraçar seus próprios dons criativos. Esta missão traz oportunidades para desenvolver talentos artísticos e habilidades sociais. Seu desafio cármico será equilibrar espontaneidade com discernimento, expressando-se sem ferir. Quando você abraça plenamente esta missão, torna-se um farol de possibilidade, mostrando que cada pessoa tem uma canção única para cantar no coro da vida."
+    ],
+    4: [
+        "Número 4 de Missão: Sua missão de vida é construção e estabilidade. Você está aqui para criar estruturas duradouras e mostrar o valor do trabalho consistente. Seu caminho envolve desenvolver disciplina, paciência e abordagem metódica para realizar objetivos. A vida testará sua capacidade de lidar com responsabilidades e perseverar quando progresso parece lento. Você aprenderá que verdadeiro sucesso vem de alicerces sólidos, não de atalhos. Seu maior desafio será equilibrar praticidade com flexibilidade, sabendo quando adaptar seus planos. Quando você vive sua missão, torna-se um pilar de confiabilidade, mostrando que sonhos podem ser materializados através de esforço dedicado.",
+        "Missão do Construtor: Como um 4 de Missão, você está destinado a transformar visões em realidade tangível. Sua alma escolheu este caminho para desenvolver habilidades organizacionais e ética de trabalho inabalável. Você encontrará situações que exigirão que você lidere pelo exemplo de consistência. Esta missão muitas vezes vem de vidas passadas onde você experimentou caos ou rigidez excessiva. Agora, o universo está lhe dando oportunidades para encontrar o meio-termo. Seu papel é demonstrar que verdadeira liberdade vem de estrutura interna, mostrando como planejamento e preparação permitem voos mais altos.",
+        "Caminho do Realizador: Sua missão envolve ensinar o valor da persistência. Você está aqui para aprender que grandes obras são construídas tijolo por tijolo. Muitas vezes você se encontrará em posições onde sua capacidade de lidar com detalhes será valiosa. Esta missão traz oportunidades para desenvolver conhecimentos especializados e sistemas eficientes. Seu desafio cármico será evitar perfeccionismo e aprender que até os melhores planos precisam de espaço para improvisação. Quando você abraça plenamente esta missão, torna-se um mestre em manifestar o invisível no mundo visível, inspirando outros a concretizar seus próprios sonhos."
+    ],
+    5: [
+        "Número 5 de Missão: Sua missão de vida é liberdade e progresso. Você está aqui para desafiar limites e mostrar a beleza da diversidade humana. Seu caminho envolve desenvolver adaptabilidade e coragem para abraçar mudanças. A vida testará sua capacidade de lidar com imprevistos e encontrar oportunidades em situações inesperadas. Você aprenderá que verdadeira liberdade vem do autoconhecimento, não da falta de compromisso. Seu maior desafio será equilibrar necessidade de variedade com consistência em projetos importantes. Quando você vive sua missão, torna-se um embaixador da vida plena, mostrando que é possível honrar tanto raízes quanto asas.",
+        "Missão do Aventureiro: Como um 5 de Missão, você está destinado a expandir horizontes - próprios e alheios. Sua alma escolheu este caminho para desenvolver versatilidade e capacidade de aprender com experiências diversas. Você encontrará situações que exigirão que você questione convenções ultrapassadas. Esta missão muitas vezes vem de vidas passadas onde você foi excessivamente restrito ou irresponsável. Agora, o universo está lhe dando oportunidades para encontrar equilíbrio. Seu papel é mostrar que crescimento requer tanto movimento quanto direção, inspirando outros a sair de zonas de conforto com sabedoria.",
+        "Caminho do Agente de Mudança: Sua missão envolve ser catalisador de transformações. Você está aqui para aprender que segurança pode ser encontrada no fluxo, não apenas na estabilidade. Muitas vezes você se encontrará em posições onde poderá introduzir novas ideias ou formas de viver. Esta missão traz oportunidades para desenvolver habilidades de comunicação e lidar com diferentes culturas. Seu desafio cármico será cultivar profundidade em suas experiências, entendendo que verdadeira aventura pode ser interna tanto quanto externa. Quando você abraça plenamente esta missão, torna-se uma ponte entre mundos, mostrando que mudança pode ser uma aliada, não uma ameaça."
+    ],
+    6: [
+        "Número 6 de Missão: Sua missão de vida é serviço amoroso e harmonia. Você está aqui para criar beleza, nutrir outros e estabelecer equilíbrio em seu ambiente. Seu caminho envolve desenvolver compaixão prática e capacidade de resolver conflitos com sabedoria. A vida testará seu senso de justiça e habilidade de cuidar sem sufocar. Você aprenderá que verdadeiro serviço vem do equilíbrio, não do sacrifício excessivo. Seu maior desafio será amar sem possuir, cuidar sem controlar. Quando você vive sua missão, torna-se um farol de aceitação incondicional, mostrando que o amor é a força mais transformadora que existe.",
+        "Missão do Cuidador: Como um 6 de Missão, você está destinado a curar através do amor em ação. Sua alma escolheu este caminho para desenvolver habilidades de aconselhamento e criação de ambientes acolhedores. Você encontrará situações que exigirão que você equilibre necessidades próprias e alheias. Esta missão muitas vezes vem de vidas passadas onde você experimentou desequilíbrios em dar/receber amor. Agora, o universo está lhe dando oportunidades para curar estes padrões. Seu papel é demonstrar que verdadeira força inclui ternura, e que cuidar é diferente de controlar.",
+        "Caminho do Pacificador: Sua missão envolve ensinar o valor do respeito mútuo. Você está aqui para aprender que verdadeira harmonia começa com autoaceitação. Muitas vezes você se encontrará em posições onde poderá resolver disputas e criar atmosferas de compreensão. Esta missão traz oportunidades para desenvolver artes terapêuticas e habilidades de aconselhamento. Seu desafio cármico será evitar o perfeccionismo em relacionamentos e aprender que amor verdadeiro inclui aceitar imperfeições. Quando você abraça plenamente esta missão, torna-se um instrumento de cura relacional, mostrando que conflitos podem ser transformados em conexão mais profunda."
+    ],
+    7: [
+        "Número 7 de Missão: Sua missão de vida é busca por sabedoria e verdade. Você está aqui para questionar, analisar e conectar-se com dimensões mais profundas da existência. Seu caminho envolve desenvolver intuição e confiança em sua voz interior. A vida testará sua fé e capacidade de encontrar respostas dentro de si mesmo. Você aprenderá que algumas verdades são percebidas, não provadas. Seu maior desafio será equilibrar ceticismo com abertura ao mistério. Quando você vive sua missão, torna-se um guia para outros em busca de significado, mostrando que o invisível sustenta o visível.",
+        "Missão do Filósofo: Como um 7 de Missão, você está destinado a explorar os grandes mistérios da vida. Sua alma escolheu este caminho para desenvolver pensamento crítico e conexão com sabedoria interior. Você encontrará situações que exigirão que você confie em percepções sutis além da lógica racional. Esta missão muitas vezes vem de vidas passadas onde você foi excessivamente dogmático ou materialista. Agora, o universo está lhe dando oportunidades para integrar razão e intuição. Seu papel é mostrar que verdadeiro conhecimento inclui tanto mente quanto espírito.",
+        "Caminho do Investigador: Sua missão envolve ser um estudante e professor da vida. Você está aqui para aprender que algumas perguntas não têm respostas fáceis. Muitas vezes você se encontrará em posições onde poderá compartilhar insights profundos ou habilidades analíticas. Esta missão traz oportunidades para desenvolver conhecimentos especializados e práticas contemplativas. Seu desafio cármico será evitar isolamento excessivo e aprender que sabedoria deve ser compartilhada para florescer plenamente. Quando você abraça plenamente esta missão, torna-se uma ponte entre mundos visível e invisível, mostrando que a realidade é mais multidimensional do que parece."
+    ],
+    8: [
+        "Número 8 de Missão: Sua missão de vida é manifestação e poder pessoal. Você está aqui para aprender a lidar com recursos e autoridade de forma ética e equilibrada. Seu caminho envolve desenvolver habilidades de liderança e capacidade de transformar visões em resultados concretos. A vida testará sua ética e habilidade de usar influência para benefício mútuo. Você aprenderá que verdadeiro sucesso vem do equilíbrio entre matéria e espírito. Seu maior desafio será evitar equacionar valor pessoal com conquistas materiais. Quando você vive sua missão, torna-se um exemplo de como o poder pode ser usado com sabedoria para criar valor duradouro.",
+        "Missão do Realizador: Como um 8 de Missão, você está destinado a ser um mestre da manifestação prática. Sua alma escolheu este caminho para desenvolver eficiência e capacidade de lidar com grandes responsabilidades. Você encontrará situações que exigirão que você tome decisões estratégicas com impacto de longo prazo. Esta missão muitas vezes vem de vidas passadas onde você abusou de poder ou foi vítima de abuso de poder. Agora, o universo está lhe dando oportunidades para curar estes padrões. Seu papel é demonstrar que verdadeira abundância circula, mostrando como recursos podem ser usados para elevar a todos.",
+        "Caminho do Líder Ético: Sua missão envolve redefinir o significado do sucesso. Você está aqui para aprender que verdadeiro poder vem do caráter, não do controle. Muitas vezes você se encontrará em posições de autoridade onde poderá implementar sistemas justos. Esta missão traz oportunidades para desenvolver projetos de grande escala e habilidades de negociação. Seu desafio cármico será evitar a ganância e aprender que legados duradouros são construídos através de serviço, não exploração. Quando você abraça plenamente esta missão, torna-se um arquiteto de realidades mais equitativas, mostrando que ética e prosperidade podem caminhar juntas."
+    ],
+    9: [
+        "Número 9 de Missão: Sua missão de vida é compaixão universal e serviço humanitário. Você está aqui para expandir sua compreensão e conectar-se com a humanidade como um todo. Seu caminho envolve desenvolver tolerância e capacidade de ver o potencial em todas as pessoas. A vida testará sua capacidade de perdoar e deixar ir o que já não serve. Você aprenderá que cada fim contém as sementes de um novo começo. Seu maior desafio será amar sem julgar, servir sem salvar. Quando você vive sua missão, torna-se um canal de sabedoria espiritual, mostrando que todas as vidas são interconectadas.",
+        "Missão do Humanitário: Como um 9 de Missão, você está destinado a transcender limites e servir a algo maior que si mesmo. Sua alma escolheu este caminho para desenvolver visão abrangente e amor incondicional. Você encontrará situações que exigirão que você abrace diversidade e supere preconceitos. Esta missão muitas vezes vem de vidas passadas onde você experimentou extremos de isolamento ou fanatismo. Agora, o universo está lhe dando oportunidades para curar estas divisões. Seu papel é mostrar que por trás de todas as diferenças superficiais, há uma humanidade compartilhada.",
+        "Caminho do Curador Global: Sua missão envolve ser um agente de transformação coletiva. Você está aqui para aprender que verdadeiro serviço começa com autoaceitação. Muitas vezes você se encontrará em posições onde poderá fazer diferença em escala ampla. Esta missão traz oportunidades para trabalhos artísticos e de serviço comunitário. Seu desafio cármico será evitar o ressentimento e aprender que verdadeiro perdão é um ato de libertação pessoal. Quando você abraça plenamente esta missão, torna-se um farol de esperança, mostrando que um mundo mais compassivo é possível quando cada um faz sua parte."
+    ],
+    11: [
+        "Número 11 de Missão: Sua missão de vida é inspiração e iluminação. Você está aqui para elevar a consciência coletiva e servir como canal de sabedoria superior. Seu caminho envolve desenvolver intuição aguçada e capacidade de traduzir insights espirituais em linguagem acessível. A vida testará seu equilíbrio entre mundos físico e espiritual. Você aprenderá que verdadeira inspiração vem da autenticidade, não da aprovação alheia. Seu maior desafio será manter os pés no chão enquanto sua alma alcança as estrelas. Quando você vive sua missão, torna-se um farol de luz, mostrando que o divino pode ser experienciado no cotidiano.",
+        "Missão do Visionário: Como um 11 de Missão, você está destinado a ver além do óbvio e compartilhar suas percepções. Sua alma escolheu este caminho para desenvolver sensibilidade psíquica e conexão com dimensões superiores. Você encontrará situações que exigirão que você confie em percepções que desafiam a lógica convencional. Esta missão muitas vezes vem de vidas passadas onde você negou seus dons intuitivos ou os usou para manipulação. Agora, o universo está lhe dando oportunidades para curar estes padrões. Seu papel é demonstrar que o extraordinário habita dentro do ordinário, inspirando outros a despertar sua própria centelha divina.",
+        "Caminho do Mensageiro: Sua missão envolve ser um tradutor de verdades espirituais. Você está aqui para aprender que verdadeira iluminação inclui integrar todas as partes do ser. Muitas vezes você se encontrará em posições onde poderá ajudar outros a interpretar sinais e sincronicidades. Esta missão traz oportunidades para trabalhos criativos e espirituais. Seu desafio cármico será cuidar de sua saúde emocional e aprender que ser um canal requer tanto receptividade quanto ação no mundo. Quando você abraça plenamente esta missão, torna-se uma ponte entre céu e terra, mostrando que cada pessoa pode acessar orientação superior."
+    ],
+    22: [
+        "Número 22 de Missão: Sua missão de vida é construção em grande escala. Você está aqui para materializar visões que beneficiem a humanidade e deixar um legado duradouro. Seu caminho envolve desenvolver capacidade de combinar inspiração elevada com execução prática. A vida testará sua paciência e perseverança em projetos de longo prazo. Você aprenderá que obras monumentais são construídas tijolo por tijolo. Seu maior desafio será equilibrar ambição com humildade, visão com atenção aos detalhes. Quando você vive sua missão, torna-se um mestre construtor, mostrando que ideais elevados podem tomar forma concreta no mundo.",
+        "Missão do Mestre Construtor: Como um 22 de Missão, você está destinado a realizar obras que transcendem benefícios pessoais. Sua alma escolheu este caminho para desenvolver habilidades excepcionais de planejamento e capacidade de inspirar outros a participar de visões coletivas. Você encontrará situações que exigirão que você lidere pelo exemplo de dedicação paciente. Esta missão muitas vezes vem de vidas passadas onde você negligenciou seu potencial ou abusou de sua capacidade de influência. Agora, o universo está lhe dando oportunidades para curar estes padrões. Seu papel é demonstrar que sonhos ousados podem ser ancorados na realidade através de esforço consistente e colaboração.",
+        "Caminho do Arquiteto Social: Sua missão envolve ser um catalisador de mudanças estruturais. Você está aqui para aprender que verdadeiros legados servem às gerações futuras. Muitas vezes você se encontrará em posições onde poderá implementar sistemas e estruturas transformadoras. Esta missão traz oportunidades para liderar projetos que criam impacto duradouro. Seu desafio cármico será evitar autocobrança excessiva e aprender que mesmo os visionários mais talentosos precisam de apoio. Quando você abraça plenamente esta missão, torna-se um instrumento de progresso coletivo, mostrando que a humanidade pode construir um futuro mais sábio e compassivo."
+    ]
+},
             destiny: {
                 1: [
                     "Número 1 do Destino: Você veio para liderar e inovar. Seu caminho é de independência e originalidade. Deverá aprender a confiar em sua própria visão e a tomar iniciativas corajosas. A vida colocará situações onde precisará 'se manter em seus próprios pés' e desenvolver autoconfiança inabalável. Este número indica que sua missão envolve quebrar padrões e estabelecer novos paradigmas, mostrando aos outros que é possível seguir caminhos não trilhados com coragem e determinação.",
@@ -847,7 +916,16 @@
             
             return sum;
         }
-        
+
+        function calculateMissionNumber(destinyNumber, expressionNumber) {
+    let sum = destinyNumber + expressionNumber;
+    
+    while (sum > 9 && sum !== 11 && sum !== 22) {
+        sum = sum.toString().split('').reduce((acc, digit) => acc + parseInt(digit), 0);
+    }
+    
+    return sum;
+}
         // Função para calcular o número da alma (vogais)
         function calculateSoulNumber(name) {
             const vowels = name.match(/[AEIOUÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜ]/gi) || [];
@@ -1161,6 +1239,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 const challengeNumbers = calculateChallengeNumbers(formattedDate);
                 const missingNumbers = calculateKarmicLessons(fullName);
                 const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
+                const missionNumber = calculateMissionNumber(destinyNumber, expressionNumber);
                 const lifeCycles = calculateLifeCycles(formattedDate);
                 const personalYear = calculatePersonalYear(formattedDate);
                 const karmicLessons = calculateKarmicLessons(fullName);
@@ -1176,6 +1255,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 displayExpressionSection(expressionNumber);
                 displayChallengeSection(challengeNumbers);
                 displayKarmicDebtsSection(karmicDebts);
+                displayMissionSection(missionNumber);
                 displayLifeCycles(lifeCycles);
                 displayPersonalYearSection(personalYear);
                 displayKarmicLessonsSection(karmicLessons);
@@ -1316,6 +1396,18 @@ function displayKarmicDebtsSection(karmicDebts) {
     
     document.getElementById('karmicLessonsVariationCount').textContent = 
         `(${karmicLessons.numbers.length} lições identificadas)`;
+}
+
+        function displayMissionSection(missionNumber) {
+    document.getElementById('missionNumber').textContent = missionNumber;
+    displayRandomInterpretation('mission', missionNumber);
+    document.getElementById('missionVariationCount').textContent = `(${interpretations.mission[missionNumber].length} variações disponíveis)`;
+    
+    // Mostrar exemplo de cálculo
+    const destinyNum = document.getElementById('destinyNumber').textContent;
+    const expressionNum = document.getElementById('expressionNumber').textContent;
+    document.getElementById('missionCalculation').textContent = 
+        `${destinyNum} (Destino) + ${expressionNum} (Expressão) = ${parseInt(destinyNum)+parseInt(expressionNum)} → ${missionNumber}`;
 }
 
         function displayLifeCycles(lifeCycles) {
@@ -1481,6 +1573,7 @@ async function generatePDF() {
             { title: 'Números de Desafio', page: 7, subtitle: 'Lições a serem aprendidas' },
             { title: 'Lições Cármicas', page: 8, subtitle: 'Energias a desenvolver' },
             { title: 'Dívidas Cármicas', page: 9, subtitle: 'Lições kármicas especiais' },
+            { title: 'Número de Missão', page: 10, subtitle: 'Propósito de vida elevado' },
             { title: 'Ciclos de Vida', page: 10, subtitle: 'Fases e energias predominantes' },
             { title: 'Ano Pessoal Atual', page: 11, subtitle: 'Energia do ano corrente' }
         ];
@@ -1538,6 +1631,7 @@ async function generatePDF() {
             { title: 'Números de Desafio', element: 'challenge' },
             { title: 'Lições Cármicas', element: 'karmicLessons' },
             { title: 'Dívidas Cármicas', element: 'karmicDebts' },
+            { title: 'Número de Missão', element: 'mission' },
             { title: 'Ciclos de Vida', element: 'lifeCycles' },
             { title: 'Ano Pessoal Atual', element: 'personalYear' }
         ];
@@ -1564,6 +1658,7 @@ async function generatePDF() {
                 'challenge': 'Revelam as principais lições que você precisa aprender',
                 'karmicLessons': 'Mostram quais energias numéricas estão faltando em seu nome',
                 'karmicDebts': 'Números especiais (13, 14, 16, 19) que indicam lições kármicas',
+                'mission': 'Representa seu propósito de vida mais elevado, calculado pela soma do Destino e Expressão',
                 'lifeCycles': 'Mostra as três principais fases da vida e suas energias',
                 'personalYear': 'Indica a energia predominante para o ano corrente'
             };
@@ -1747,8 +1842,7 @@ async function generatePDF() {
             doc.setTextColor(150, 150, 150);
             doc.setFontSize(8);
             doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
-            doc.text(`Página ${index + 3}`, pageWidth - margin, 285, { align: 'right' });
-        });
+            doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
 
         // 4. PÁGINA FINAL (CONCLUSÃO sem logo)
         doc.addPage();
