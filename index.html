@@ -1894,16 +1894,15 @@ async function generatePDF() {
         doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
         doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
         
-        // SALVAR O PDF
+              // SALVAR O PDF
         const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
         doc.save(fileName);
             
-        } catch (error) {
+    } catch (error) {
         console.error("Erro ao gerar PDF:", error);
-        alert("Erro ao gerar o PDF. Por favor, veifique o console para detalhes.");
+        alert("Erro ao gerar o PDF. Por favor, verifique o console para detalhes.");
     }
 }
-    </script>
+</script>
 </body>
 </html>
-         
