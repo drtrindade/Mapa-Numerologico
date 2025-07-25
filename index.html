@@ -2078,14 +2078,13 @@ if (section.element === 'numerologicalPatterns') {
             }
             
             // Rodapé da página
-            doc.setFont(bodyFont, 'normal');
-            doc.setTextColor(150, 150, 150);
-            doc.setFontSize(8);
-            doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
-            doc.text(`Página ${index + 3}`, pageWidth - margin, 285, { align: 'right' });
-    });
-       
-
+doc.setFont(bodyFont, 'normal');
+doc.setTextColor(150, 150, 150);
+doc.setFontSize(8);
+doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+doc.text(`Página ${index + 3}`, pageWidth - margin, 285, { align: 'right' });
+    
+});
         // 4. PÁGINA FINAL (CONCLUSÃO sem logo)
         doc.addPage();
         doc.setFont(titleFont, 'bold');
