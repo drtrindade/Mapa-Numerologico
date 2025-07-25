@@ -2174,13 +2174,13 @@ doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, 
         doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
         
           // SALVAR O PDF
-        const clientName = document.getElementById('clientName').textContent || "Cliente";
-        const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
-        doc.save(fileName);
-     catch (error) {
-        console.error("Erro ao gerar PDF:", error);
-        alert("Erro ao gerar o PDF. Por favor, verifique o console para detalhes.");
-    }
+       // SALVAR O PDF (LINHA REVISADA)
+    const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+    doc.save(fileName);
+
+} catch (error) {  // LINHA 2180 - AGORA CORRIGIDA
+    console.error("Erro ao gerar PDF:", error);
+    alert("Erro ao gerar o PDF. Verifique o console para detalhes.");
 }
 </script>
 </body>
