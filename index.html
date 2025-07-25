@@ -1543,38 +1543,54 @@ function displayKarmicDebtsSection(karmicDebts) {
     patternsStr = patternsList.join(' | ');
     
     // Exibir no HTML
-    document.getElementById('numerologicalPatterns').textContent = patternsStr || 'Nenhum padrão significativo encontrado';
+    const patternsElement = document.getElementById('numerologicalPatterns');
+    if (patternsElement) {
+        patternsElement.textContent = patternsStr || 'Nenhum padrão significativo encontrado';
+    }
     
     // Criar descrição detalhada
     let description = '';
     
     if (patterns.repetitions.length > 0) {
-        description += `<h4>Repetições (${patterns.repetitions.join(', ')})</h4>`;
-        description += `<p>${interpretations.patterns.repetitions.join(' ')}</p>`;
+        description += `<div class="pattern-item">
+            <div class="pattern-type">Repetições (${patterns.repetitions.join(', ')})</div>
+            <p>${interpretations.patterns.repetitions.join(' ')}</p>
+        </div>`;
     }
     
     if (patterns.sequences.length > 0) {
-        description += `<h4>Sequências (${patterns.sequences.join(', ')})</h4>`;
-        description += `<p>${interpretations.patterns.sequences.join(' ')}</p>`;
+        description += `<div class="pattern-item">
+            <div class="pattern-type">Sequências (${patterns.sequences.join(', ')})</div>
+            <p>${interpretations.patterns.sequences.join(' ')}</p>
+        </div>`;
     }
     
     if (patterns.mirror) {
-        description += `<h4>Números Espelho (${patterns.mirror})</h4>`;
-        description += `<p>${interpretations.patterns.mirror.join(' ')}</p>`;
+        description += `<div class="pattern-item">
+            <div class="pattern-type">Números Espelho (${patterns.mirror})</div>
+            <p>${interpretations.patterns.mirror.join(' ')}</p>
+        </div>`;
     }
     
     if (patterns.master.length > 0) {
-        description += `<h4>Números Mestres (${patterns.master.join(', ')})</h4>`;
-        description += `<p>${interpretations.patterns.master.join(' ')}</p>`;
+        description += `<div class="pattern-item">
+            <div class="pattern-type">Números Mestres (${patterns.master.join(', ')})</div>
+            <p>${interpretations.patterns.master.join(' ')}</p>
+        </div>`;
     }
     
     if (patterns.triple.length > 0) {
-        description += `<h4>Triplas (${patterns.triple.join(', ')})</h4>`;
-        description += `<p>${interpretations.patterns.triple.join(' ')}</p>`;
+        description += `<div class="pattern-item">
+            <div class="pattern-type">Triplas (${patterns.triple.join(', ')})</div>
+            <p>${interpretations.patterns.triple.join(' ')}</p>
+        </div>`;
     }
     
-    document.getElementById('numerologicalPatternsDescription').innerHTML = description || 
-        '<p>Nenhum padrão numerológico significativo foi encontrado no nome e data de nascimento.</p>';
+    const descriptionElement = document.getElementById('numerologicalPatternsDescription');
+    if (descriptionElement) {
+        descriptionElement.innerHTML = description || 
+            '<p>Nenhum padrão numerológico significativo foi encontrado no nome e data de nascimento.</p>';
+    }
 }
 
         function displayPersonalYearSection(personalYear) {
@@ -1853,6 +1869,118 @@ async function generatePDF() {
                 
                 yPosition += 25;
             }
+
+            // E adicione este caso especial no loop que processa as seções:
+if (section.element === 'numerologicalPatterns') {
+    // Cabeçalho da seção
+    doc.setFillColor(212, 175, 55);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setFont(titleFont, 'bold');
+    doc.setTextColor(darkColor);
+    doc.setFontSize(14);
+    doc.text(section.title.toUpperCase(), margin, 15);
+    
+    // Descrição
+    doc.setFont(bodyFont, 'italic');
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(9);
+    doc.text('Padrões especiais encontrados no nome e data de nascimento', margin, 25);
+    
+    // Linha divisória
+    doc.setDrawColor(darkColor);
+    doc.setLineWidth(0.5);
+    doc.line(margin, 30, pageWidth - margin, 30);
+    
+    let yPosition = 35;
+    
+    // Exibir cálculo
+    const calculation = document.getElementById(`${section.element}Calculation`)?.textContent;
+    if (calculation) {
+        const calcLines = calculation.split('\n');
+        const boxHeight = 10 + (calcLines.length * 4);
+        
+        doc.setFillColor(245, 245, 245);
+        doc.setDrawColor(212, 175, 55);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(margin, yPosition, pageWidth - (margin * 2), boxHeight, 2, 2, 'FD');
+        
+        doc.setFont(calcFont, 'normal');
+        doc.setTextColor(80, 80, 80);
+        doc.setFontSize(9);
+        calcLines.forEach((line, i) => {
+            doc.text(line, margin + 5, yPosition + 5 + (i * 4));
+        });
+        
+        yPosition += boxHeight + 5;
+    }
+    
+    // Exibir padrões encontrados
+    const patternsText = document.getElementById('numerologicalPatterns')?.textContent;
+    if (patternsText) {
+        doc.setFont(bodyFont, 'bold');
+        doc.setTextColor(darkColor);
+        doc.setFontSize(12);
+        doc.text('PADRÕES ENCONTRADOS:', margin, yPosition + 5);
+        
+        doc.setFont(bodyFont, 'normal');
+        doc.setTextColor(textColor);
+        doc.setFontSize(11);
+        
+        const patternsLines = doc.splitTextToSize(patternsText, pageWidth - (margin * 2));
+        patternsLines.forEach((line, i) => {
+            doc.text(line, margin, yPosition + 15 + (i * 6));
+        });
+        
+        yPosition += 15 + (patternsLines.length * 6);
+    }
+    
+    // Exibir descrição dos padrões
+    const descriptionElement = document.getElementById(`${section.element}Description`);
+    if (descriptionElement) {
+        const patternItems = descriptionElement.querySelectorAll('.pattern-item');
+        
+        patternItems.forEach(item => {
+            const type = item.querySelector('.pattern-type')?.textContent;
+            const desc = item.querySelector('p')?.textContent;
+            
+            if (type && desc) {
+                // Tipo do padrão
+                doc.setFont(bodyFont, 'bold');
+                doc.setTextColor(primaryColor);
+                doc.setFontSize(12);
+                doc.text(type, margin, yPosition + 5);
+                
+                // Descrição
+                doc.setFont(bodyFont, 'normal');
+                doc.setTextColor(textColor);
+                doc.setFontSize(11);
+                
+                const descLines = doc.splitTextToSize(desc, pageWidth - (margin * 2));
+                descLines.forEach((line, i) => {
+                    doc.text(line, margin, yPosition + 10 + (i * 6));
+                });
+                
+                yPosition += 15 + (descLines.length * 6);
+            }
+        });
+        
+        if (patternItems.length === 0) {
+            doc.setFont(bodyFont, 'italic');
+            doc.setTextColor(100, 100, 100);
+            doc.setFontSize(11);
+            doc.text('Nenhum padrão significativo encontrado', margin, yPosition + 5);
+            yPosition += 10;
+        }
+    }
+    
+    // Rodapé da página
+    doc.setFont(bodyFont, 'normal');
+    doc.setTextColor(150, 150, 150);
+    doc.setFontSize(8);
+    doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+    doc.text(`Página ${index + 3}`, pageWidth - margin, 285, { align: 'right' });
+    
+    continue; // Pular para próxima seção
             
             // Tratamento especial para Ciclos de Vida
             if (section.element === 'lifeCycles') {
