@@ -1541,9 +1541,9 @@ if (data.karmicLessons.numbers.length > 0) {
         // Exibir container de resultados
         document.getElementById('resultContainer').style.display = 'block';
         document.getElementById('btnPdf').disabled = false;
-        document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' }); 
 
-    } catch (error) {
+     catch (error) {
         console.error("Erro ao gerar mapa:", error);
         alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
     }
