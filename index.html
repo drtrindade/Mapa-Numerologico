@@ -1465,10 +1465,10 @@ if (data.karmicLessons.numbers.length > 0) {
         const fullName = document.getElementById('fullName').value.trim().toUpperCase();
         const birthDate = document.getElementById('birthDate').value;
         
-        if (!fullName || !birthDate) {
-            alert('Por favor, preencha todos os campos.');
-            return;
-        }
+         if (!fullName || !birthDate) {
+        alert('Por favor, preencha todos os campos.');
+        return; // Agora válido, pois está dentro de uma função
+    }
 
         // Formatar data
         const formattedDate = formatDate(birthDate);
