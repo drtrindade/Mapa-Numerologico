@@ -1189,7 +1189,7 @@
     }
 
     // Identificar números mestres (mesmo que não se repitam)
-    padroes.mestres = [...new Set(numeros.filter(num => [11, 22, 33].includes(num))];
+    padroes.mestres = [...new Set(numeros.filter(num => [11, 22, 33].includes(num)))];
 
     // Identificar sequências (3+ números em sequência)
     const numerosUnicos = [...new Set(numeros)].sort((a, b) => a - b);
