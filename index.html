@@ -1098,7 +1098,8 @@
 }
         
         // Função para calcular dívidas cármicas
-        function calculateKarmicDebts(name, date) {
+        // 1. Atualize a função calculateKarmicDebts para SEMPRE retornar um array
+function calculateKarmicDebts(name, date) {
     const debts = [];
     const numbersToCheck = [13, 14, 16, 19];
     
@@ -1120,10 +1121,10 @@
     }
     
     // Verificar na data
-    const dateNumbers = date.split('/').join('').split('').map(Number);
+    const dateStr = date.replace(/\D/g, ''); // Remove não-numéricos
     currentGroup = '';
     
-    for (const digit of dateNumbers) {
+    for (const digit of dateStr) {
         currentGroup += digit;
         const value = parseInt(currentGroup);
         
@@ -1136,9 +1137,10 @@
         }
     }
     
-    // Remover duplicatas e ordenar - SEMPRE retornar array
-    return [...new Set(debts)].sort((a, b) => a - b);
+    // Garante que retorna um array, mesmo que vazio
+    return Array.from(new Set(debts)).sort((a, b) => a - b);
 }
+
         // Função para calcular os ciclos de vida
         function calculateLifeCycles(date) {
             const [day, month, year] = date.split('/').map(Number);
@@ -1155,10 +1157,11 @@
             };
         }
 
-        function identificarPadroes(numerosDoMapa) {
-    // Verificação adicional para garantir que temos um array válido
+        // 3. Atualize a função identificarPadroes
+function identificarPadroes(numerosDoMapa) {
+    // Verificação de segurança
     if (!Array.isArray(numerosDoMapa)) {
-        console.error("O parâmetro numerosDoMapa não é um array:", numerosDoMapa);
+        console.warn("identificarPadroes: esperado array, recebido:", numerosDoMapa);
         return {
             repeticoes: {},
             sequencias: [],
@@ -1168,10 +1171,18 @@
         };
     }
 
+    const padroes = {
+        repeticoes: {},
+        sequencias: [],
+        espelhos: [],
+        mestres: [],
+        triplas: []
+    };
+
     // Converter para números e filtrar válidos
     const numeros = numerosDoMapa
         .map(n => parseInt(n))
-        .filter(n => !isNaN(n) && n > 0); // Filtra NaN e números negativos
+        .filter(n => !isNaN(n) && n > 0);
             
     // Contar ocorrências de cada número
     const contagem = {};
@@ -1395,7 +1406,7 @@ if (data.karmicLessons.numbers.length > 0) {
             challengeNumbers.second,
             challengeNumbers.third,
             challengeNumbers.fourth,
-            ...(karmicDebts || []), // Garante que é iterável
+            ...(Array.isArray(karmicDebts) ? karmicDebts : []), // Correção aqui
             missionNumber,
             lifeCycles.first,
             lifeCycles.second,
@@ -1403,8 +1414,18 @@ if (data.karmicLessons.numbers.length > 0) {
             personalYear
         ].filter(n => n !== undefined && n !== null && !isNaN(n) && n !== 0);
 
-        // 3.2 Identificar padrões
-        const padroes = identificarPadroes(allNumbers);
+        // 3.2 Identificar padrões - agora com verificação
+        let padroes = {
+            repeticoes: {},
+            sequencias: [],
+            espelhos: [],
+            mestres: [],
+            triplas: []
+        };
+        
+        if (Array.isArray(allNumbers) && allNumbers.length > 0) {
+            padroes = identificarPadroes(allNumbers);
+        }
                 
                 // 4. Exibir resultados básicos
                 document.getElementById('clientName').textContent = fullName;
@@ -1419,7 +1440,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 displayKarmicDebtsSection(karmicDebts);
                 displayMissionSection(missionNumber);
                 displayLifeCycles(lifeCycles);
-                 displayPatternsSection(padroes, allNumbers); // Passa allNumbers como parâmetro
+                displayPatternsSection(padroes, allNumbers); // Passa allNumbers como parâmetro
                 displayPersonalYearSection(personalYear);
                 displayKarmicLessonsSection(karmicLessons);
 
@@ -1452,11 +1473,31 @@ if (data.karmicLessons.numbers.length > 0) {
         // Funções de exibição para cada seção
 
         function displayPatternsSection(padroes, allNumbers) {
+            // Verificações iniciais
+    if (!padroes || !allNumbers) {
+        console.error("Parâmetros inválidos para displayPatternsSection");
+        return;
+    }
+
     const container = document.getElementById('numericalPatternsSection');
+    if (!container) {
+        console.error("Elemento 'numericalPatternsSection' não encontrado");
+        return;
+    }
     const patternsElement = document.getElementById('numericalPatterns');
     const descElement = document.getElementById('patternsDescription');
     const calcElement = document.getElementById('patternsCalculation');
 
+    / Garanta que allNumbers existe antes de usá-lo
+    const calculationText = allNumbers && allNumbers.length ? 
+        `Números analisados: ${allNumbers.join(', ')}` : 
+        'Nenhum número válido para análise';
+    
+    document.getElementById('patternsCalculation').textContent = calculationText;
+    
+    container.style.display = 'block';
+}
+            
     // Montar texto com padrões encontrados
     let patternsText = [];
     if (Object.keys(padroes.repeticoes).length > 0) {
