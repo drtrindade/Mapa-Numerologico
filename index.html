@@ -1099,47 +1099,46 @@
         
         // Função para calcular dívidas cármicas
         function calculateKarmicDebts(name, date) {
-            const debts = [];
-            const numbersToCheck = [13, 14, 16, 19];
-            
-            // Verificar no nome
-            const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
-            let currentGroup = '';
-            
-            for (const letter of letters) {
-                currentGroup += letter.toUpperCase();
-                const value = getLetterValue(currentGroup);
-                
-                if (numbersToCheck.includes(value)) {
-                    debts.push(value);
-                }
-                
-                if (value >= 10) {
-                    currentGroup = '';
-                }
-            }
-            
-            // Verificar na data
-            const dateNumbers = date.split('/').join('').split('').map(Number);
-            currentGroup = '';
-            
-            for (const digit of dateNumbers) {
-                currentGroup += digit;
-                const value = parseInt(currentGroup);
-                
-                if (numbersToCheck.includes(value)) {
-                    debts.push(value);
-                }
-                
-                if (value >= 10) {
-                    currentGroup = '';
-                }
-            }
-            
-            // Remover duplicatas e ordenar
-            return [...new Set(debts)].sort((a, b) => a - b);
+    const debts = [];
+    const numbersToCheck = [13, 14, 16, 19];
+    
+    // Verificar no nome
+    const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
+    let currentGroup = '';
+    
+    for (const letter of letters) {
+        currentGroup += letter.toUpperCase();
+        const value = getLetterValue(currentGroup);
+        
+        if (numbersToCheck.includes(value)) {
+            debts.push(value);
         }
         
+        if (value >= 10) {
+            currentGroup = '';
+        }
+    }
+    
+    // Verificar na data
+    const dateNumbers = date.split('/').join('').split('').map(Number);
+    currentGroup = '';
+    
+    for (const digit of dateNumbers) {
+        currentGroup += digit;
+        const value = parseInt(currentGroup);
+        
+        if (numbersToCheck.includes(value)) {
+            debts.push(value);
+        }
+        
+        if (value >= 10) {
+            currentGroup = '';
+        }
+    }
+    
+    // Remover duplicatas e ordenar - SEMPRE retornar array
+    return [...new Set(debts)].sort((a, b) => a - b);
+}
         // Função para calcular os ciclos de vida
         function calculateLifeCycles(date) {
             const [day, month, year] = date.split('/').map(Number);
@@ -1156,18 +1155,24 @@
             };
         }
 
-        function identificarPadroes(numerosDoMapa) {
-    // Converter para números e filtrar válidos
-    const numeros = numerosDoMapa.map(n => parseInt(n)).filter(n => !isNaN(n));
-    
-    const padroes = {
-        repeticoes: {},
-        sequencias: [],
-        espelhos: [],
-        mestres: [],
-        triplas: []
-    };
+        unction identificarPadroes(numerosDoMapa) {
+    // Verificação adicional para garantir que temos um array válido
+    if (!Array.isArray(numerosDoMapa)) {
+        console.error("O parâmetro numerosDoMapa não é um array:", numerosDoMapa);
+        return {
+            repeticoes: {},
+            sequencias: [],
+            espelhos: [],
+            mestres: [],
+            triplas: []
+        };
+    }
 
+    // Converter para números e filtrar válidos
+    const numeros = numerosDoMapa
+        .map(n => parseInt(n))
+        .filter(n => !isNaN(n) && n > 0); // Filtra NaN e números negativos
+            
     // Contar ocorrências de cada número
     const contagem = {};
     numeros.forEach(num => {
@@ -1390,7 +1395,7 @@ if (data.karmicLessons.numbers.length > 0) {
             challengeNumbers.second,
             challengeNumbers.third,
             challengeNumbers.fourth,
-            ...karmicDebts,
+            ...(karmicDebts || []), // Garante que é iterável
             missionNumber,
             lifeCycles.first,
             lifeCycles.second,
@@ -1414,7 +1419,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 displayKarmicDebtsSection(karmicDebts);
                 displayMissionSection(missionNumber);
                 displayLifeCycles(lifeCycles);
-                 displayPatternsSection(padroes); // NOVA SEÇÃO
+                 displayPatternsSection(padroes, allNumbers); // Passa allNumbers como parâmetro
                 displayPersonalYearSection(personalYear);
                 displayKarmicLessonsSection(karmicLessons);
 
@@ -1446,7 +1451,7 @@ if (data.karmicLessons.numbers.length > 0) {
 
         // Funções de exibição para cada seção
 
-        function displayPatternsSection(padroes) {
+        function displayPatternsSection(padroes, allNumbers) {
     const container = document.getElementById('numericalPatternsSection');
     const patternsElement = document.getElementById('numericalPatterns');
     const descElement = document.getElementById('patternsDescription');
