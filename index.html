@@ -1371,7 +1371,7 @@ if (data.karmicLessons.numbers.length > 0) {
         // Função para gerar o mapa numerológico
         function generateMap() {
             try {
-                // Obter valores dos inputs
+        // Obter valores dos inputs
         const fullName = document.getElementById('fullName').value.trim().toUpperCase();
         const birthDate = document.getElementById('birthDate').value;
         
@@ -1383,13 +1383,13 @@ if (data.karmicLessons.numbers.length > 0) {
         // Formatar data
         const formattedDate = formatDate(birthDate);
         
-        // Cálculos principais (declare todas as variáveis primeiro)
+        // Cálculos principais
         const destinyNumber = calculateDestinyNumber(formattedDate);
         const soulNumber = calculateSoulNumber(fullName);
         const personalityNumber = calculatePersonalityNumber(fullName);
         const expressionNumber = calculateExpressionNumber(fullName);
         const challengeNumbers = calculateChallengeNumbers(formattedDate);
-        const karmicDebts = calculateKarmicDebts(fullName, formattedDate) || []; // Garante que é array
+        const karmicDebts = calculateKarmicDebts(fullName, formattedDate) || [];
         const missionNumber = calculateMissionNumber(destinyNumber, expressionNumber);
         const lifeCycles = calculateLifeCycles(formattedDate);
         const personalYear = calculatePersonalYear(formattedDate);
@@ -1405,7 +1405,7 @@ if (data.karmicLessons.numbers.length > 0) {
             challengeNumbers.second,
             challengeNumbers.third,
             challengeNumbers.fourth,
-            ...karmicDebts, // Agora seguro pois karmicDebts sempre será array
+            ...karmicDebts,
             missionNumber,
             lifeCycles.first,
             lifeCycles.second,
@@ -1420,7 +1420,7 @@ if (data.karmicLessons.numbers.length > 0) {
         document.getElementById('clientName').textContent = fullName;
         document.getElementById('birthDateDisplay').textContent = formattedDate;
 
-        // Exibir cada seção (passando allNumbers como parâmetro adicional)
+        // Exibir cada seção
         displayDestinySection(destinyNumber);
         displaySoulSection(soulNumber);
         displayPersonalitySection(personalityNumber);
@@ -1428,7 +1428,7 @@ if (data.karmicLessons.numbers.length > 0) {
         displayChallengeSection(challengeNumbers);
         displayKarmicDebtsSection(karmicDebts);
         displayMissionSection(missionNumber);
-        displayPatternsSection(padroes, allNumbers); // Passando ambos parâmetros
+        displayPatternsSection(padroes, allNumbers);
         displayLifeCycles(lifeCycles);
         displayPersonalYearSection(personalYear);
         displayKarmicLessonsSection(karmicLessons);
@@ -1456,7 +1456,8 @@ if (data.karmicLessons.numbers.length > 0) {
         console.error("Erro ao gerar mapa:", error);
         alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
     }
-} // <-- Este é o final correto da função
+}
+ // <-- Este é o final correto da função
 
         // Funções de exibição para cada seção
 
