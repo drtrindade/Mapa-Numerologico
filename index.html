@@ -448,7 +448,14 @@
                     <span class="variation-count" id="lifeCyclesVariationCount"></span>
                 </div>
             </div>
-            
+
+        <div class="result-section" id="numericalPatternsSection">
+    <h3>Padrões Numerológicos</h3>
+    <p class="section-subtitle">Padrões especiais que revelam energias repetidas, sequências e relações entre os números do seu mapa</p>
+    <div class="calculation-example" id="patternsCalculation"></div>
+    <div class="result-value" id="numericalPatterns"></div>
+    <div class="result-description" id="patternsDescription"></div>
+</div>
             <div class="result-section" id="personalYearSection">
                 <h3>Ano Pessoal Atual</h3>
                 <p class="section-subtitle">Indica a energia predominante para o ano corrente, calculado a partir da soma do dia e mês de nascimento com o ano atual.</p>
@@ -481,6 +488,8 @@
         
         // Dados de interpretação numerológica
         const interpretations = {
+            
+                       
             mission: {
     1: [
         "Número 1 de Missão: Sua missão de vida é pioneirismo e liderança. Você está aqui para iniciar projetos inovadores, mostrar independência e inspirar outros a confiarem em sua própria força. Seu caminho envolve desenvolver coragem para seguir sua visão única, mesmo contra a corrente. A vida testará sua capacidade de tomar iniciativas e sustentar seus projetos com autoconfiança. Você aprenderá que verdadeira liderança vem do exemplo, não da imposição. Seu maior desafio será equilibrar individualidade com cooperação, mantendo sua autenticidade enquanto trabalha com outros. Quando você vive sua missão, torna-se um farol de originalidade e força de vontade, mostrando que é possível criar novos caminhos onde antes parecia não haver possibilidade.",
@@ -902,8 +911,72 @@
                     "Ano 9 - A Conclusão: Este ano marca um período de transição e liberação emocional. Você sentirá um impulso interior para limpar o passado e abrir espaço para novas experiências. O universo estará trazendo situações que testarão sua capacidade de perdoar e seguir em frente. Cuidado com apegos excessivos - este é um tempo para deixar ir com graça o que já cumpriu seu propósito. Aproveite para expressar gratidão pelas lições aprendidas, encerrar capítulos completos e dedicar-se a causas que beneficiem o coletivo.",
                     "Energia do Ano 9: Este é um período de sabedoria e transição, onde você é encorajado a compartilhar o que aprendeu ao longo do ciclo que está terminando. Você pode sentir uma forte necessidade de fazer diferença no mundo e contribuir para algo maior que você mesmo. A energia favorece tudo relacionado a arte, cura e serviço humanitário. Este não é um ano para começar projetos totalmente novos, mas sim para completar o inacabado e preparar-se interiormente para o próximo ciclo. Aproveite para refletir sobre seu crescimento nos últimos nove anos e definir intenções para o futuro. Lembre-se: cada fim contém as sementes de um novo começo."
                 ]
+            },
+
+            const interpretations = {
+    padroes: {
+        repeticoes: {
+            textoBase: "Números que se repetem em seu mapa indicam energias que exigem atenção especial. Quando um número aparece múltiplas vezes, ele representa:",
+            detalhes: {
+                1: "A repetição do número 1 em seu mapa é como um farol piscando, chamando sua atenção para questões de independência, autoconfiança e liderança. Você está sendo desafiado a tomar iniciativa em sua vida, a confiar em seu próprio julgamento e a desenvolver coragem para seguir seu caminho único. No entanto, este padrão também alerta para possíveis excessos - o ego inflado, a teimosia ou a dificuldade em cooperar. A lição central é encontrar o equilíbrio entre a autoafirmação saudável e o respeito pela individualidade alheia. Quando bem integrado, este padrão confere capacidade pioneira e força de vontade inabalável.",
+                2: "Várias aparições do número 2 criam uma ressonância de sensibilidade, diplomacia e busca por harmonia em seu mapa. Este padrão indica que suas lições mais importantes giram em torno de relacionamentos, cooperação e capacidade de adaptação. Você possui dons naturais para mediação e trabalho em equipe, mas pode tender à indecisão ou excessiva dependência da aprovação alheia. O desafio é desenvolver assertividade sem perder a delicadeza, aprender a dizer 'não' quando necessário e encontrar segurança interior independentemente das circunstâncias externas. Quando equilibrado, este padrão traz talento para criar pontes entre pessoas e ideias.",
+                3: "A repetição do número 3 em seu mapa forma um triângulo de energia criativa, comunicação e expressão pessoal. Este padrão sugere que você possui múltiplos talentos artísticos e capacidade de inspirar os outros através de palavras, arte ou performance. No entanto, alerta para tendências à dispersão, superficialidade ou dificuldade em lidar com críticas. A lição é desenvolver disciplina para concretizar seus dons criativos, aprendendo a canalizar sua energia abundante de forma produtiva. Quando bem direcionado, este padrão confere charme, otimismo contagiente e capacidade de ver beleza em todas as experiências.",
+                4: "Múltiplas ocorrências do número 4 criam uma estrutura sólida em seu mapa, indicando lições sobre trabalho, paciência e construção de bases estáveis. Este padrão mostra que seu caminho envolve esforço persistente, organização e desenvolvimento de competências práticas. Você pode enfrentar testes de paciência ou situações que exigem método e perseverança. Cuidado com a rigidez excessiva, o pessimismo ou a resistência a mudanças necessárias. A lição é encontrar segurança na competência e não no controle, aprendendo a construir degrau por degrau. Quando integrado, este padrão traz capacidade de materializar sonhos através de trabalho consistente e ética inabalável.",
+                5: "A repetição do número 5 em seu mapa forma uma espiral de liberdade, mudança e versatilidade. Este padrão indica que sua vida será marcada por experiências variadas, viagens (físicas ou mentais) e constante busca por novidades. Você aprende melhor através da experiência direta e da quebra de rotinas. No entanto, alerta para tendências à instabilidade, impulsividade ou dificuldade em manter compromissos de longo prazo. A lição é encontrar liberdade interior independentemente das circunstâncias externas, desenvolvendo adaptabilidade sem perder seu centro. Quando equilibrado, este padrão confere carisma, mente aberta e capacidade de se reinventar continuamente.",
+                6: "Várias aparições do número 6 criam um campo de energia voltado para serviço, responsabilidade e cuidado em seu mapa. Este padrão destaca lições sobre relacionamentos familiares, compromissos éticos e desenvolvimento de dons de cura. Você possui forte senso de justiça e desejo de harmonia, mas pode tender ao perfeccionismo ou controle excessivo sobre os outros. O desafio é aprender a ajudar sem sufocar, a amar sem possuir e a encontrar equilíbrio entre dar e receber. Quando bem integrado, este padrão traz capacidade de criar ambientes acolhedores e resolver conflitos com sabedoria e compaixão.",
+                7: "A repetição do número 7 em seu mapa forma um portal para introspecção, sabedoria e busca por significado. Este padrão indica uma jornada de autoconhecimento profundo, desenvolvimento intuitivo e investigação das verdades essenciais da existência. Você é naturalmente analítico e questionador, mas pode tender ao ceticismo excessivo ou isolamento emocional. A lição é conectar sabedoria intelectual com experiência direta, aprendendo a confiar na intuição sem perder o discernimento. Quando equilibrado, este padrão confere capacidade de síntese extraordinária, percepção aguçada e talento para ensinar conceitos complexos com clareza.",
+                8: "Múltiplas ocorrências do número 8 criam um fluxo de energia voltado para manifestação material, poder pessoal e gestão de recursos em seu mapa. Este padrão mostra que suas lições envolvem lidar com questões de autoridade, finanças e realização no mundo concreto. Você possui talento para organização em larga escala e visão estratégica, mas pode tender à ambição desmedida ou valorização excessiva de status. A lição é aprender que verdadeiro poder vem da integridade, e que riqueza material deve ser canal para servir a propósitos maiores. Quando integrado, este padrão traz capacidade de liderança excepcional e habilidade para transformar ideias em realidades tangíveis.",
+                9: "A repetição do número 9 em seu mapa forma um círculo de compaixão, idealismo e serviço humanitário. Este padrão indica forte vocação para ajudar os outros, seja através de artes, cura ou ativismo. Você possui visão ampla e capacidade de síntese, mas pode tender ao sacrifício excessivo ou expectativas irreais sobre si e os outros. A lição é aprender a doar sem esgotar-se, a perdoar sem permitir abusos e a transformar ideais em ações práticas. Quando equilibrado, este padrão confere sabedoria filosófica, tolerância e capacidade de inspirar transformações positivas em escala coletiva.",
+                11: "Várias aparições do número 11 em seu mapa criam um portal de potencial visionário e sensibilidade psíquica elevada. Este padrão mestre indica que você está aqui para transmitir inspiração e insights espirituais, servindo como ponte entre dimensões. Você possui intuição aguçada e ideias revolucionárias, mas pode tender ao nervosismo ou dificuldade em ancorar suas visões na realidade prática. O desafio é manter os pés no chão enquanto explora alturas visionárias, aprendendo a canalizar inspiração em formas acessíveis. Quando integrado, este padrão confere capacidade de antever tendências e iluminar caminhos com percepções transcendentais.",
+                22: "A repetição do número 22 em seu mapa forma uma base de potencial magistral para manifestação concreta de grandes visões. Este padrão mestre indica capacidade incomum de transformar ideias abstratas em realidades tangíveis que beneficiam muitas pessoas. Você é um construtor por natureza, com talento para projetos de larga escala, mas pode enfrentar testes de paciência e perseverança. A lição é aprender que verdadeiras obras-primas exigem tempo, planejamento meticuloso e colaboração estratégica. Quando realizado, este padrão traz capacidade de realizar o aparentemente impossível, deixando legados duradouros que transcendem o indivíduo.",
+                33: "Múltiplas ocorrências do número 33 em seu mapa criam um triângulo de energia cristica, indicando potencial excepcional para cura e serviço humanitário em grande escala. Este padrão mestre mostra que você está aqui para elevar e inspirar a humanidade através do amor incondicional e sabedoria compassiva. Você possui dons naturais de cura e ensino, mas pode enfrentar desafios para equilibrar necessidades pessoais com chamado vocacional. A lição é aprender que verdadeira maestria espiritual inclui autocompaixão e limites saudáveis. Quando realizado, este padrão confere capacidade de tocar vidas profundamente e catalisar transformações coletivas através do exemplo vivo."
             }
-        };
+        },
+        sequencias: {
+            textoBase: "Sequências numéricas em seu mapa revelam fluxos energéticos importantes.",
+            detalhes: {
+                "1-2-3": "A sequência 1-2-3 é como uma escada ascendente de manifestação criativa. O número 1 traz a centelha inicial da ideia e vontade pioneira. O 2 adiciona cooperação e adaptabilidade, permitindo que a visão ganhe forma através de parcerias. O 3 completa com expressão criativa e comunicação, trazendo a realização ao mundo concreto. Esta sequência indica talento para transformar inspirações em realidades palpáveis, mas alerta para a necessidade de completar ciclos - muitas ideias iniciadas (1), colaborações estabelecidas (2), mas poucas concretizadas plenamente (3). A lição é desenvolver persistência para levar projetos até sua plena expressão.",
+                "3-2-1": "A sequência inversa 3-2-1 mostra um caminho de exteriorização para interiorização. Você primeiro se expressa criativamente (3), depois encontra significado através de relacionamentos (2), e finalmente alcança autossuficiência e clareza de propósito (1). Este padrão sugere que sua aprendizagem acontece melhor através da experiência concreta que leva à reflexão. Pode indicar tendência a começar muitos projetos com entusiasmo (3), depois se perder em dúvidas ou dependências (2), até encontrar foco e direção claros (1). A lição é confiar no processo enquanto cultiva disciplina para estruturar seu talento criativo.",
+                "4-5-6": "A sequência 4-5-6 forma uma ponte entre estabilidade, liberdade e serviço. O 4 estabelece bases sólidas e estrutura prática. O 5 introduz movimento, mudança e expansão de horizontes. O 6 transforma essas experiências em sabedoria aplicada ao servir outros. Este padrão mostra sua capacidade de transformar trabalho árduo (4) em recursos que permitem liberdade (5), que por sua vez são canalizados para ajudar os outros (6). O desafio é evitar ciclos de construir (4), destruir (5) e recomeçar constantemente, aprendendo em vez disso a evoluir sem perder conquistas essenciais.",
+                "7-8-9": "A sequência 7-8-9 traça um caminho do místico ao universal. O 7 traz introspecção e busca por significado. O 8 transforma essa sabedoria em realização material e poder pessoal. O 9 expande para serviço humanitário e compaixão. Este padrão indica que suas maiores realizações vêm quando permite que a sabedoria interior (7) se manifeste concretamente (8) para benefício coletivo (9). O risco é ficar preso na fase de análise (7) ou no sucesso pessoal (8), sem alcançar a dimensão de serviço (9). A lição é ver sua jornada como parte de um todo maior.",
+                "9-8-7": "A sequência inversa 9-8-7 mostra um caminho de doação para autoconhecimento. Você primeiro se envolve em causas maiores (9), depois desenvolve recursos pessoais (8), e finalmente volta-se para compreensão interior profunda (7). Este padrão sugere que seu aprendizado vem através do serviço aos outros, que revela seus próprios dons e recursos, levando por fim à sabedoria existencial. Pode indicar tendência a se sacrificar excessivamente por causas (9), depois buscar compensação material (8), até encontrar equilíbrio através da autoanálise (7). A lição é encontrar formas sustentáveis de servir sem esgotamento."
+            }
+        },
+        espelhos: {
+            textoBase: "Números espelhados em seu mapa (como 12/21 ou 13/31) revelam lições cármicas especiais e conexões entre energias.",
+            detalhes: {
+                "12/21": "O espelho 12/21 representa a dança cósmica entre inspiração individual e cooperação harmônica. O 12 (1+2=3) fala sobre liderança criativa, enquanto o 21 (2+1=3) mostra diplomacia assertiva. Juntos, ensinam que verdadeira liderança surge da capacidade de ouvir e integrar múltiplas perspectivas. Você está aprendendo a guiar sem dominar, a cooperar sem se anular, encontrando o ponto de equilíbrio onde sua individualidade (1) se expressa através de relacionamentos significativos (2). Este padrão muitas vezes aparece em pessoas que em vidas passadas foram autoritárias (ênfase no 1) ou excessivamente submissas (ênfase no 2), agora buscando o caminho do meio.",
+                "13/31": "O espelho 13/31 forma um portal de transformação criativa. O 13 (1+3=4) representa a capacidade de reorganizar estruturas de maneira inovadora, enquanto o 31 (3+1=4) mostra expressão criativa com propósito prático. Juntos, indicam talento para reformular sistemas obsoletos através de abordagens originais. Você está aprendendo a canalizar sua energia pioneira (1) através de formas criativas (3) que trazem ordem e estabilidade (4). Este padrão muitas vezes vem após vidas de rebeldia destrutiva (13) ou criatividade sem foco (31), agora direcionada para reconstrução positiva.",
+                "14/41": "O espelho 14/41 revela a interação entre liberdade e estrutura. O 14 (1+4=5) fala sobre romper limites para experimentar liberdade, enquanto o 41 (4+1=5) mostra como criar estruturas que permitam expressão individual. Você está aprendendo que verdadeira liberdade surge dentro de parâmetros conscientemente escolhidos, não da ausência de limites. Este padrão indica lições sobre usar disciplina (4) para alcançar autêntica autoexpressão (1), resultando em versatilidade equilibrada (5). Pode marcar pessoas que em vidas passadas foram rígidas demais (41) ou caóticas demais (14), agora buscando o equilíbrio dinâmico.",
+                "23/32": "O espelho 23/32 destaca a comunicação criativa como ponte entre mundos. O 23 (2+3=5) representa diplomacia aliada à expressão artística, enquanto o 32 (3+2=5) mostra criatividade aplicada à solução de conflitos. Juntos, indicam talento para traduzir ideias complexas em formas acessíveis e harmoniosas. Você está aprendendo a usar seus dons de mediação (2) e expressão (3) para inspirar mudanças positivas (5). Este padrão muitas vezes aparece em almas que foram manipuladoras (23) ou dispersas (32) em expressões passadas, agora refinando esses dons para serviço construtivo.",
+                "24/42": "O espelho 24/42 forma uma base de construção harmoniosa. O 24 (2+4=6) representa cooperação que cria estabilidade, enquanto o 42 (4+2=6) mostra estrutura que facilita relacionamentos saudáveis. Juntos, ensinam que sistemas duradouros são construídos através do equilíbrio entre flexibilidade (2) e solidez (4). Você está aqui para aprender a ser um arquiteto de relacionamentos e estruturas que nutrem o crescimento mútuo (6). Este padrão pode indicar lições cármicas de vidas onde houve desequilíbrio - muito foco em relacionamentos sem base (24) ou em estruturas rígidas sem calor humano (42)."
+            }
+        },
+        mestres: {
+            textoBase: "Números mestres (11, 22, 33) em seu mapa indicam potencial espiritual elevado e desafios correspondentes.",
+            detalhes: {
+                "11": "O número mestre 11 é um portal de percepção elevada e potencial visionário. Como o primeiro número mestre, ele representa a iluminação espiritual que transcende os limites do mundo material, enquanto mantém um pé na realidade concreta. Você está aqui para ser um canal de insights transcendentais, traduzindo verdades espirituais em formas que outros possam compreender. No entanto, este caminho traz desafios intensos - tendência ao nervosismo, sensibilidade extrema e dificuldade em ancorar suas visões na prática. A lição é aprender a equilibrar intuição com discernimento, inspiração com ação, mantendo os pés no chão enquanto explora alturas visionárias. Quando realizado, o 11 se torna uma ponte entre dimensões, iluminando caminhos com sua percepção aguçada.",
+                "22": "O número mestre 22 é o arquiteto do mundo material, capaz de transformar visões grandiosas em realidades tangíveis. Como o mais potente dos números na realização concreta, ele combina a intuição do 11 com o poder de manifestação do 4 (2+2=4). Você está aqui para construir estruturas duradouras que beneficiem a humanidade - sejam sistemas, instituições ou obras físicas. O desafio é a paciência - verdadeiras obras-primas exigem tempo, planejamento meticuloso e colaboração estratégica. Pode haver tendência à frustração quando a realidade não acompanha seus padrões elevados. A lição é aprender que a maestria vem através da persistência, não da perfeição instantânea. Quando realizado, o 22 deixa legados que transcendem o indivíduo, transformando ideais em formas palpáveis.",
+                "33": "O número mestre 33 é a expressão mais elevada de amor incondicional e serviço compassivo. Como o 'Mestre Curador', ele combina a inspiração do 11 com a expressão criativa do 3 (3+3=6 no nível de serviço). Você está aqui para elevar a consciência coletiva através do exemplo vivo de compaixão, sabedoria e perdão. O desafio é evitar o sacrifício excessivo ou a tendência a carregar pesos que não são seus. A lição é aprender que verdadeira cura começa pelo equilíbrio interior - você não pode dar o que não possui. Quando realizado, o 33 toca vidas profundamente, catalisando transformações através da simples presença amorosa e aceitação incondicional."
+            }
+        },
+        triplas: {
+            textoBase: "Números que aparecem três ou mais vezes em seu mapa indicam energias muito ativas em sua vida.",
+            detalhes: {
+                1: "A tripla presença do número 1 em seu mapa cria um campo de força voltado para a autoafirmação e liderança. Este padrão intenso indica que sua alma escolheu uma jornada de independência radical e desenvolvimento de autoconfiança inabalável. Você está sendo desafiado a confiar em sua visão única, mesmo contra a corrente, e a tomar iniciativa em situações onde outros hesitam. No entanto, este padrão também traz testes importantes - tendência ao autoritarismo, dificuldade em pedir ajuda ou reconhecer contribuições alheias. A lição cármica é aprender que verdadeira força inclui vulnerabilidade, e que liderança autêntica serve em vez de dominar. Quando equilibrado, este padrão confere capacidade pioneira excepcional e coragem para abrir novos caminhos.",
+                2: "A triplicação do número 2 em seu mapa forma um campo de energia relacional altamente sensível e receptivo. Este padrão intenso destaca que suas lições mais importantes giram em torno de relacionamentos, cooperação e desenvolvimento de diplomacia emocional. Você possui dons naturais para mediação, trabalho em equipe e criação de harmonia em ambientes conturbados. No entanto, pode enfrentar desafios com limites saudáveis, indecisão crônica ou tendência a absorver energias alheias como se fossem suas. A lição cármica é aprender a valorizar sua própria voz tanto quanto a dos outros, encontrando segurança interior independentemente de aprovação externa. Quando integrado, este padrão traz capacidade extraordinária de curar divisões e criar consenso entre perspectivas opostas.",
+                3: "A tripla ocorrência do número 3 em seu mapa cria um vórtice de energia criativa e expressiva. Este padrão intenso indica que sua alma escolheu uma encarnação voltada para alegria, comunicação inspirada e manifestação artística em múltiplas formas. Você é abençoado com talentos criativos variados e capacidade de inspirar os outros através de palavras, arte ou performance. No entanto, pode enfrentar desafios com dispersão de energia, superficialidade emocional ou dificuldade em lidar com críticas construtivas. A lição cármica é aprender a canalizar sua abundância criativa com foco e disciplina, entendendo que verdadeira arte muitas vezes exige trabalho árduo além do talento inato. Quando realizado, este padrão confere capacidade de trazer luz e beleza ao mundo através de expressão autêntica.",
+                4: "A triplicação do número 4 em seu mapa forma uma estrutura de energia extremamente sólida e prática. Este padrão intenso mostra que sua alma escolheu uma jornada de construção lenta e estável, onde realizações duradouras são conquistadas através de paciência, método e trabalho consistente. Você possui dons naturais para organização, gestão de recursos e concretização de ideias abstratas. No entanto, pode enfrentar desafios com rigidez mental, resistência a mudanças necessárias ou tendência ao pessimismo quando as coisas não seguem seu plano. A lição cármica é aprender que verdadeira segurança vem da adaptabilidade interior, não do controle externo. Quando equilibrado, este padrão traz capacidade incomum de materializar visões em estruturas tangíveis que resistem ao teste do tempo.",
+                5: "A tripla presença do número 5 em seu mapa cria um campo de energia dinâmico e versátil. Este padrão intenso indica que sua alma escolheu uma encarnação de liberdade, experiência direta e constante busca por expansão de horizontes. Você aprende melhor através da variedade de vivências, viagens (físicas ou mentais) e desafios que testam sua adaptabilidade. No entanto, pode enfrentar dificuldades com compromissos de longo prazo, impulsividade ou tendência a fugir quando as situações exigem estabilidade. A lição cármica é descobrir que verdadeira liberdade é interna, e que às vezes é preciso ficar para crescer. Quando integrado, este padrão confere talento extraordinário para navegar mudanças e ensinar outros a abraçar a transformação.",
+                6: "A triplicação do número 6 em seu mapa forma um campo de energia voltado para serviço, cura e responsabilidade. Este padrão intenso mostra que sua alma escolheu uma jornada focada em relacionamentos significativos, harmonia familiar e desenvolvimento de dons de cura em múltiplos níveis. Você possui forte senso de justiça, beleza e desejo de criar ambientes acolhedores. No entanto, pode enfrentar desafios com perfeccionismo, controle excessivo sobre entes queridos ou tendência a carregar pesos emocionais que não são seus. A lição cármica é aprender a ajudar sem sufocar, a amar sem possuir e a estabelecer limites saudáveis. Quando equilibrado, este padrão traz capacidade de curar através da simples presença e de transformar espaços físicos e emocionais em refúgios de paz.",
+                7: "A tripla ocorrência do número 7 em seu mapa cria um campo de energia analítica e introspectiva. Este padrão intenso indica que sua alma escolheu uma jornada de busca por sabedoria, autoconhecimento profundo e compreensão dos mistérios da existência. Você possui mente investigativa, intuição aguçada e capacidade de perceber padrões invisíveis para a maioria. No entanto, pode enfrentar desafios com ceticismo excessivo, isolamento emocional ou tendência a sobreanalisar em vez de agir. A lição cármica é aprender a confiar na sabedoria do coração tanto quanto na da mente, encontrando equilíbrio entre reflexão e experiência direta. Quando integrado, este padrão confere capacidade de sintetizar conhecimentos complexos e iluminar caminhos através do discernimento apurado.",
+                8: "A tripla presença do número 8 em seu mapa forma um campo de energia voltado para manifestação material e poder pessoal. Este padrão intenso mostra que sua alma escolheu uma encarnação para lidar com questões de autoridade, finanças e gestão de recursos em larga escala. Você possui talentos naturais para liderança, organização de sistemas e concretização de objetivos ambiciosos. No entanto, pode enfrentar desafios com ambição desmedida, valorização excessiva de status ou tendência a equacionar sucesso com acumulação material. A lição cármica é aprender que verdadeiro poder vem da integridade, e que riqueza é melhor usada como ferramenta para servir propósitos maiores. Quando equilibrado, este padrão traz capacidade incomum de criar prosperidade compartilhada e estruturas organizacionais que beneficiam a todos.",
+                9: "A triplicação do número 9 em seu mapa cria um campo de energia compassiva e universalista. Este padrão intenso indica que sua alma escolheu uma jornada de serviço humanitário, perdão incondicional e desenvolvimento de amor que transcende barreiras pessoais. Você possui visão ampla, tolerância para diferenças e capacidade de ver o divino em todas as expressões de vida. No entanto, pode enfrentar desafios com tendência ao martírio, expectativas irreais sobre si mesmo e os outros, ou dificuldade em lidar com imperfeições do mundo material. A lição cármica é aprender a servir sem esgotar-se, a idealizar sem dogmatizar, encontrando formas práticas de manifestar sua visão elevada. Quando integrado, este padrão confere capacidade de inspirar transformações positivas em escala coletiva através do exemplo vivo de compaixão."
+            }
+        }
+    }
+};
+      
         
        // Função para calcular o número de destino
         function calculateDestinyNumber(dateStr) {
@@ -1083,6 +1156,88 @@
                 ]
             };
         }
+
+        function identificarPadroes(numerosDoMapa) {
+    const padroes = {
+        repeticoes: {},
+        sequencias: [],
+        espelhos: [],
+        mestres: [],
+        triplas: [],
+        quaternas: []
+    };
+
+    // Contar repetições
+    const contagem = {};
+    numerosDoMapa.forEach(num => {
+        contagem[num] = (contagem[num] || 0) + 1;
+    });
+    
+    // Filtrar apenas números que se repetem (2+ vezes)
+    for (const num in contagem) {
+        if (contagem[num] >= 2) {
+            padroes.repeticoes[num] = contagem[num];
+        }
+    }
+
+    // Identificar números mestres (11, 22, 33) mesmo que não se repitam
+    padroes.mestres = [...new Set(numerosDoMapa.filter(num => [11, 22, 33].includes(num)))];
+
+    // Buscar sequências (ex: 1-2-3 ou 9-8-7)
+    const numerosUnicos = [...new Set(numerosDoMapa)].sort((a, b) => a - b);
+    
+    // Sequências crescentes
+    for (let i = 0; i < numerosUnicos.length - 2; i++) {
+        if (numerosUnicos[i] + 1 === numerosUnicos[i+1] && 
+            numerosUnicos[i] + 2 === numerosUnicos[i+2]) {
+            const sequencia = `${numerosUnicos[i]}-${numerosUnicos[i+1]}-${numerosUnicos[i+2]}`;
+            if (!padroes.sequencias.includes(sequencia)) {
+                padroes.sequencias.push(sequencia);
+            }
+        }
+    }
+    
+    // Sequências decrescentes
+    for (let i = 0; i < numerosUnicos.length - 2; i++) {
+        if (numerosUnicos[i] - 1 === numerosUnicos[i+1] && 
+            numerosUnicos[i] - 2 === numerosUnicos[i+2]) {
+            const sequencia = `${numerosUnicos[i]}-${numerosUnicos[i+1]}-${numerosUnicos[i+2]}`;
+            if (!padroes.sequencias.includes(sequencia)) {
+                padroes.sequencias.push(sequencia);
+            }
+        }
+    }
+
+    // Identificar números espelhados (ex: 12 e 21)
+    const reversiveis = numerosDoMapa.filter(num => num > 9 && num < 100 && num !== parseInt(num.toString().split('').reverse().join('')));
+    const espelhosUnicos = new Set();
+    
+    reversiveis.forEach(num => {
+        const reverso = parseInt(num.toString().split('').reverse().join(''));
+        if (numerosDoMapa.includes(reverso)) {
+            const par = num < reverso ? `${num}/${reverso}` : `${reverso}/${num}`;
+            espelhosUnicos.add(par);
+        }
+    });
+    
+    padroes.espelhos = [...espelhosUnicos];
+
+    // Identificar triplas (números que aparecem 3+ vezes)
+    for (const num in contagem) {
+        if (contagem[num] >= 3) {
+            padroes.triplas.push(parseInt(num));
+        }
+    }
+
+    // Identificar quaternas (números que aparecem 4+ vezes)
+    for (const num in contagem) {
+        if (contagem[num] >= 4) {
+            padroes.quaternas.push(parseInt(num));
+        }
+    }
+
+    return padroes;
+}
         
         // Função para calcular o ano pessoal atual
         function calculatePersonalYear(date) {
@@ -1485,6 +1640,113 @@ function displayKarmicDebtsSection(karmicDebts) {
             const number = parseInt(document.getElementById(`${type}Number`).textContent);
             displayRandomInterpretation(type, number);
         }
+
+        // Na função generateMap(), adicione após os outros cálculos:
+const allNumbers = [
+    destinyNumber,
+    soulNumber,
+    personalityNumber,
+    expressionNumber,
+    challengeNumbers.first,
+    challengeNumbers.second,
+    challengeNumbers.third,
+    challengeNumbers.fourth,
+    ...karmicDebts,
+    missionNumber,
+    lifeCycles.first,
+    lifeCycles.second,
+    lifeCycles.third,
+    personalYear
+].filter(n => n !== undefined && n !== null && !isNaN(n));
+
+const padroes = identificarPadroes(allNumbers);
+displayPatternsSection(padroes);
+
+// Função para exibir a seção de padrões
+function displayPatternsSection(padroes) {
+    let patternsText = [];
+    let patternsDesc = [];
+    
+    // Repetições
+    if (Object.keys(padroes.repeticoes).length > 0) {
+        const reps = Object.entries(padroes.repeticoes)
+            .map(([num, count]) => `${num} (${count}x)`)
+            .join(', ');
+        patternsText.push(`Repetições: ${reps}`);
+        
+        let repDesc = interpretations.padroes.repeticoes.textoBase + "\n\n";
+        for (const num in padroes.repeticoes) {
+            if (interpretations.padroes.repeticoes.detalhes[num]) {
+                repDesc += `• ${num}: ${interpretations.padroes.repeticoes.detalhes[num]}\n\n`;
+            }
+        }
+        patternsDesc.push(repDesc);
+    }
+    
+    // Sequências
+    if (padroes.sequencias.length > 0) {
+        patternsText.push(`Sequências: ${padroes.sequencias.join(', ')}`);
+        
+        let seqDesc = interpretations.padroes.sequencias.textoBase + "\n\n";
+        for (const seq of padroes.sequencias) {
+            if (interpretations.padroes.sequencias.detalhes[seq]) {
+                seqDesc += `• ${seq}: ${interpretations.padroes.sequencias.detalhes[seq]}\n\n`;
+            }
+        }
+        patternsDesc.push(seqDesc);
+    }
+    
+    // Espelhos
+    if (padroes.espelhos.length > 0) {
+        patternsText.push(`Espelhos: ${padroes.espelhos.join(', ')}`);
+        
+        let espDesc = interpretations.padroes.espelhos.textoBase + "\n\n";
+        for (const esp of padroes.espelhos) {
+            if (interpretations.padroes.espelhos.detalhes[esp]) {
+                espDesc += `• ${esp}: ${interpretations.padroes.espelhos.detalhes[esp]}\n\n`;
+            }
+        }
+        patternsDesc.push(espDesc);
+    }
+    
+    // Números mestres
+    if (padroes.mestres.length > 0) {
+        patternsText.push(`Números mestres: ${padroes.mestres.join(', ')}`);
+        
+        let mestDesc = interpretations.padroes.mestres.textoBase + "\n\n";
+        for (const m of padroes.mestres) {
+            if (interpretations.padroes.mestres.detalhes[m]) {
+                mestDesc += `• ${m}: ${interpretations.padroes.mestres.detalhes[m]}\n\n`;
+            }
+        }
+        patternsDesc.push(mestDesc);
+    }
+    
+    // Triplas
+    if (padroes.triplas.length > 0) {
+        patternsText.push(`Números triplicados: ${padroes.triplas.join(', ')}`);
+        
+        let tripDesc = interpretations.padroes.triplas.textoBase + "\n\n";
+        for (const t of padroes.triplas) {
+            if (interpretations.padroes.triplas.detalhes[t]) {
+                tripDesc += `• ${t}: ${interpretations.padroes.triplas.detalhes[t]}\n\n`;
+            }
+        }
+        patternsDesc.push(tripDesc);
+    }
+    
+    // Exibir no HTML
+    document.getElementById('numericalPatterns').textContent = 
+        patternsText.length > 0 ? patternsText.join(' | ') : 'Nenhum padrão significativo encontrado';
+    
+    document.getElementById('patternsDescription').innerHTML = 
+        patternsDesc.length > 0 ? patternsDesc.join('<hr class="cycle-divider">') : 
+        'Seu mapa não apresenta padrões numéricos significativos.';
+    
+    // Exemplo de cálculo
+    document.getElementById('patternsCalculation').textContent = 
+        `Números analisados: ${allNumbers.join(', ')}`;
+}
         
         // Função para gerar o PDF
 async function generatePDF() {
@@ -1575,7 +1837,8 @@ async function generatePDF() {
             { title: 'Dívidas Cármicas', page: 9, subtitle: 'Lições kármicas especiais' },
             { title: 'Número de Missão', page: 10, subtitle: 'Propósito de vida elevado' },
             { title: 'Ciclos de Vida', page: 11, subtitle: 'Fases e energias predominantes' },
-            { title: 'Ano Pessoal Atual', page: 12, subtitle: 'Energia do ano corrente' }
+             { title: 'Padrões Numerológicos', page: 12, subtitle: 'Repetições, sequências e relações entre números' },
+            { title: 'Ano Pessoal Atual', page: 13, subtitle: 'Energia do ano corrente' }
         ];
         
         // Adiciona links clicáveis
@@ -1633,6 +1896,7 @@ async function generatePDF() {
             { title: 'Dívidas Cármicas', element: 'karmicDebts' },
             { title: 'Número de Missão', element: 'mission' },
             { title: 'Ciclos de Vida', element: 'lifeCycles' },
+            { title: 'Padrões Numerológicos', element: 'numericalPatterns' },
             { title: 'Ano Pessoal Atual', element: 'personalYear' }
         ];
 
@@ -1825,7 +2089,124 @@ async function generatePDF() {
                             yPosition += (descLines.length * 4) + 3; // Ajuste de altura
                         }
                     });
+                } 
+    // Dentro do loop contentSections.forEach(), adicione este caso especial antes do else geral:
+if (section.element === 'numericalPatterns') {
+    // CABEÇALHO (igual às outras seções)
+    doc.setFillColor(212, 175, 55);
+    doc.rect(0, 0, pageWidth, 20, 'F');
+    doc.setFont(titleFont, 'bold');
+    doc.setTextColor(darkColor);
+    doc.setFontSize(14);
+    doc.text(section.title.toUpperCase(), margin, 15);
+    doc.setFont(bodyFont, 'italic');
+    doc.setTextColor(100, 100, 100);
+    doc.setFontSize(9);
+    doc.text('Padrões especiais que revelam energias repetidas, sequências e relações entre os números', margin, 25);
+    doc.setDrawColor(darkColor);
+    doc.setLineWidth(0.5);
+    doc.line(margin, 30, pageWidth - margin, 30);
+    
+    let yPosition = 35;
+    
+    // CÁLCULOS
+    const calculation = document.getElementById('patternsCalculation')?.textContent;
+    if (calculation) {
+        const calcLines = doc.splitTextToSize(calculation, pageWidth - (margin * 2));
+        const boxHeight = 10 + (calcLines.length * 4);
+        
+        doc.setFillColor(245, 245, 245);
+        doc.setDrawColor(212, 175, 55);
+        doc.setLineWidth(0.3);
+        doc.roundedRect(margin, yPosition, pageWidth - (margin * 2), boxHeight, 2, 2, 'FD');
+        
+        doc.setFont(calcFont, 'normal');
+        doc.setTextColor(80, 80, 80);
+        doc.setFontSize(9);
+        calcLines.forEach((line, i) => {
+            doc.text(line, margin + 5, yPosition + 5 + (i * 4));
+        });
+        
+        yPosition += boxHeight + 10;
+    }
+    
+    // RESULTADOS DOS PADRÕES
+    const patternsText = document.getElementById('numericalPatterns')?.textContent;
+    if (patternsText && patternsText !== 'Nenhum padrão significativo encontrado') {
+        // Label "PADRÕES IDENTIFICADOS"
+        doc.setFont(bodyFont, 'bold');
+        doc.setTextColor(darkColor);
+        doc.setFontSize(12);
+        doc.text('PADRÕES IDENTIFICADOS:', margin, yPosition);
+        yPosition += 7;
+        
+        // Texto com os padrões
+        doc.setFont(bodyFont, 'normal');
+        doc.setTextColor(textColor);
+        doc.setFontSize(11);
+        const patternLines = doc.splitTextToSize(patternsText, pageWidth - (margin * 2));
+        doc.text(patternLines, margin, yPosition);
+        yPosition += (patternLines.length * 6) + 10;
+    }
+    
+    // DESCRIÇÕES DETALHADAS
+    const description = document.getElementById('patternsDescription')?.textContent;
+    if (description) {
+        // Divisor
+        doc.setDrawColor(212, 175, 55, 50);
+        doc.setLineWidth(0.3);
+        doc.line(margin, yPosition, pageWidth - margin, yPosition);
+        yPosition += 10;
+        
+        // Título "INTERPRETAÇÕES"
+        doc.setFont(titleFont, 'bold');
+        doc.setTextColor(primaryColor);
+        doc.setFontSize(14);
+        doc.text('INTERPRETAÇÕES DOS PADRÕES', pageWidth/2, yPosition, { align: 'center' });
+        yPosition += 10;
+        
+        // Texto da descrição
+        doc.setFont(bodyFont, 'normal');
+        doc.setTextColor(textColor);
+        doc.setFontSize(11);
+        
+        const paragraphs = description.split('\n\n');
+        paragraphs.forEach(para => {
+            if (para.trim()) {
+                // Verifica se é um título de padrão (começa com •)
+                if (para.startsWith('•')) {
+                    doc.setFont(bodyFont, 'bold');
+                    doc.setTextColor(primaryColor);
+                    doc.setFontSize(11);
+                    doc.text(para.split(':')[0] + ':', margin, yPosition);
+                    
+                    const descText = para.split(':').slice(1).join(':');
+                    const descLines = doc.splitTextToSize(descText, pageWidth - (margin * 2));
+                    
+                    doc.setFont(bodyFont, 'normal');
+                    doc.setTextColor(textColor);
+                    doc.text(descLines, margin + 10, yPosition + 5);
+                    yPosition += (descLines.length * 6) + 10;
                 } else {
+                    const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
+                    doc.text(descLines, margin, yPosition);
+                    yPosition += (descLines.length * 6) + 5;
+                }
+            }
+        });
+    }
+    
+    // Rodapé da página
+    doc.setFont(bodyFont, 'normal');
+    doc.setTextColor(150, 150, 150);
+    doc.setFontSize(8);
+    doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+    doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
+    
+    continue; // Pula para a próxima seção
+}            
+        
+    else {
                     const paragraphs = description.split('\n\n');
                     paragraphs.forEach(para => {
                         if (para.trim()) {
@@ -1871,29 +2252,31 @@ async function generatePDF() {
             `Que esta análise sirva como ferramenta para seu crescimento e realização pessoal.`
         ];
         
-        let yPosFinal = 70;
-        conclusionText.forEach(line => {
-            doc.text(line, pageWidth/2, yPosFinal, { align: 'center' });
-            yPosFinal += 7;
-        });
-        
-        // Assinatura
-        doc.setFont(titleFont, 'bold');
-        doc.setTextColor(primaryColor);
-        doc.setFontSize(14);
-        doc.text('Ouro Oracular', pageWidth/2, 150, { align: 'center' });
-        
-        doc.setFont(bodyFont, 'normal');
-        doc.setTextColor(darkColor);
-        doc.setFontSize(10);
-        doc.text('Especialistas em Numerologia e Autoconhecimento', pageWidth/2, 155, { align: 'center' });
+        // Na página de CONCLUSÃO, atualize o posicionamento do texto:
+let yPosFinal = 70;
+conclusionText.forEach(line => {
+    doc.text(line, pageWidth/2, yPosFinal, { align: 'center' });
+    yPosFinal += 7;
+});
+
+// Atualize a posição da assinatura também:
+doc.setFont(titleFont, 'bold');
+doc.setTextColor(primaryColor);
+doc.setFontSize(14);
+doc.text('Ouro Oracular', pageWidth/2, yPosFinal + 20, { align: 'center' });
+
+doc.setFont(bodyFont, 'normal');
+doc.setTextColor(darkColor);
+doc.setFontSize(10);
+doc.text('Especialistas em Numerologia e Autoconhecimento', pageWidth/2, yPosFinal + 25, { align: 'center' });
         
         // Rodapé final
         doc.setFont(bodyFont, 'normal');
         doc.setTextColor(150, 150, 150);
         doc.setFontSize(8);
-        doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
-        doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
+        // Em todas as seções, atualize a posição do rodapé para evitar sobreposição:
+doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
         
         // SALVAR O PDF
         const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
