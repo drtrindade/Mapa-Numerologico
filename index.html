@@ -1830,10 +1830,15 @@ const padroes = identificarPadroes(allNumbers);
 displayPatternsSection(padroes);
 
 // Função para exibir a seção de padrões
-function displayPatternsSection(padroes) {
-    let patternsText = [];
-    let patternsDesc = [];
+function displayPatternsSection(padroes, allNumbers) {
+    const container = document.getElementById('numericalPatternsSection');
+    const valueElement = document.getElementById('numericalPatterns');
+    const calcElement = document.getElementById('patternsCalculation');
+    const descElement = document.getElementById('patternsDescription');
     
+    let patternsText = [];
+    let descriptionHTML = '';
+
     // Repetições
     if (Object.keys(padroes.repeticoes).length > 0) {
         const reps = Object.entries(padroes.repeticoes)
@@ -1841,78 +1846,75 @@ function displayPatternsSection(padroes) {
             .join(', ');
         patternsText.push(`Repetições: ${reps}`);
         
-        let repDesc = interpretations.padroes.repeticoes.textoBase + "\n\n";
+        descriptionHTML += `<h4>Números Repetidos</h4><p>${interpretations.padroes.repeticoes.textoBase}</p>`;
         for (const num in padroes.repeticoes) {
             if (interpretations.padroes.repeticoes.detalhes[num]) {
-                repDesc += `• ${num}: ${interpretations.padroes.repeticoes.detalhes[num]}\n\n`;
+                descriptionHTML += `<p><strong>Número ${num}:</strong> ${interpretations.padroes.repeticoes.detalhes[num]}</p>`;
             }
         }
-        patternsDesc.push(repDesc);
     }
-    
+
     // Sequências
     if (padroes.sequencias.length > 0) {
         patternsText.push(`Sequências: ${padroes.sequencias.join(', ')}`);
         
-        let seqDesc = interpretations.padroes.sequencias.textoBase + "\n\n";
-        for (const seq of padroes.sequencias) {
+        descriptionHTML += `<h4>Sequências Numéricas</h4><p>${interpretations.padroes.sequencias.textoBase}</p>`;
+        padroes.sequencias.forEach(seq => {
             if (interpretations.padroes.sequencias.detalhes[seq]) {
-                seqDesc += `• ${seq}: ${interpretations.padroes.sequencias.detalhes[seq]}\n\n`;
+                descriptionHTML += `<p><strong>Sequência ${seq}:</strong> ${interpretations.padroes.sequencias.detalhes[seq]}</p>`;
             }
-        }
-        patternsDesc.push(seqDesc);
+        });
     }
-    
+
     // Espelhos
     if (padroes.espelhos.length > 0) {
         patternsText.push(`Espelhos: ${padroes.espelhos.join(', ')}`);
         
-        let espDesc = interpretations.padroes.espelhos.textoBase + "\n\n";
-        for (const esp of padroes.espelhos) {
+        descriptionHTML += `<h4>Números Espelhados</h4><p>${interpretations.padroes.espelhos.textoBase}</p>`;
+        padroes.espelhos.forEach(esp => {
             if (interpretations.padroes.espelhos.detalhes[esp]) {
-                espDesc += `• ${esp}: ${interpretations.padroes.espelhos.detalhes[esp]}\n\n`;
+                descriptionHTML += `<p><strong>Espelho ${esp}:</strong> ${interpretations.padroes.espelhos.detalhes[esp]}</p>`;
             }
-        }
-        patternsDesc.push(espDesc);
+        });
     }
-    
+
     // Números mestres
     if (padroes.mestres.length > 0) {
         patternsText.push(`Números mestres: ${padroes.mestres.join(', ')}`);
         
-        let mestDesc = interpretations.padroes.mestres.textoBase + "\n\n";
-        for (const m of padroes.mestres) {
+        descriptionHTML += `<h4>Números Mestres</h4><p>${interpretations.padroes.mestres.textoBase}</p>`;
+        padroes.mestres.forEach(m => {
             if (interpretations.padroes.mestres.detalhes[m]) {
-                mestDesc += `• ${m}: ${interpretations.padroes.mestres.detalhes[m]}\n\n`;
+                descriptionHTML += `<p><strong>Número ${m}:</strong> ${interpretations.padroes.mestres.detalhes[m]}</p>`;
             }
-        }
-        patternsDesc.push(mestDesc);
+        });
     }
-    
+
     // Triplas
     if (padroes.triplas.length > 0) {
         patternsText.push(`Números triplicados: ${padroes.triplas.join(', ')}`);
         
-        let tripDesc = interpretations.padroes.triplas.textoBase + "\n\n";
-        for (const t of padroes.triplas) {
+        descriptionHTML += `<h4>Números Triplicados</h4><p>${interpretations.padroes.triplas.textoBase}</p>`;
+        padroes.triplas.forEach(t => {
             if (interpretations.padroes.triplas.detalhes[t]) {
-                tripDesc += `• ${t}: ${interpretations.padroes.triplas.detalhes[t]}\n\n`;
+                descriptionHTML += `<p><strong>Número ${t}:</strong> ${interpretations.padroes.triplas.detalhes[t]}</p>`;
             }
-        }
-        patternsDesc.push(tripDesc);
+        });
     }
-    
+
     // Exibir no HTML
-    document.getElementById('numericalPatterns').textContent = 
-        patternsText.length > 0 ? patternsText.join(' | ') : 'Nenhum padrão significativo encontrado';
+    valueElement.textContent = patternsText.length > 0 ? 
+        patternsText.join(' | ') : 'Nenhum padrão significativo encontrado';
     
-    document.getElementById('patternsDescription').innerHTML = 
-        patternsDesc.length > 0 ? patternsDesc.join('<hr class="cycle-divider">') : 
-        'Seu mapa não apresenta padrões numéricos significativos.';
+    descElement.innerHTML = descriptionHTML || '<p>Seu mapa não apresenta padrões numéricos significativos.</p>';
     
     // Exemplo de cálculo
-    document.getElementById('patternsCalculation').textContent = 
-        `Números analisados: ${allNumbers.join(', ')}`;
+    calcElement.textContent = allNumbers && allNumbers.length ? 
+        `Números analisados: ${allNumbers.join(', ')}` : 
+        'Nenhum número válido para análise';
+    
+    // Mostrar a seção
+    container.style.display = 'block';
 }
         
         // Função para gerar o PDF
