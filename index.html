@@ -1448,7 +1448,6 @@ if (data.karmicLessons.numbers.length > 0) {
             personalYear
         });
 
-        // Exibir container de resultados
         document.getElementById('resultContainer').style.display = 'block';
         document.getElementById('btnPdf').disabled = false;
         document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
@@ -1457,7 +1456,7 @@ if (data.karmicLessons.numbers.length > 0) {
         console.error("Erro ao gerar mapa:", error);
         alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
     }
-}
+} // <-- Este é o final correto da função
 
         // Funções de exibição para cada seção
 
@@ -1467,7 +1466,7 @@ if (data.karmicLessons.numbers.length > 0) {
         
          if (!fullName || !birthDate) {
         alert('Por favor, preencha todos os campos.');
-        return; // Agora válido, pois está dentro de uma função
+        
     }
 
         // Formatar data
