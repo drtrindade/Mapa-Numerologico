@@ -1098,7 +1098,7 @@
 }
         
         // Função para calcular dívidas cármicas
-        // 1. Atualize a função calculateKarmicDebts para SEMPRE retornar um array
+//  Garanta que calculateKarmicDebts sempre retorne um array
 function calculateKarmicDebts(name, date) {
     const debts = [];
     const numbersToCheck = [13, 14, 16, 19];
@@ -1137,8 +1137,8 @@ function calculateKarmicDebts(name, date) {
         }
     }
     
-    // Garante que retorna um array, mesmo que vazio
-    return Array.from(new Set(debts)).sort((a, b) => a - b);
+     // Garante retorno como array, mesmo que vazio
+    return Array.isArray(debts) ? debts : [];
 }
 
         // Função para calcular os ciclos de vida
@@ -1371,32 +1371,31 @@ if (data.karmicLessons.numbers.length > 0) {
         // Função para gerar o mapa numerológico
         function generateMap() {
             try {
-                // 1. Obter valores dos inputs
-                const fullName = document.getElementById('fullName').value.trim().toUpperCase();
-                const birthDate = document.getElementById('birthDate').value;
-                
-                if (!fullName || !birthDate) {
-                    alert('Por favor, preencha todos os campos.');
-                    return;
-                }
+                // Obter valores dos inputs
+        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
+        const birthDate = document.getElementById('birthDate').value;
+        
+        if (!fullName || !birthDate) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
 
-                // 2. Formatar data
-                const formattedDate = formatDate(birthDate);
-                const [day, month, year] = formattedDate.split('/').map(Number);
-
-                // 3. Cálculos principais (mantenha os existentes)
+        // Formatar data
+        const formattedDate = formatDate(birthDate);
+        
+        // Cálculos principais (declare todas as variáveis primeiro)
         const destinyNumber = calculateDestinyNumber(formattedDate);
         const soulNumber = calculateSoulNumber(fullName);
         const personalityNumber = calculatePersonalityNumber(fullName);
         const expressionNumber = calculateExpressionNumber(fullName);
         const challengeNumbers = calculateChallengeNumbers(formattedDate);
-        const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
+        const karmicDebts = calculateKarmicDebts(fullName, formattedDate) || []; // Garante que é array
         const missionNumber = calculateMissionNumber(destinyNumber, expressionNumber);
         const lifeCycles = calculateLifeCycles(formattedDate);
         const personalYear = calculatePersonalYear(formattedDate);
         const karmicLessons = calculateKarmicLessons(fullName);
 
-        // 3.1 Coletar TODOS os números do mapa para análise de padrões
+        // Coletar TODOS os números do mapa para análise de padrões
         const allNumbers = [
             destinyNumber,
             soulNumber,
@@ -1406,7 +1405,7 @@ if (data.karmicLessons.numbers.length > 0) {
             challengeNumbers.second,
             challengeNumbers.third,
             challengeNumbers.fourth,
-            ...(Array.isArray(karmicDebts) ? karmicDebts : []), // Correção aqui
+            ...karmicDebts, // Agora seguro pois karmicDebts sempre será array
             missionNumber,
             lifeCycles.first,
             lifeCycles.second,
@@ -1414,57 +1413,47 @@ if (data.karmicLessons.numbers.length > 0) {
             personalYear
         ].filter(n => n !== undefined && n !== null && !isNaN(n) && n !== 0);
 
-        // 3.2 Identificar padrões - agora com verificação
-        let padroes = {
-            repeticoes: {},
-            sequencias: [],
-            espelhos: [],
-            mestres: [],
-            triplas: []
-        };
-        
-        if (Array.isArray(allNumbers) && allNumbers.length > 0) {
-            padroes = identificarPadroes(allNumbers);
-        }
-                
-                // 4. Exibir resultados básicos
-                document.getElementById('clientName').textContent = fullName;
-                document.getElementById('birthDateDisplay').textContent = formattedDate;
+        // Identificar padrões
+        const padroes = identificarPadroes(allNumbers);
 
-                // 5. Exibir cada seção
-                displayDestinySection(destinyNumber);
-                displaySoulSection(soulNumber);
-                displayPersonalitySection(personalityNumber);
-                displayExpressionSection(expressionNumber);
-                displayChallengeSection(challengeNumbers);
-                displayKarmicDebtsSection(karmicDebts);
-                displayMissionSection(missionNumber);
-                displayLifeCycles(lifeCycles);
-                displayPatternsSection(padroes, allNumbers); // Passa allNumbers como parâmetro
-                displayPersonalYearSection(personalYear);
-                displayKarmicLessonsSection(karmicLessons);
+        // Exibir resultados
+        document.getElementById('clientName').textContent = fullName;
+        document.getElementById('birthDateDisplay').textContent = formattedDate;
 
-                // 6. Mostrar exemplos de cálculo
-                showCalculationExamples({
-                    fullName,
-                    formattedDate,
-                    destinyNumber,
-                    soulNumber,
-                    personalityNumber,
-                    expressionNumber,
-                    challengeNumbers,
-                    karmicLessons: calculateKarmicLessons(fullName),
-                    karmicDebts,
-                    lifeCycles,
-                    personalYear
-                });
+        // Exibir cada seção (passando allNumbers como parâmetro adicional)
+        displayDestinySection(destinyNumber);
+        displaySoulSection(soulNumber);
+        displayPersonalitySection(personalityNumber);
+        displayExpressionSection(expressionNumber);
+        displayChallengeSection(challengeNumbers);
+        displayKarmicDebtsSection(karmicDebts);
+        displayMissionSection(missionNumber);
+        displayPatternsSection(padroes, allNumbers); // Passando ambos parâmetros
+        displayLifeCycles(lifeCycles);
+        displayPersonalYearSection(personalYear);
+        displayKarmicLessonsSection(karmicLessons);
 
-                // 7. Exibir container de resultados
-                document.getElementById('resultContainer').style.display = 'block';
-                document.getElementById('btnPdf').disabled = false;
-                document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+        // Mostrar exemplos de cálculo
+        showCalculationExamples({
+            fullName,
+            formattedDate,
+            destinyNumber,
+            soulNumber,
+            personalityNumber,
+            expressionNumber,
+            challengeNumbers,
+            karmicLessons,
+            karmicDebts,
+            lifeCycles,
+            personalYear
+        });
 
-            } catch (error) {
+        // Exibir container de resultados
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('btnPdf').disabled = false;
+        document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (error) {
         console.error("Erro ao gerar mapa:", error);
         alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
     }
@@ -1472,57 +1461,93 @@ if (data.karmicLessons.numbers.length > 0) {
 
         // Funções de exibição para cada seção
 
-        function displayPatternsSection(padroes, allNumbers) {
-            // Verificações iniciais
-    if (!padroes || !allNumbers) {
-        console.error("Parâmetros inválidos para displayPatternsSection");
-        return;
-    }
+        // Obter valores dos inputs
+        const fullName = document.getElementById('fullName').value.trim().toUpperCase();
+        const birthDate = document.getElementById('birthDate').value;
+        
+        if (!fullName || !birthDate) {
+            alert('Por favor, preencha todos os campos.');
+            return;
+        }
 
-    const container = document.getElementById('numericalPatternsSection');
-    if (!container) {
-        console.error("Elemento 'numericalPatternsSection' não encontrado");
-        return;
-    }
-    const patternsElement = document.getElementById('numericalPatterns');
-    const descElement = document.getElementById('patternsDescription');
-    const calcElement = document.getElementById('patternsCalculation');
+        // Formatar data
+        const formattedDate = formatDate(birthDate);
+        
+        // Cálculos principais (declare todas as variáveis primeiro)
+        const destinyNumber = calculateDestinyNumber(formattedDate);
+        const soulNumber = calculateSoulNumber(fullName);
+        const personalityNumber = calculatePersonalityNumber(fullName);
+        const expressionNumber = calculateExpressionNumber(fullName);
+        const challengeNumbers = calculateChallengeNumbers(formattedDate);
+        const karmicDebts = calculateKarmicDebts(fullName, formattedDate) || []; // Garante que é array
+        const missionNumber = calculateMissionNumber(destinyNumber, expressionNumber);
+        const lifeCycles = calculateLifeCycles(formattedDate);
+        const personalYear = calculatePersonalYear(formattedDate);
+        const karmicLessons = calculateKarmicLessons(fullName);
 
-    // Garanta que allNumbers existe antes de usá-lo
-    const calculationText = allNumbers && allNumbers.length ? 
-        `Números analisados: ${allNumbers.join(', ')}` : 
-        'Nenhum número válido para análise';
-    
-    document.getElementById('patternsCalculation').textContent = calculationText;
-    
-    container.style.display = 'block';
+        // Coletar TODOS os números do mapa para análise de padrões
+        const allNumbers = [
+            destinyNumber,
+            soulNumber,
+            personalityNumber,
+            expressionNumber,
+            challengeNumbers.first,
+            challengeNumbers.second,
+            challengeNumbers.third,
+            challengeNumbers.fourth,
+            ...karmicDebts, // Agora seguro pois karmicDebts sempre será array
+            missionNumber,
+            lifeCycles.first,
+            lifeCycles.second,
+            lifeCycles.third,
+            personalYear
+        ].filter(n => n !== undefined && n !== null && !isNaN(n) && n !== 0);
+
+        // Identificar padrões
+        const padroes = identificarPadroes(allNumbers);
+
+        // Exibir resultados
+        document.getElementById('clientName').textContent = fullName;
+        document.getElementById('birthDateDisplay').textContent = formattedDate;
+
+        // Exibir cada seção (passando allNumbers como parâmetro adicional)
+        displayDestinySection(destinyNumber);
+        displaySoulSection(soulNumber);
+        displayPersonalitySection(personalityNumber);
+        displayExpressionSection(expressionNumber);
+        displayChallengeSection(challengeNumbers);
+        displayKarmicDebtsSection(karmicDebts);
+        displayMissionSection(missionNumber);
+        displayPatternsSection(padroes, allNumbers); // Passando ambos parâmetros
+        displayLifeCycles(lifeCycles);
+        displayPersonalYearSection(personalYear);
+        displayKarmicLessonsSection(karmicLessons);
+
+        // Mostrar exemplos de cálculo
+        showCalculationExamples({
+            fullName,
+            formattedDate,
+            destinyNumber,
+            soulNumber,
+            personalityNumber,
+            expressionNumber,
+            challengeNumbers,
+            karmicLessons,
+            karmicDebts,
+            lifeCycles,
+            personalYear
+        });
+
+        // Exibir container de resultados
+        document.getElementById('resultContainer').style.display = 'block';
+        document.getElementById('btnPdf').disabled = false;
+        document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
+
+    } catch (error) {
+        console.error("Erro ao gerar mapa:", error);
+        alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
+    }
 }
-            
-    // Montar texto com padrões encontrados
-    let patternsText = [];
-    if (Object.keys(padroes.repeticoes).length > 0) {
-        patternsText.push(`Repetições: ${Object.entries(padroes.repeticoes).map(([n, q]) => `${n} (${q}x)`).join(', ')}`);
-    }
-    if (padroes.sequencias.length > 0) {
-        patternsText.push(`Sequências: ${padroes.sequencias.join(', ')}`);
-    }
-    if (padroes.espelhos.length > 0) {
-        patternsText.push(`Espelhos: ${padroes.espelhos.join(', ')}`);
-    }
-    if (padroes.mestres.length > 0) {
-        patternsText.push(`Mestres: ${padroes.mestres.join(', ')}`);
-    }
-    if (padroes.triplas.length > 0) {
-        patternsText.push(`Triplas: ${padroes.triplas.join(', ')}`);
-    }
-
-    // Exibir no HTML
-    patternsElement.textContent = patternsText.length > 0 ? 
-        patternsText.join(' | ') : 
-        'Nenhum padrão significativo encontrado';
-
-    // Montar descrição detalhada
-    let descriptionHTML = '';
     
     // Repetições
     if (Object.keys(padroes.repeticoes).length > 0) {
@@ -1574,13 +1599,16 @@ if (data.karmicLessons.numbers.length > 0) {
         });
     }
 
-    descElement.innerHTML = descriptionHTML || '<p>Seu mapa não apresenta padrões numéricos significativos.</p>';
-    
-    // Exemplo de cálculo
-    calcElement.textContent = `Números analisados: ${allNumbers.join(', ')}`;
+ descElement.innerHTML = descriptionHTML || '<p>Seu mapa não apresenta padrões numéricos significativos.</p>';
+        
+    // Exemplo de cálculo - agora usando o allNumbers passado como parâmetro
+    calcElement.textContent = allNumbers && allNumbers.length ? 
+        `Números analisados: ${allNumbers.join(', ')}` : 
+        'Nenhum número válido para análise';
     
     // Mostrar a seção
     container.style.display = 'block';
+}
 
         function displayDestinySection(destinyNumber) {
             document.getElementById('destinyNumber').textContent = destinyNumber;
