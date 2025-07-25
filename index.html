@@ -9,6 +9,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
    
     <style>
+
+        /* No seu CSS existente */
+.pattern-item {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
+}
+
+.pattern-item:last-child {
+    border-bottom: none;
+}
+
+.pattern-type {
+    font-weight: bold;
+    color: var(--ouro);
+    margin-bottom: 5px;
+}
+
+.pattern-values {
+    background: rgba(212, 175, 55, 0.1);
+    padding: 5px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 5px;
+}
+        
 .logo-container {
     text-align: center;
     margin-bottom: 20px;
@@ -436,6 +463,14 @@
                     <span class="variation-count" id="lifeCyclesVariationCount"></span>
                 </div>
             </div>
+
+            <div class="result-section" id="numerologicalPatternsSection">
+    <h3>Padrões Numerológicos</h3>
+    <p class="section-subtitle">Padrões especiais encontrados no nome e data de nascimento que revelam características únicas.</p>
+    <div class="calculation-example" id="numerologicalPatternsCalculation"></div>
+    <div class="result-value" id="numerologicalPatterns"></div>
+    <div class="result-description" id="numerologicalPatternsDescription"></div>
+</div>
             
             <div class="result-section" id="personalYearSection">
                 <h3>Ano Pessoal Atual</h3>
@@ -833,7 +868,25 @@
                     "Ano 9 - A Conclusão: Este ano marca um período de transição e liberação emocional. Você sentirá um impulso interior para limpar o passado e abrir espaço para novas experiências. O universo estará trazendo situações que testarão sua capacidade de perdoar e seguir em frente. Cuidado com apegos excessivos - este é um tempo para deixar ir com graça o que já cumpriu seu propósito. Aproveite para expressar gratidão pelas lições aprendidas, encerrar capítulos completos e dedicar-se a causas que beneficiem o coletivo.",
                     "Energia do Ano 9: Este é um período de sabedoria e transição, onde você é encorajado a compartilhar o que aprendeu ao longo do ciclo que está terminando. Você pode sentir uma forte necessidade de fazer diferença no mundo e contribuir para algo maior que você mesmo. A energia favorece tudo relacionado a arte, cura e serviço humanitário. Este não é um ano para começar projetos totalmente novos, mas sim para completar o inacabado e preparar-se interiormente para o próximo ciclo. Aproveite para refletir sobre seu crescimento nos últimos nove anos e definir intenções para o futuro. Lembre-se: cada fim contém as sementes de um novo começo."
                 ]
-            }
+            },
+            patterns: {
+        repetitions: [
+            "Números ou letras que se repetem indicam ênfase em certas energias e talentos que se destacam em sua vida."
+        ],
+        sequences: [
+            "Sequências numéricas mostram fluxos de energia contínuos e desenvolvimento progressivo em certas áreas."
+        ],
+        mirror: [
+            "Números espelho revelam dualidades e equilíbrios que precisam ser trabalhados em sua jornada."
+        ],
+        master: [
+            "Números mestres (11, 22, 33) indicam potencial espiritual elevado e desafios correspondentes."
+        ],
+        triple: [
+            "Triplas numéricas mostram energias muito fortes e concentradas em aspectos específicos."
+        ]
+    }
+};
         };
         
        // Função para calcular o número de destino
@@ -1075,6 +1128,88 @@
             
             return `${day}/${month}/${year}`;
         }
+
+// Função para calcular os padrões numerológicos
+function calculateNumerologicalPatterns(name, date) {
+    const patterns = {
+        repetitions: [],
+        sequences: [],
+        mirror: null,
+        master: [],
+        triple: []
+    };
+
+    // Converter nome para maiúsculas e remover acentos
+    const normalizedName = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    
+    // Converter data para string sem barras
+    const dateNumbers = date.replace(/\//g, '');
+    
+    // 1. Verificar repetições no nome e data
+    const allChars = [...normalizedName.replace(/[^A-Z]/g, ''), ...dateNumbers];
+    const charCount = {};
+    
+    allChars.forEach(char => {
+        charCount[char] = (charCount[char] || 0) + 1;
+        if (charCount[char] === 2) { // Só adiciona quando encontra pela segunda vez
+            patterns.repetitions.push(char);
+        }
+    });
+    
+    // 2. Verificar sequências (3+ números consecutivos)
+    const nameNumbers = normalizedName.split('').map(c => getLetterValue(c)).filter(n => n);
+    const allNumbers = [...nameNumbers, ...dateNumbers.split('').map(Number)];
+    
+    for (let i = 0; i <= allNumbers.length - 3; i++) {
+        const a = allNumbers[i];
+        const b = allNumbers[i+1];
+        const c = allNumbers[i+2];
+        
+        // Sequência crescente (1,2,3)
+        if (a+1 === b && b+1 === c) {
+            patterns.sequences.push(`${a}-${b}-${c}`);
+        }
+        // Sequência decrescente (3,2,1)
+        if (a-1 === b && b-1 === c) {
+            patterns.sequences.push(`${a}-${b}-${c}`);
+        }
+    }
+    
+    // 3. Verificar números espelho (ex: 12 e 21)
+    const uniqueNumbers = [...new Set(allNumbers)];
+    
+    for (let i = 0; i < uniqueNumbers.length; i++) {
+        for (let j = i+1; j < uniqueNumbers.length; j++) {
+            const a = uniqueNumbers[i].toString();
+            const b = uniqueNumbers[j].toString();
+            
+            if (a.length === 2 && b.length === 2 && a === b.split('').reverse().join('')) {
+                patterns.mirror = `${a}/${b}`;
+                break;
+            }
+        }
+        if (patterns.mirror) break;
+    }
+    
+    // 4. Verificar números mestres (11, 22, 33)
+    const masterNumbers = [11, 22, 33];
+    patterns.master = allNumbers.filter(n => masterNumbers.includes(n));
+    
+    // 5. Verificar triplas (3 números iguais)
+    for (let i = 0; i <= allNumbers.length - 3; i++) {
+        if (allNumbers[i] === allNumbers[i+1] && allNumbers[i] === allNumbers[i+2]) {
+            patterns.triple.push(allNumbers[i]);
+        }
+    }
+    
+    // Remover duplicatas
+    patterns.repetitions = [...new Set(patterns.repetitions)].sort();
+    patterns.sequences = [...new Set(patterns.sequences)];
+    patterns.master = [...new Set(patterns.master)].sort((a,b) => a-b);
+    patterns.triple = [...new Set(patterns.triple)].sort((a,b) => a-b);
+    
+    return patterns;
+}
         
         // Função para mostrar exemplos de cálculo
         function showCalculationExamples(data) {
@@ -1130,6 +1265,18 @@ if (data.karmicLessons.numbers.length > 0) {
     const lifeCycles = data.lifeCycles;
     document.getElementById('lifeCyclesCalculation').textContent = 
         `1º ciclo (0-30 anos): ${month} (mês) → ${lifeCycles.first}\n2º ciclo (30-60 anos): ${day} (dia) → ${lifeCycles.second}\n3º ciclo (60+ anos): ${year} (ano) → ${reduceToSingleDigit(parseInt(year))} → ${lifeCycles.third}`;
+
+            // Padrões Numerológicos
+const patterns = calculateNumerologicalPatterns(data.fullName, data.formattedDate);
+let patternsCalc = "Padrões encontrados:\n";
+if (patterns.repetitions.length > 0) patternsCalc += `Repetições: ${patterns.repetitions.join(', ')}\n`;
+if (patterns.sequences.length > 0) patternsCalc += `Sequências: ${patterns.sequences.join(', ')}\n`;
+if (patterns.mirror) patternsCalc += `Espelho: ${patterns.mirror}\n`;
+if (patterns.master.length > 0) patternsCalc += `Mestres: ${patterns.master.join(', ')}\n`;
+if (patterns.triple.length > 0) patternsCalc += `Triplas: ${patterns.triple.join(', ')}`;
+
+document.getElementById('numerologicalPatternsCalculation').textContent = patternsCalc || 
+    "Nenhum padrão significativo encontrado no nome ou data";
             
            // Ano Pessoal
     const currentYear = new Date().getFullYear();
@@ -1164,6 +1311,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 const lifeCycles = calculateLifeCycles(formattedDate);
                 const personalYear = calculatePersonalYear(formattedDate);
                 const karmicLessons = calculateKarmicLessons(fullName);
+                const numerologicalPatterns = calculateNumerologicalPatterns(fullName, formattedDate);
 
                 // 4. Exibir resultados básicos
                 document.getElementById('clientName').textContent = fullName;
@@ -1178,6 +1326,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 displayKarmicDebtsSection(karmicDebts);
                 displayLifeCycles(lifeCycles);
                 displayPersonalYearSection(personalYear);
+                displayNumerologicalPatternsSection(numerologicalPatterns);
                 displayKarmicLessonsSection(karmicLessons);
 
                 // 6. Mostrar exemplos de cálculo
@@ -1371,6 +1520,64 @@ function displayKarmicDebtsSection(karmicDebts) {
             }
         }
 
+        function displayNumerologicalPatternsSection(patterns) {
+    // Criar string resumo dos padrões encontrados
+    let patternsStr = '';
+    const patternsList = [];
+    
+    if (patterns.repetitions.length > 0) {
+        patternsList.push(`Repetições: ${patterns.repetitions.join(', ')}`);
+    }
+    if (patterns.sequences.length > 0) {
+        patternsList.push(`Sequências: ${patterns.sequences.join(', ')}`);
+    }
+    if (patterns.mirror) {
+        patternsList.push(`Espelho: ${patterns.mirror}`);
+    }
+    if (patterns.master.length > 0) {
+        patternsList.push(`Mestres: ${patterns.master.join(', ')}`);
+    }
+    if (patterns.triple.length > 0) {
+        patternsList.push(`Triplas: ${patterns.triple.join(', ')}`);
+    }
+    
+    patternsStr = patternsList.join(' | ');
+    
+    // Exibir no HTML
+    document.getElementById('numerologicalPatterns').textContent = patternsStr || 'Nenhum padrão significativo encontrado';
+    
+    // Criar descrição detalhada
+    let description = '';
+    
+    if (patterns.repetitions.length > 0) {
+        description += `<h4>Repetições (${patterns.repetitions.join(', ')})</h4>`;
+        description += `<p>${interpretations.patterns.repetitions.join(' ')}</p>`;
+    }
+    
+    if (patterns.sequences.length > 0) {
+        description += `<h4>Sequências (${patterns.sequences.join(', ')})</h4>`;
+        description += `<p>${interpretations.patterns.sequences.join(' ')}</p>`;
+    }
+    
+    if (patterns.mirror) {
+        description += `<h4>Números Espelho (${patterns.mirror})</h4>`;
+        description += `<p>${interpretations.patterns.mirror.join(' ')}</p>`;
+    }
+    
+    if (patterns.master.length > 0) {
+        description += `<h4>Números Mestres (${patterns.master.join(', ')})</h4>`;
+        description += `<p>${interpretations.patterns.master.join(' ')}</p>`;
+    }
+    
+    if (patterns.triple.length > 0) {
+        description += `<h4>Triplas (${patterns.triple.join(', ')})</h4>`;
+        description += `<p>${interpretations.patterns.triple.join(' ')}</p>`;
+    }
+    
+    document.getElementById('numerologicalPatternsDescription').innerHTML = description || 
+        '<p>Nenhum padrão numerológico significativo foi encontrado no nome e data de nascimento.</p>';
+}
+
         function displayPersonalYearSection(personalYear) {
             document.getElementById('personalYear').textContent = personalYear;
             displayRandomInterpretation('personalYear', personalYear);
@@ -1482,6 +1689,7 @@ async function generatePDF() {
             { title: 'Lições Cármicas', page: 8, subtitle: 'Energias a desenvolver' },
             { title: 'Dívidas Cármicas', page: 9, subtitle: 'Lições kármicas especiais' },
             { title: 'Ciclos de Vida', page: 10, subtitle: 'Fases e energias predominantes' },
+            { title: 'Padrões Numerológicos', page: 12, subtitle: 'Padrões especiais no nome e data' },
             { title: 'Ano Pessoal Atual', page: 11, subtitle: 'Energia do ano corrente' }
         ];
         
@@ -1539,6 +1747,7 @@ async function generatePDF() {
             { title: 'Lições Cármicas', element: 'karmicLessons' },
             { title: 'Dívidas Cármicas', element: 'karmicDebts' },
             { title: 'Ciclos de Vida', element: 'lifeCycles' },
+            { title: 'Padrões Numerológicos', element: 'numerologicalPatterns' },
             { title: 'Ano Pessoal Atual', element: 'personalYear' }
         ];
 
