@@ -451,7 +451,7 @@
 
         <div class="result-section" id="numericalPatternsSection">
     <h3>Padrões Numerológicos</h3>
-    <p class="section-subtitle">Padrões especiais que revelam energias repetidas, sequências e relações entre os números do seu mapa</p>
+    <p class="section-subtitle">Padrões especiais que revelam energias repetidas, sequências e relações entre os números</p>
     <div class="calculation-example" id="patternsCalculation"></div>
     <div class="result-value" id="numericalPatterns"></div>
     <div class="result-description" id="patternsDescription"></div>
@@ -1157,83 +1157,66 @@
         }
 
         function identificarPadroes(numerosDoMapa) {
+    // Converter para números e filtrar válidos
+    const numeros = numerosDoMapa.map(n => parseInt(n)).filter(n => !isNaN(n));
+    
     const padroes = {
         repeticoes: {},
         sequencias: [],
         espelhos: [],
         mestres: [],
-        triplas: [],
-        quaternas: []
+        triplas: []
     };
 
-    // Contar repetições
+    // Contar ocorrências de cada número
     const contagem = {};
-    numerosDoMapa.forEach(num => {
+    numeros.forEach(num => {
         contagem[num] = (contagem[num] || 0) + 1;
     });
-    
-    // Filtrar apenas números que se repetem (2+ vezes)
+
+    // Identificar repetições (2+ vezes)
     for (const num in contagem) {
         if (contagem[num] >= 2) {
             padroes.repeticoes[num] = contagem[num];
         }
     }
 
-    // Identificar números mestres (11, 22, 33) mesmo que não se repitam
-    padroes.mestres = [...new Set(numerosDoMapa.filter(num => [11, 22, 33].includes(num)))];
-
-    // Buscar sequências (ex: 1-2-3 ou 9-8-7)
-    const numerosUnicos = [...new Set(numerosDoMapa)].sort((a, b) => a - b);
-    
-    // Sequências crescentes
-    for (let i = 0; i < numerosUnicos.length - 2; i++) {
-        if (numerosUnicos[i] + 1 === numerosUnicos[i+1] && 
-            numerosUnicos[i] + 2 === numerosUnicos[i+2]) {
-            const sequencia = `${numerosUnicos[i]}-${numerosUnicos[i+1]}-${numerosUnicos[i+2]}`;
-            if (!padroes.sequencias.includes(sequencia)) {
-                padroes.sequencias.push(sequencia);
-            }
-        }
-    }
-    
-    // Sequências decrescentes
-    for (let i = 0; i < numerosUnicos.length - 2; i++) {
-        if (numerosUnicos[i] - 1 === numerosUnicos[i+1] && 
-            numerosUnicos[i] - 2 === numerosUnicos[i+2]) {
-            const sequencia = `${numerosUnicos[i]}-${numerosUnicos[i+1]}-${numerosUnicos[i+2]}`;
-            if (!padroes.sequencias.includes(sequencia)) {
-                padroes.sequencias.push(sequencia);
-            }
-        }
-    }
-
-    // Identificar números espelhados (ex: 12 e 21)
-    const reversiveis = numerosDoMapa.filter(num => num > 9 && num < 100 && num !== parseInt(num.toString().split('').reverse().join('')));
-    const espelhosUnicos = new Set();
-    
-    reversiveis.forEach(num => {
-        const reverso = parseInt(num.toString().split('').reverse().join(''));
-        if (numerosDoMapa.includes(reverso)) {
-            const par = num < reverso ? `${num}/${reverso}` : `${reverso}/${num}`;
-            espelhosUnicos.add(par);
-        }
-    });
-    
-    padroes.espelhos = [...espelhosUnicos];
-
-    // Identificar triplas (números que aparecem 3+ vezes)
+    // Identificar triplas (3+ vezes)
     for (const num in contagem) {
         if (contagem[num] >= 3) {
             padroes.triplas.push(parseInt(num));
         }
     }
 
-    // Identificar quaternas (números que aparecem 4+ vezes)
-    for (const num in contagem) {
-        if (contagem[num] >= 4) {
-            padroes.quaternas.push(parseInt(num));
+    // Identificar números mestres (mesmo que não se repitam)
+    padroes.mestres = [...new Set(numeros.filter(num => [11, 22, 33].includes(num))];
+
+    // Identificar sequências (3+ números em sequência)
+    const numerosUnicos = [...new Set(numeros)].sort((a, b) => a - b);
+    for (let i = 0; i < numerosUnicos.length - 2; i++) {
+        if (numerosUnicos[i] + 1 === numerosUnicos[i+1] && 
+            numerosUnicos[i] + 2 === numerosUnicos[i+2]) {
+            const seq = `${numerosUnicos[i]}-${numerosUnicos[i+1]}-${numerosUnicos[i+2]}`;
+            if (!padroes.sequencias.includes(seq)) {
+                padroes.sequencias.push(seq);
+            }
         }
     }
+
+    // Identificar números espelhados (12/21, 13/31, etc)
+    const reversiveis = numeros.filter(num => num > 9 && num < 100 && 
+                          num !== parseInt(num.toString().split('').reverse().join('')));
+    const espelhosUnicos = new Set();
+    
+    reversiveis.forEach(num => {
+        const reverso = parseInt(num.toString().split('').reverse().join(''));
+        if (numeros.includes(reverso)) {
+            const par = num < reverso ? `${num}/${reverso}` : `${reverso}/${num}`;
+            espelhosUnicos.add(par);
+        }
+    });
+    
+    padroes.espelhos = [...espelhosUnicos];
 
     return padroes;
 }
@@ -1385,19 +1368,39 @@ if (data.karmicLessons.numbers.length > 0) {
                 const formattedDate = formatDate(birthDate);
                 const [day, month, year] = formattedDate.split('/').map(Number);
 
-                // 3. Cálculos principais
-                const destinyNumber = calculateDestinyNumber(formattedDate);
-                const soulNumber = calculateSoulNumber(fullName);
-                const personalityNumber = calculatePersonalityNumber(fullName);
-                const expressionNumber = calculateExpressionNumber(fullName);
-                const challengeNumbers = calculateChallengeNumbers(formattedDate);
-                const missingNumbers = calculateKarmicLessons(fullName);
-                const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
-                const missionNumber = calculateMissionNumber(destinyNumber, expressionNumber);
-                const lifeCycles = calculateLifeCycles(formattedDate);
-                const personalYear = calculatePersonalYear(formattedDate);
-                const karmicLessons = calculateKarmicLessons(fullName);
+                // 3. Cálculos principais (mantenha os existentes)
+        const destinyNumber = calculateDestinyNumber(formattedDate);
+        const soulNumber = calculateSoulNumber(fullName);
+        const personalityNumber = calculatePersonalityNumber(fullName);
+        const expressionNumber = calculateExpressionNumber(fullName);
+        const challengeNumbers = calculateChallengeNumbers(formattedDate);
+        const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
+        const missionNumber = calculateMissionNumber(destinyNumber, expressionNumber);
+        const lifeCycles = calculateLifeCycles(formattedDate);
+        const personalYear = calculatePersonalYear(formattedDate);
+        const karmicLessons = calculateKarmicLessons(fullName);
 
+        // 3.1 Coletar TODOS os números do mapa para análise de padrões
+        const allNumbers = [
+            destinyNumber,
+            soulNumber,
+            personalityNumber,
+            expressionNumber,
+            challengeNumbers.first,
+            challengeNumbers.second,
+            challengeNumbers.third,
+            challengeNumbers.fourth,
+            ...karmicDebts,
+            missionNumber,
+            lifeCycles.first,
+            lifeCycles.second,
+            lifeCycles.third,
+            personalYear
+        ].filter(n => n !== undefined && n !== null && !isNaN(n) && n !== 0);
+
+        // 3.2 Identificar padrões
+        const padroes = identificarPadroes(allNumbers);
+                
                 // 4. Exibir resultados básicos
                 document.getElementById('clientName').textContent = fullName;
                 document.getElementById('birthDateDisplay').textContent = formattedDate;
@@ -1411,6 +1414,7 @@ if (data.karmicLessons.numbers.length > 0) {
                 displayKarmicDebtsSection(karmicDebts);
                 displayMissionSection(missionNumber);
                 displayLifeCycles(lifeCycles);
+                 displayPatternsSection(padroes); // NOVA SEÇÃO
                 displayPersonalYearSection(personalYear);
                 displayKarmicLessonsSection(karmicLessons);
 
@@ -1435,12 +1439,103 @@ if (data.karmicLessons.numbers.length > 0) {
                 document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
 
             } catch (error) {
-                console.error("Erro crítico ao gerar mapa:", error);
-                alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
-            }
-        }
+        console.error("Erro ao gerar mapa:", error);
+        alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
+    }
+}
 
         // Funções de exibição para cada seção
+
+        function displayPatternsSection(padroes) {
+    const container = document.getElementById('numericalPatternsSection');
+    const patternsElement = document.getElementById('numericalPatterns');
+    const descElement = document.getElementById('patternsDescription');
+    const calcElement = document.getElementById('patternsCalculation');
+
+    // Montar texto com padrões encontrados
+    let patternsText = [];
+    if (Object.keys(padroes.repeticoes).length > 0) {
+        patternsText.push(`Repetições: ${Object.entries(padroes.repeticoes).map(([n, q]) => `${n} (${q}x)`).join(', ')}`);
+    }
+    if (padroes.sequencias.length > 0) {
+        patternsText.push(`Sequências: ${padroes.sequencias.join(', ')}`);
+    }
+    if (padroes.espelhos.length > 0) {
+        patternsText.push(`Espelhos: ${padroes.espelhos.join(', ')}`);
+    }
+    if (padroes.mestres.length > 0) {
+        patternsText.push(`Mestres: ${padroes.mestres.join(', ')}`);
+    }
+    if (padroes.triplas.length > 0) {
+        patternsText.push(`Triplas: ${padroes.triplas.join(', ')}`);
+    }
+
+    // Exibir no HTML
+    patternsElement.textContent = patternsText.length > 0 ? 
+        patternsText.join(' | ') : 
+        'Nenhum padrão significativo encontrado';
+
+    // Montar descrição detalhada
+    let descriptionHTML = '';
+    
+    // Repetições
+    if (Object.keys(padroes.repeticoes).length > 0) {
+        descriptionHTML += `<h4>Números Repetidos</h4><p>${interpretations.padroes.repeticoes.textoBase}</p>`;
+        for (const num in padroes.repeticoes) {
+            if (interpretations.padroes.repeticoes.detalhes[num]) {
+                descriptionHTML += `<p><strong>Número ${num}:</strong> ${interpretations.padroes.repeticoes.detalhes[num]}</p>`;
+            }
+        }
+    }
+
+    // Sequências
+    if (padroes.sequencias.length > 0) {
+        descriptionHTML += `<h4>Sequências Numéricas</h4><p>${interpretations.padroes.sequencias.textoBase}</p>`;
+        padroes.sequencias.forEach(seq => {
+            if (interpretations.padroes.sequencias.detalhes[seq]) {
+                descriptionHTML += `<p><strong>Sequência ${seq}:</strong> ${interpretations.padroes.sequencias.detalhes[seq]}</p>`;
+            }
+        });
+    }
+
+    // Espelhos
+    if (padroes.espelhos.length > 0) {
+        descriptionHTML += `<h4>Números Espelhados</h4><p>${interpretations.padroes.espelhos.textoBase}</p>`;
+        padroes.espelhos.forEach(esp => {
+            if (interpretations.padroes.espelhos.detalhes[esp]) {
+                descriptionHTML += `<p><strong>Espelho ${esp}:</strong> ${interpretations.padroes.espelhos.detalhes[esp]}</p>`;
+            }
+        });
+    }
+
+    // Mestres
+    if (padroes.mestres.length > 0) {
+        descriptionHTML += `<h4>Números Mestres</h4><p>${interpretations.padroes.mestres.textoBase}</p>`;
+        padroes.mestres.forEach(m => {
+            if (interpretations.padroes.mestres.detalhes[m]) {
+                descriptionHTML += `<p><strong>Número ${m}:</strong> ${interpretations.padroes.mestres.detalhes[m]}</p>`;
+            }
+        });
+    }
+
+    // Triplas
+    if (padroes.triplas.length > 0) {
+        descriptionHTML += `<h4>Números Triplicados</h4><p>${interpretations.padroes.triplas.textoBase}</p>`;
+        padroes.triplas.forEach(t => {
+            if (interpretations.padroes.triplas.detalhes[t]) {
+                descriptionHTML += `<p><strong>Número ${t}:</strong> ${interpretations.padroes.triplas.detalhes[t]}</p>`;
+            }
+        });
+    }
+
+    descElement.innerHTML = descriptionHTML || '<p>Seu mapa não apresenta padrões numéricos significativos.</p>';
+    
+    // Exemplo de cálculo
+    calcElement.textContent = `Números analisados: ${allNumbers.join(', ')}`;
+    
+    // Mostrar a seção
+    container.style.display = 'block';
+}
         function displayDestinySection(destinyNumber) {
             document.getElementById('destinyNumber').textContent = destinyNumber;
             displayRandomInterpretation('destiny', destinyNumber);
