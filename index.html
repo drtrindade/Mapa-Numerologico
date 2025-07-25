@@ -2093,37 +2093,35 @@ if (description) {
                 
                 
                 // Tratamento especial para Lições Cármicas (espaçamento reduzido)
-                if (section.element === 'karmicLessons') {
-                    const paragraphs = description.split('\n\n');
-                    paragraphs.forEach(para => {
-                        if (para.trim()) {
-                            const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
-                            // Reduzir o espaçamento entre linhas
-                            descLines.forEach((line, i) => {
-                                doc.text(line, margin, yPosition + (i * 4)); // lineHeight de 4 (era 6)
-                            });
-                            yPosition += (descLines.length * 4) + 3; // Ajuste de altura
-                        }
-                    });
-                } else {
-                    const paragraphs = description.split('\n\n');
-                    paragraphs.forEach(para => {
-                        if (para.trim()) {
-                            const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
-                            doc.text(descLines, margin, yPosition);
-                            yPosition += (descLines.length * lineHeight) + 5;
-                        }
-                    });
-                }
-            }
-            
-            // Rodapé da página
-            doc.setFont(bodyFont, 'normal');
-            doc.setTextColor(150, 150, 150);
-            doc.setFontSize(8);
-            doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
-            doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
-        });
+if (section.element === 'karmicLessons') {
+    const paragraphs = description.split('\n\n');
+    paragraphs.forEach(para => {
+        if (para.trim()) {
+            const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
+            // Reduzir o espaçamento entre linhas
+            descLines.forEach((line, i) => {
+                doc.text(line, margin, yPosition + (i * 4)); // lineHeight de 4 (era 6)
+            });
+            yPosition += (descLines.length * 4) + 3; // Ajuste de altura
+        }
+    });
+} else {
+    const paragraphs = description.split('\n\n');
+    paragraphs.forEach(para => {
+        if (para.trim()) {
+            const descLines = doc.splitTextToSize(para, pageWidth - (margin * 2));
+            doc.text(descLines, margin, yPosition);
+            yPosition += (descLines.length * lineHeight) + 5;
+        }
+    });
+}
+
+// Rodapé da página
+doc.setFont(bodyFont, 'normal'); // LINHA 2121
+doc.setTextColor(150, 150, 150);
+doc.setFontSize(8);
+doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
+doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
 
         // 4. PÁGINA FINAL (CONCLUSÃO sem logo)
         doc.addPage();
