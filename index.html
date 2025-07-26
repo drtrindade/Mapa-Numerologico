@@ -1,3 +1,11 @@
+Uncaught ReferenceError: formattedDate is not defined
+    <anonymous> https://drtrindade.github.io/Mapa-Numerologico/:1468
+Mapa-Numerologico:1468:80
+Erro crítico ao gerar mapa: TypeError: can't access property "textContent", document.getElementById(...) is null
+    displayDestinySection https://drtrindade.github.io/Mapa-Numerologico/:1724
+    generateMap https://drtrindade.github.io/Mapa-Numerologico/:1684
+    onclick https://drtrindade.github.io/Mapa-Numerologico/:1
+Mapa-Numerologico:1717:25
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -1339,6 +1347,7 @@
         }
 
       // Função para calcular os padrões numerológicos (versão simplificada)
+        // Função para calcular os padrões numerológicos
         function calculateNumerologicalPatterns(name, date) {
             const patterns = {
                 repeticoes: [],
@@ -1348,29 +1357,30 @@
                 tripla: []
             };
 
-            // 1. Converter nome e data em números
+            // Converter nome e data em números
             const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
             const nameNumbers = letters.map(l => getLetterValue(l.toUpperCase()));
             
             const dateNumbers = date.split('/').join('').split('').map(Number);
             const allNumbers = [...nameNumbers, ...dateNumbers];
             
-            // 2. Contar ocorrências de cada número
+            // Contar ocorrências de cada número
             const count = {};
             allNumbers.forEach(num => count[num] = (count[num] || 0) + 1);
             
-            // 3. Identificar repetições (2+ vezes)
+            // Identificar padrões
             for (const num in count) {
-                if (count[num] > 1) patterns.repeticoes.push(parseInt(num));
-                if (count[num] >= 3) patterns.tripla.push(parseInt(num));
+                const numInt = parseInt(num);
+                if (count[num] > 1) patterns.repeticoes.push(numInt);
+                if (count[num] >= 3) patterns.tripla.push(numInt);
             }
             
-            // 4. Identificar números mestres (11, 22, 33)
+            // Números mestres
             [11, 22, 33].forEach(num => {
                 if (allNumbers.includes(num)) patterns.mestre.push(num);
             });
             
-            // 5. Identificar sequências (3+ números consecutivos)
+            // Sequências
             const uniqueSorted = [...new Set(allNumbers)].sort((a,b) => a-b);
             let sequence = [uniqueSorted[0]];
             
@@ -1386,7 +1396,7 @@
             }
             if (sequence.length >= 3) patterns.sequencias.push(sequence.join('-'));
             
-            // 6. Identificar espelhos (12/21, 13/31, etc.)
+            // Espelhos
             const possibleMirrors = ['12/21', '13/31', '14/41', '23/32', '24/42'];
             const numbersStr = allNumbers.join('');
             
@@ -1400,7 +1410,7 @@
             return patterns;
         }
 
-        // Função para exibir os padrões numerológicos
+        // Função para exibir os padrões
         function displayNumerologicalPatterns(patterns) {
             const container = document.getElementById('numerologicalPatternsResults');
             const descElement = document.getElementById('numerologicalPatternsDescription');
@@ -1425,26 +1435,19 @@
                 
                 const patternDiv = document.createElement('div');
                 patternDiv.className = 'pattern-item';
-                
-                const titleSpan = document.createElement('span');
-                titleSpan.className = 'pattern-title';
-                titleSpan.textContent = title;
-                
-                const valueSpan = document.createElement('span');
-                valueSpan.className = 'pattern-value';
-                valueSpan.textContent = numbers.join(', ');
-                
-                patternDiv.appendChild(titleSpan);
-                patternDiv.appendChild(document.createTextNode(' '));
-                patternDiv.appendChild(valueSpan);
+                patternDiv.innerHTML = `
+                    <span class="pattern-title">${title}</span>
+                    <span class="pattern-value">${numbers.join(', ')}</span>
+                `;
                 container.appendChild(patternDiv);
                 
                 // Adicionar interpretação
                 let interpretation = interpretations.padroes[type].textoBase + "\n\n";
                 
                 numbers.forEach(num => {
-                    if (interpretations.padroes[type].detalhes[num]) {
-                        interpretation += `• ${num}: ${interpretations.padroes[type].detalhes[num]}\n\n`;
+                    const numStr = typeof num === 'string' ? num.split('-')[0] : num.toString();
+                    if (interpretations.padroes[type].detalhes[numStr]) {
+                        interpretation += `• ${num}: ${interpretations.padroes[type].detalhes[numStr]}\n\n`;
                     }
                 });
                 
@@ -1464,9 +1467,7 @@
             }
         }
 
-        // Na função generateMap(), adicione após os outros cálculos:
-        const numerologicalPatterns = calculateNumerologicalPatterns(fullName, formattedDate);
-        displayNumerologicalPatterns(numerologicalPatterns);
+        
 
         // Na função showCalculationExamples(), adicione:
         showCalculationExamples({
@@ -1551,17 +1552,12 @@
             return num;
         }
 
-        // Substitua a função formatDate por esta versão corrigida
+       // Função auxiliar para formatar data
         function formatDate(dateString) {
             const date = new Date(dateString);
-            // Ajuste para o fuso horário brasileiro (UTC-3)
-            const offset = date.getTimezoneOffset();
-            date.setMinutes(date.getMinutes() + offset);
-            
             const day = date.getDate().toString().padStart(2, '0');
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const year = date.getFullYear();
-            
             return `${day}/${month}/${year}`;
         }
         
@@ -1651,7 +1647,7 @@
         // Função para gerar o mapa numerológico
         function generateMap() {
             try {
-                // 1. Obter valores dos inputs
+                // Obter valores dos inputs
                 const fullName = document.getElementById('fullName').value.trim().toUpperCase();
                 const birthDate = document.getElementById('birthDate').value;
                 
@@ -1674,12 +1670,12 @@
                 const karmicDebts = calculateKarmicDebts(fullName, formattedDate);
                 const lifeCycles = calculateLifeCycles(formattedDate);
                 const personalYear = calculatePersonalYear(formattedDate);
-                const numerologicalPatterns = calculateNumerologicalPatterns(fullName, formattedDate);
-
-                // 4. Exibir resultados básicos
+                const numerologicalPatterns = calculateNumerologicalPatterns(fullName, formattedDate.replace(/\//g, ''));
+                
+                // Exibir resultados básicos
                 document.getElementById('clientName').textContent = fullName;
                 document.getElementById('birthDateDisplay').textContent = formattedDate;
-
+                
                 // 5. Exibir cada seção
                 displayDestinySection(destinyNumber);
                 displaySoulSection(soulNumber);
@@ -1708,11 +1704,11 @@
                     numerologicalPatterns
                 });
 
-                // 7. Exibir container de resultados
+                // Exibir container de resultados
                 document.getElementById('resultContainer').style.display = 'block';
                 document.getElementById('btnPdf').disabled = false;
                 document.getElementById('resultContainer').scrollIntoView({ behavior: 'smooth' });
-
+                
             } catch (error) {
                 console.error("Erro crítico ao gerar mapa:", error);
                 alert("Ocorreu um erro ao gerar o mapa. Verifique o console para detalhes.");
