@@ -2173,14 +2173,15 @@ doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, 
         doc.text('Ouro Oracular - Mapa Numerológico - Confidencial', pageWidth/2, 285, { align: 'center' });
         doc.text(`Página ${doc.internal.getNumberOfPages()}`, pageWidth - margin, 285, { align: 'right' });
         
-          // SALVAR O PDF
-       // SALVAR O PDF (LINHA REVISADA)
-    const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
-    doc.save(fileName);
+         // SALVAR O PDF (sem erros)
+        const clientName = document.getElementById('clientName')?.textContent || "Cliente";
+        const fileName = `Mapa_Numerologico_${clientName.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0,10)}.pdf`;
+        doc.save(fileName);
 
-} catch (error) {  // LINHA 2180 - AGORA CORRIGIDA
-    console.error("Erro ao gerar PDF:", error);
-    alert("Erro ao gerar o PDF. Verifique o console para detalhes.");
+    } catch (error) {
+        console.error("Erro ao gerar PDF:", error);
+        alert("Erro ao gerar o PDF. Verifique o console.");
+    }
 }
 </script>
 </body>
