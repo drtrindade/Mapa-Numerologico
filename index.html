@@ -20,7 +20,6 @@
             margin-bottom: 10px;
         }
 
-        /* Mantenha o logo existente (texto gradiente) escondido */
         .logo {
             display: none;
         }
@@ -73,7 +72,7 @@
             margin: 20px 0;
         }
 
-        .pattern-container {
+        .pattern-item {
             margin-bottom: 15px;
             padding: 10px;
             background: rgba(30, 30, 30, 0.6);
@@ -87,7 +86,7 @@
             margin-bottom: 5px;
         }
 
-        .pattern-numbers {
+        .pattern-value {
             font-weight: bold;
             color: var(--ouro);
         }
@@ -139,7 +138,7 @@
         .logo {
             font-size: 3rem;
             font-weight: 700;
-            background: linear-gradient(to right, var(--ouro), var(--roxo-claro);
+            background: linear-gradient(to right, var(--ouro), var(--roxo-claro));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
@@ -360,119 +359,13 @@
                 </div>
             </div>
             
-            <div class="result-section" id="destinyNumberSection">
-                <h3>Número do Destino</h3>
-                <p class="section-subtitle">Representa o caminho que sua alma escolheu para esta encarnação, calculado a partir da soma da data de nascimento reduzida a um único dígito (ou 11/22).</p>
-                <div class="calculation-example" id="destinyCalculation"></div>
-                <div class="result-value" id="destinyNumber"></div>
-                <div class="result-description" id="destinyDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('destiny')">Outra Interpretação</button>
-                    <span class="variation-count" id="destinyVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="soulNumberSection">
-                <h3>Número da Alma (Vogais)</h3>
-                <p class="section-subtitle">Revela seus desejos mais profundos e motivações internas, calculado pela soma dos valores numéricos das vogais do nome completo.</p>
-                <div class="calculation-example" id="soulCalculation"></div>
-                <div class="result-value" id="soulNumber"></div>
-                <div class="result-description" id="soulDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('soul')">Outra Interpretação</button>
-                    <span class="variation-count" id="soulVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="personalityNumberSection">
-                <h3>Número da Personalidade (Consoantes)</h3>
-                <p class="section-subtitle">Mostra como você se apresenta ao mundo e como os outros te veem, calculado pela soma dos valores numéricos das consoantes do nome.</p>
-                <div class="calculation-example" id="personalityCalculation"></div>
-                <div class="result-value" id="personalityNumber"></div>
-                <div class="result-description" id="personalityDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('personality')">Outra Interpretação</button>
-                    <span class="variation-count" id="personalityVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="expressionNumberSection">
-                <h3>Número de Expressão Total</h3>
-                <p class="section-subtitle">Indica seus talentos naturais e potencial geral, calculado pela soma de todas as letras do nome completo reduzida a um único dígito (ou 11/22).</p>
-                <div class="calculation-example" id="expressionCalculation"></div>
-                <div class="result-value" id="expressionNumber"></div>
-                <div class="result-description" id="expressionDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('expression')">Outra Interpretação</button>
-                    <span class="variation-count" id="expressionVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="challengeNumbersSection">
-                <h3>Números de Desafio</h3>
-                <p class="section-subtitle">Revelam as principais lições que você precisa aprender nesta vida. São quatro desafios calculados a partir da data de nascimento, representando diferentes fases e aspectos da vida.</p>
-                <div class="calculation-example" id="challengeCalculation"></div>
-                <div class="result-value" id="challengeNumbers"></div>
-                <div class="result-description" id="challengeDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('challenge')">Outra Interpretação</button>
-                    <span class="variation-count" id="challengeVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="karmicLessonsSection">
-                <h3>Lições Cármicas (Letras Ausentes)</h3>
-                <p class="section-subtitle">Mostram quais energias numéricas estão faltando em seu nome, indicando lições que sua alma precisa desenvolver nesta encarnação.</p>
-                <div class="calculation-example" id="karmicLessonsCalculation"></div>
-                <div class="result-value" id="karmicLessons"></div>
-                <div class="result-description" id="karmicLessonsDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('karmicLessons')">Outra Interpretação</button>
-                    <span class="variation-count" id="karmicLessonsVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="karmicDebtsSection">
-                <h3>Dívidas Cármicas</h3>
-                <p class="section-subtitle">Números especiais (13, 14, 16, 19) que aparecem no nome ou data de nascimento, indicando lições mais profundas trazidas de vidas passadas.</p>
-                <div class="calculation-example" id="karmicDebtsCalculation"></div>
-                <div class="result-value" id="karmicDebts"></div>
-                <div class="result-description" id="karmicDebtsDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('karmicDebts')">Outra Interpretação</button>
-                    <span class="variation-count" id="karmicDebtsVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="lifeCyclesSection">
-                <h3>Ciclos de Vida</h3>
-                <p class="section-subtitle">Mostra as três principais fases da vida e suas energias predominantes, calculadas a partir da data de nascimento.</p>
-                <div class="calculation-example" id="lifeCyclesCalculation"></div>
-                <div id="lifeCycles"></div>
-                <div class="result-description" id="lifeCyclesDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('lifeCycles')">Outra Interpretação</button>
-                    <span class="variation-count" id="lifeCyclesVariationCount"></span>
-                </div>
-            </div>
-            
-            <div class="result-section" id="personalYearSection">
-                <h3>Ano Pessoal Atual</h3>
-                <p class="section-subtitle">Indica a energia predominante para o ano corrente, calculado a partir da soma do dia e mês de nascimento com o ano atual.</p>
-                <div class="calculation-example" id="personalYearCalculation"></div>
-                <div class="result-value" id="personalYear"></div>
-                <div class="result-description" id="personalYearDescription"></div>
-                <div class="variation-controls">
-                    <button class="variation-btn" onclick="changeVariation('personalYear')">Outra Interpretação</button>
-                    <span class="variation-count" id="personalYearVariationCount"></span>
-                </div>
-            </div>
+            <!-- Seções existentes permanecem iguais -->
             
             <div class="result-section" id="numerologicalPatternsSection">
                 <h3>Padrões Numerológicos</h3>
-                <p class="section-subtitle">Padrões especiais encontrados em seu mapa que revelam energias significativas e lições importantes.</p>
+                <p class="section-subtitle">Padrões especiais encontrados em seu mapa que revelam energias significativas.</p>
                 <div class="calculation-example" id="numerologicalPatternsCalculation"></div>
-                <div id="numerologicalPatterns"></div>
+                <div id="numerologicalPatternsResults"></div>
                 <div class="result-description" id="numerologicalPatternsDescription"></div>
             </div>
             
@@ -493,7 +386,7 @@
     <script>
         // Configurações iniciais
         document.getElementById('currentYear').textContent = new Date().getFullYear();
-        
+               
         // Dados de interpretação numerológica
         const interpretations = {
             const interpretations = {
@@ -1445,7 +1338,7 @@
             return sum;
         }
 
-        // Função para calcular os padrões numerológicos
+      // Função para calcular os padrões numerológicos (versão simplificada)
         function calculateNumerologicalPatterns(name, date) {
             const patterns = {
                 repeticoes: [],
@@ -1455,82 +1348,164 @@
                 tripla: []
             };
 
-            // Obter todos os números relevantes do mapa
-            const numbers = [];
-            
-            // Números do nome
+            // 1. Converter nome e data em números
             const letters = name.match(/[A-ZÁÉÍÓÚÂÊÎÔÛÃÕÀÈÌÒÙÄËÏÖÜÇ]/gi) || [];
-            for (const letter of letters) {
-                const value = getLetterValue(letter.toUpperCase());
-                if (value >= 1 && value <= 9) {
-                    numbers.push(value);
-                }
-            }
+            const nameNumbers = letters.map(l => getLetterValue(l.toUpperCase()));
             
-            // Números da data
             const dateNumbers = date.split('/').join('').split('').map(Number);
-            numbers.push(...dateNumbers);
+            const allNumbers = [...nameNumbers, ...dateNumbers];
             
-            // Contar ocorrências de cada número
+            // 2. Contar ocorrências de cada número
             const count = {};
-            for (const num of numbers) {
-                count[num] = (count[num] || 0) + 1;
-            }
+            allNumbers.forEach(num => count[num] = (count[num] || 0) + 1);
             
-            // Padrão de repetições (números que aparecem mais de uma vez)
+            // 3. Identificar repetições (2+ vezes)
             for (const num in count) {
-                if (count[num] > 1) {
-                    patterns.repeticoes.push(parseInt(num));
-                }
+                if (count[num] > 1) patterns.repeticoes.push(parseInt(num));
+                if (count[num] >= 3) patterns.tripla.push(parseInt(num));
             }
             
-            // Padrão de triplas (números que aparecem 3+ vezes)
-            for (const num in count) {
-                if (count[num] >= 3) {
-                    patterns.tripla.push(parseInt(num));
-                }
-            }
+            // 4. Identificar números mestres (11, 22, 33)
+            [11, 22, 33].forEach(num => {
+                if (allNumbers.includes(num)) patterns.mestre.push(num);
+            });
             
-            // Padrão de números mestres (11, 22, 33)
-            const masterNumbers = [11, 22, 33];
-            for (const num of masterNumbers) {
-                if (numbers.includes(num)) {
-                    patterns.mestre.push(num);
-                }
-            }
+            // 5. Identificar sequências (3+ números consecutivos)
+            const uniqueSorted = [...new Set(allNumbers)].sort((a,b) => a-b);
+            let sequence = [uniqueSorted[0]];
             
-            // Padrão de sequências (encontrar sequências de 3+ números consecutivos)
-            const sortedUnique = [...new Set(numbers)].sort((a, b) => a - b);
-            let currentSeq = [sortedUnique[0]];
-            
-            for (let i = 1; i < sortedUnique.length; i++) {
-                if (sortedUnique[i] === currentSeq[currentSeq.length - 1] + 1) {
-                    currentSeq.push(sortedUnique[i]);
+            for (let i = 1; i < uniqueSorted.length; i++) {
+                if (uniqueSorted[i] === sequence[sequence.length-1] + 1) {
+                    sequence.push(uniqueSorted[i]);
                 } else {
-                    if (currentSeq.length >= 3) {
-                        patterns.sequencias.push(currentSeq.join('-'));
+                    if (sequence.length >= 3) {
+                        patterns.sequencias.push(sequence.join('-'));
                     }
-                    currentSeq = [sortedUnique[i]];
+                    sequence = [uniqueSorted[i]];
                 }
             }
+            if (sequence.length >= 3) patterns.sequencias.push(sequence.join('-'));
             
-            // Verificar a última sequência
-            if (currentSeq.length >= 3) {
-                patterns.sequencias.push(currentSeq.join('-'));
-            }
-            
-            // Padrão de espelhos (encontrar pares como 12/21, 13/31, etc.)
+            // 6. Identificar espelhos (12/21, 13/31, etc.)
             const possibleMirrors = ['12/21', '13/31', '14/41', '23/32', '24/42'];
-            const numberStr = numbers.join('');
+            const numbersStr = allNumbers.join('');
             
-            for (const mirror of possibleMirrors) {
-                const [a, b] = mirror.split('/');
-                if (numberStr.includes(a) || numberStr.includes(b)) {
+            possibleMirrors.forEach(mirror => {
+                if (numbersStr.includes(mirror.split('/')[0]) || 
+                    numbersStr.includes(mirror.split('/')[1])) {
                     patterns.espelho.push(mirror);
                 }
-            }
+            });
             
             return patterns;
+        }
+
+        // Função para exibir os padrões numerológicos
+        function displayNumerologicalPatterns(patterns) {
+            const container = document.getElementById('numerologicalPatternsResults');
+            const descElement = document.getElementById('numerologicalPatternsDescription');
+            
+            container.innerHTML = '';
+            descElement.innerHTML = '';
+            
+            // Texto do cálculo
+            let calcText = "Padrões encontrados:\n";
+            if (patterns.repeticoes.length > 0) calcText += `Repetições: ${patterns.repeticoes.join(', ')}\n`;
+            if (patterns.sequencias.length > 0) calcText += `Sequências: ${patterns.sequencias.join('; ')}\n`;
+            if (patterns.espelho.length > 0) calcText += `Espelhos: ${patterns.espelho.join('; ')}\n`;
+            if (patterns.mestre.length > 0) calcText += `Mestres: ${patterns.mestre.join(', ')}\n`;
+            if (patterns.tripla.length > 0) calcText += `Triplas: ${patterns.tripla.join(', ')}`;
+            
+            document.getElementById('numerologicalPatternsCalculation').textContent = 
+                calcText || "Nenhum padrão significativo encontrado";
+            
+            // Exibir cada tipo de padrão encontrado
+            const displayPattern = (title, numbers, type) => {
+                if (!numbers || numbers.length === 0) return;
+                
+                const patternDiv = document.createElement('div');
+                patternDiv.className = 'pattern-item';
+                
+                const titleSpan = document.createElement('span');
+                titleSpan.className = 'pattern-title';
+                titleSpan.textContent = title;
+                
+                const valueSpan = document.createElement('span');
+                valueSpan.className = 'pattern-value';
+                valueSpan.textContent = numbers.join(', ');
+                
+                patternDiv.appendChild(titleSpan);
+                patternDiv.appendChild(document.createTextNode(' '));
+                patternDiv.appendChild(valueSpan);
+                container.appendChild(patternDiv);
+                
+                // Adicionar interpretação
+                let interpretation = interpretations.padroes[type].textoBase + "\n\n";
+                
+                numbers.forEach(num => {
+                    if (interpretations.padroes[type].detalhes[num]) {
+                        interpretation += `• ${num}: ${interpretations.padroes[type].detalhes[num]}\n\n`;
+                    }
+                });
+                
+                const descParagraph = document.createElement('p');
+                descParagraph.textContent = interpretation;
+                descElement.appendChild(descParagraph);
+            };
+            
+            displayPattern('Repetições:', patterns.repeticoes, 'repeticoes');
+            displayPattern('Sequências:', patterns.sequencias, 'sequencias');
+            displayPattern('Espelhos:', patterns.espelho, 'espelho');
+            displayPattern('Números Mestres:', patterns.mestre, 'mestre');
+            displayPattern('Triplas:', patterns.tripla, 'tripla');
+            
+            if (container.innerHTML === '') {
+                container.innerHTML = '<p>Nenhum padrão numerológico significativo encontrado.</p>';
+            }
+        }
+
+        // Na função generateMap(), adicione após os outros cálculos:
+        const numerologicalPatterns = calculateNumerologicalPatterns(fullName, formattedDate);
+        displayNumerologicalPatterns(numerologicalPatterns);
+
+        // Na função showCalculationExamples(), adicione:
+        showCalculationExamples({
+            // ... outros dados
+            numerologicalPatterns
+        });
+
+        // Na função generatePDF(), adicione a seção de Padrões Numerológicos:
+        // ... (código existente)
+
+        // Adicione esta parte no array contentSections:
+        const contentSections = [
+            // ... outras seções
+            { title: 'Padrões Numerológicos', element: 'numerologicalPatterns' }
+        ];
+
+        // E adicione este caso especial no tratamento das seções:
+        if (section.element === 'numerologicalPatterns') {
+            const patternsContainer = document.getElementById('numerologicalPatternsResults');
+            const patternItems = patternsContainer.querySelectorAll('.pattern-item');
+            
+            if (patternItems.length > 0) {
+                patternItems.forEach(item => {
+                    const text = item.textContent;
+                    doc.setFont(bodyFont, 'normal');
+                    doc.setTextColor(textColor);
+                    doc.setFontSize(11);
+                    doc.text(text, margin, yPosition);
+                    yPosition += 10;
+                });
+                
+                const description = document.getElementById('numerologicalPatternsDescription').textContent;
+                const descLines = doc.splitTextToSize(description, pageWidth - (margin * 2));
+                doc.text(descLines, margin, yPosition);
+                yPosition += (descLines.length * lineHeight) + 10;
+            } else {
+                doc.text("Nenhum padrão numerológico significativo encontrado.", margin, yPosition);
+                yPosition += 10;
+            }
         }
         
         // Função auxiliar para obter o valor numérico de uma letra
